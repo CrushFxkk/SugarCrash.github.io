@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"sugarcrashx.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="起因最近每天都是上午学习，下午开黑和朋友玩玩游戏，但是一玩吃鸡或者TFT电脑转的都要起飞了起初我换了个去年的信越7921的硅脂，还是飚到了90多度，思前想后，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="记一次水冷改造">
+<meta property="og:url" content="https://sugarcrashx.github.io/2022/05/30/%E8%AE%B0%E4%B8%80%E6%AC%A1%E6%B0%B4%E5%86%B7%E6%94%B9%E9%80%A0/index.html">
+<meta property="og:site_name" content="SugarCrash!">
+<meta property="og:description" content="起因最近每天都是上午学习，下午开黑和朋友玩玩游戏，但是一玩吃鸡或者TFT电脑转的都要起飞了起初我换了个去年的信越7921的硅脂，还是飚到了90多度，思前想后，">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s2.loli.net/2022/06/01/LXOvEwWtqxPRnIy.jpg">
+<meta property="og:image" content="https://s2.loli.net/2022/06/01/4K1rwNlW9BY8hPL.jpg">
+<meta property="og:image" content="https://s2.loli.net/2022/06/01/JzZeB8qfgtrImLX.png">
+<meta property="og:image" content="https://s2.loli.net/2022/06/01/lIVHbsZFWt8j6P9.png">
+<meta property="og:image" content="https://s2.loli.net/2022/06/01/i2kwTN9V34AvReo.jpg">
+<meta property="article:published_time" content="2022-05-30T05:20:38.000Z">
+<meta property="article:modified_time" content="2022-06-01T05:24:45.104Z">
+<meta property="article:author" content="Lu1i丶">
+<meta property="article:tag" content="杂文">
+<meta property="article:tag" content="唠嗑">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s2.loli.net/2022/06/01/LXOvEwWtqxPRnIy.jpg">
+
+<link rel="canonical" href="https://sugarcrashx.github.io/2022/05/30/%E8%AE%B0%E4%B8%80%E6%AC%A1%E6%B0%B4%E5%86%B7%E6%94%B9%E9%80%A0/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>记一次水冷改造 | SugarCrash!</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">SugarCrash!</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">记录学习，想找个师傅带带我</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://sugarcrashx.github.io/2022/05/30/%E8%AE%B0%E4%B8%80%E6%AC%A1%E6%B0%B4%E5%86%B7%E6%94%B9%E9%80%A0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/1.PNG">
+      <meta itemprop="name" content="Lu1i丶">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="SugarCrash!">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          记一次水冷改造
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-05-30 13:20:38" itemprop="dateCreated datePublished" datetime="2022-05-30T13:20:38+08:00">2022-05-30</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-06-01 13:24:45" itemprop="dateModified" datetime="2022-06-01T13:24:45+08:00">2022-06-01</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%9D%82%E6%96%87/" itemprop="url" rel="index"><span itemprop="name">杂文</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2022/05/30/%E8%AE%B0%E4%B8%80%E6%AC%A1%E6%B0%B4%E5%86%B7%E6%94%B9%E9%80%A0/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2022/05/30/%E8%AE%B0%E4%B8%80%E6%AC%A1%E6%B0%B4%E5%86%B7%E6%94%B9%E9%80%A0/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h4 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h4><p>最近每天都是上午学习，下午开黑和朋友玩玩游戏，但是一玩吃鸡或者TFT电脑转的都要起飞了<br>起初我换了个去年的信越7921的硅脂，还是飚到了90多度，思前想后，</p>
+<span id="more"></span>
+<p>我没钱换新的电脑，<br>第二个，预算也不能特别高，看了看老马的压风散热器，感觉声音太大，不适合我，像给笔记本坐了个<br>沙发，最后，看了几天的水冷决定整水冷，我其中也了解到了水冷搞不好的话漏液直接火葬场，<br>但是我怕过嘛，我初中就开始拆自己家的电脑，高中电烙铁焊樱桃轴键盘，大学搞个水冷不过分把，<br>于是就有了这篇水冷改造之旅。</p>
+<h4 id="经过"><a href="#经过" class="headerlink" title="经过"></a>经过</h4><p>水冷的话我感觉大体就两个东西，一个就是铜管的焊接过程，还有一个就是外机的选择</p>
+<h5 id="铜管焊接"><a href="#铜管焊接" class="headerlink" title="铜管焊接"></a>铜管焊接</h5><p>铜管的话要根据自己的笔记本的铜管，用脑子算一下大概要怎么弯，买个长度差不多的，自己弯感觉也行，<br>我是买的别人弯好的，优点就是省事，不费力，只有一个焊接的过程，缺点就是一丢丢点铜，80块钱啊<br>80块钱啊，当时铜管到的时候哪轻飘飘的手感，抓一头中间都要弯的轻薄铜管，我就感觉后悔了，早知道<br>这么轻，我不如买了20-30块钱的自己动手弯了试一下。不过铜管还需要自己去压扁，既要保证好水的流通性<br>也要让自己的后盖不会鼓包，又确实是个技术活，焊接的过程的话，当时太乱了，没拍</p>
+<p>先上一个笔记本的散热结构。<br><img src="https://s2.loli.net/2022/06/01/LXOvEwWtqxPRnIy.jpg" alt="IMG_3026_20220525-234332_.JPG"></p>
+<p>整体就是先比对铜管，中间偏左的方块是显卡，靠右的是cpu，这两个是主要的发热源，铜管的话尽量是这两个东西的覆盖<br>先搞好一点，然后尽量贴合右边的铜管。</p>
+<p>锡焊过程也没图<br>先把散热拆下来，风扇也拆下来，开始把铜管氧化的地方打磨，打磨过后用锡膏，最好低温的138度的，<br>挤在大概贴合的地方，铜管中间，挤米粒大小的一条线，把铜管放上去，贴合，用g型夹固定，多做几个<br>固定，因为可能原散热的cpu盖子和铜管不是一体的也是锡焊的，热风枪温度上去容易脱落，然后直接就<br>报废了散热器，固定好后，去找个花岗岩或者自家的地板，别在桌子上，热风枪不要对手吹试温度，<br>我刚开始有这个想法，后来我克制住了，直接像吹头发那样，左右的吹铜管的导热是非常好的，一会儿<br>就会全部铜管都是热的，我们要让他达到这个整体130-150度这样子，让锡膏完全融化焊接铜管。<br>完了之后也不要用手摸，热风枪放好不要烫着其他东西，开始想打孔的方法，我由于没有锯齿，用的剪刀<br>工业剪刀，暴力剪的，然后用砂纸打磨了一下，还行。<br>最终效果如下<br><img src="https://s2.loli.net/2022/06/01/4K1rwNlW9BY8hPL.jpg" alt="IMG_3045_20220529-210116_.JPG"></p>
+<h5 id="水冷外机"><a href="#水冷外机" class="headerlink" title="水冷外机"></a>水冷外机</h5><p>水冷外机的话我看了好几天，最开始是想用个水桶解决的，家里太小，没地方放，所有只有委屈我的钱包<br>逛了几天的拼多多和淘宝，闲鱼，大佬的作品，最终选择了沸腾菲菲的散热240铝排散热，关于铜排和铝排<br>我表示，铝排够用，120-240-360的240绝对够用，我最开始想选择一个带自动回水的，就是安一个键，电脑<br>铜管里的水回流到外机里，直到我看到一个视频，发现拆的话也挺简单，就没有卖自动回水，毕竟要多给100<br>RMB，<br>外机长这样，<br><img src="https://s2.loli.net/2022/06/01/JzZeB8qfgtrImLX.png" alt="IMG_3048.PNG"><br>管子一转就安好了，没有技术含量。</p>
+<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p>总结话费铜管80 工具租用30+24运费  哎哟这个是最傻逼的，工具该他妈自己买，淦，水冷机340<br>总花费474，钱确实心痛，但是效果是真不错，待机的话这个温度</p>
+<p><img src="https://s2.loli.net/2022/06/01/lIVHbsZFWt8j6P9.png" alt="image.png"></p>
+<p>玩游戏的话，gpu60左右，cpu60左右，水冷微微热，室温25度。</p>
+<p>总体感觉很好，pubg没有再掉帧，落地钢枪也不卡了，自带的风扇转都不想转了，没到那个温度</p>
+<p>完美收工。</p>
+<p><img src="https://s2.loli.net/2022/06/01/i2kwTN9V34AvReo.jpg" alt="IMG_3018_20220521-131627_.JPG"></p>
+<p>感觉自己学东西还是挺快的，就是学不深入。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%9D%82%E6%96%87/" rel="tag"># 杂文</a>
+              <a href="/tags/%E5%94%A0%E5%97%91/" rel="tag"># 唠嗑</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/05/28/Windows%E6%8F%90%E6%9D%83/" rel="prev" title="Windows提权">
+      <i class="fa fa-chevron-left"></i> Windows提权
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/06/02/Write/" rel="next" title="Driver">
+      Driver <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%B5%B7%E5%9B%A0"><span class="nav-number">1.</span> <span class="nav-text">起因</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BB%8F%E8%BF%87"><span class="nav-number">2.</span> <span class="nav-text">经过</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E9%93%9C%E7%AE%A1%E7%84%8A%E6%8E%A5"><span class="nav-number">2.1.</span> <span class="nav-text">铜管焊接</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%B0%B4%E5%86%B7%E5%A4%96%E6%9C%BA"><span class="nav-number">2.2.</span> <span class="nav-text">水冷外机</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">3.</span> <span class="nav-text">总结</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Lu1i丶"
+      src="/images/1.PNG">
+  <p class="site-author-name" itemprop="name">Lu1i丶</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">18</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Lu1i丶</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : '2IjWrTCGWIUFwAsamIh2ezIu-gzGzoHsz',
+      appKey     : 'EOJr4RJE5lM0E3ryx1vGuAPV',
+      placeholder: "Just go go",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : 'zh-cn' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : true,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>

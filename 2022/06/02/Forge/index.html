@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"sugarcrashx.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="收集curl 10.10.11.111 火狐进不去，curl看一下，发现了一个域名，把他添加到hosts文件里">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Forge">
+<meta property="og:url" content="https://sugarcrashx.github.io/2022/06/02/Forge/index.html">
+<meta property="og:site_name" content="SugarCrash!">
+<meta property="og:description" content="收集curl 10.10.11.111 火狐进不去，curl看一下，发现了一个域名，把他添加到hosts文件里">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s2.loli.net/2022/06/01/5W83girT4tLYfqN.png">
+<meta property="og:image" content="https://s2.loli.net/2022/06/01/5agWQJo6ZijlkyC.png">
+<meta property="og:image" content="https://s2.loli.net/2022/06/01/5agWQJo6ZijlkyC.png">
+<meta property="og:image" content="https://s2.loli.net/2022/06/01/Vx24bzUw9dPoNMa.png">
+<meta property="og:image" content="https://s2.loli.net/2022/06/01/4p3hEJxSzXT81aj.png">
+<meta property="og:image" content="https://s2.loli.net/2022/06/01/CG6cgTnwfqJiU4Y.png">
+<meta property="og:image" content="https://s2.loli.net/2022/06/01/xvuOJMZDfwnIHbc.png">
+<meta property="og:image" content="https://s2.loli.net/2022/06/01/AhwJoV42jPgTr5M.png">
+<meta property="og:image" content="https://s2.loli.net/2022/06/01/SNlJqR76KTzCAWn.png">
+<meta property="og:image" content="https://s2.loli.net/2022/06/01/xhwL9Q4AN5IcYS3.png">
+<meta property="og:image" content="https://s2.loli.net/2022/06/01/rhQpBzuqjCZ3Od2.png">
+<meta property="og:image" content="https://s2.loli.net/2022/06/01/n4oGeMjD3AtEmiw.png">
+<meta property="og:image" content="https://s2.loli.net/2022/06/01/AhJbR83p2wniOcv.png">
+<meta property="og:image" content="https://sugarcrashx.github.io/">
+<meta property="og:image" content="https://sugarcrashx.github.io/">
+<meta property="og:image" content="https://sugarcrashx.github.io/">
+<meta property="article:published_time" content="2022-06-02T03:30:51.000Z">
+<meta property="article:modified_time" content="2022-06-02T03:31:23.772Z">
+<meta property="article:author" content="Lu1i丶">
+<meta property="article:tag" content="Hack The Box">
+<meta property="article:tag" content="靶场练习">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s2.loli.net/2022/06/01/5W83girT4tLYfqN.png">
+
+<link rel="canonical" href="https://sugarcrashx.github.io/2022/06/02/Forge/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Forge | SugarCrash!</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">SugarCrash!</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">记录学习，想找个师傅带带我</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://sugarcrashx.github.io/2022/06/02/Forge/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/1.PNG">
+      <meta itemprop="name" content="Lu1i丶">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="SugarCrash!">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Forge
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-06-02 11:30:51 / 修改时间：11:31:23" itemprop="dateCreated datePublished" datetime="2022-06-02T11:30:51+08:00">2022-06-02</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Hack-The-Box/" itemprop="url" rel="index"><span itemprop="name">Hack The Box</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2022/06/02/Forge/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2022/06/02/Forge/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h4 id="收集"><a href="#收集" class="headerlink" title="收集"></a>收集</h4><p><code>curl 10.10.11.111 火狐进不去，curl看一下，发现了一个域名，把他添加到hosts文件里</code></p>
+<span id="more"></span>
+<p><code>echo &quot;10.10.11.111 forge.htb&quot; &gt;&gt; /etc/hosts</code><br><img src="https://s2.loli.net/2022/06/01/5W83girT4tLYfqN.png"></p>
+<p>打开网页长这样<br><img src="https://s2.loli.net/2022/06/01/5agWQJo6ZijlkyC.png"></p>
+<p>有一个上传的地方，抓包，尝试抓包上传一下。<br><img src="https://s2.loli.net/2022/06/01/5agWQJo6ZijlkyC.png"><br><img src="https://s2.loli.net/2022/06/01/Vx24bzUw9dPoNMa.png"><br>上传的一张图片显示是上传成功，传一个php文件，就不能访问了，也不知道这个能解析什么， 尝试目录扫描和子域名扫描，因为这个网站不是还有一个upload from url吗</p>
+<p><code>wfuzz -c -u &quot;http://forge.htb/&quot; -H &quot;Host:FUZZ.forge.htb&quot; -w /usr/share/amass/wordlists/subdomains-top1mil-5000.txt</code></p>
+<p><code>gobuster vhost -u forge.htb -w /usr/share/amass/wordlists/subdomains-top1mil-5000.txt</code></p>
+<p>扫到一个admin.forge.htb<br><img src="https://s2.loli.net/2022/06/01/4p3hEJxSzXT81aj.png"><br><code>echo &quot;10.10.11.111 admin.forge.htb&quot; &gt;&gt; /etc/hosts</code><br>访问一下，只允许本地访问，尝试迪哥教的加一个X-Forwarded-For:127.0.0.1 看看能不能绕过<br><img src="https://s2.loli.net/2022/06/01/CG6cgTnwfqJiU4Y.png"><br>然鹅。。<br><img src="https://s2.loli.net/2022/06/01/xvuOJMZDfwnIHbc.png"><br>尝试把他子域上传上去，黑名单，还好不是白名单，尝试大小写绕过<br><img src="https://s2.loli.net/2022/06/01/AhwJoV42jPgTr5M.png"></p>
+<p>改了一个大写，成功了，访问不了，curl 还是原来页面，wp的绕过成功了 <a target="_blank" rel="noopener" href="http://admin.forge.htb/">http://aDmin.forGe.hTb/</a><br><img src="https://s2.loli.net/2022/06/01/SNlJqR76KTzCAWn.png"></p>
+<p>访问图像损坏，curl看报文&#x2F;announcement<br><img src="https://s2.loli.net/2022/06/01/xhwL9Q4AN5IcYS3.png"></p>
+<p><a target="_blank" rel="noopener" href="http://admin.forge.htb/announcement">http://aDmin.forGe.hTb/announcement</a><br><code>好东西来了，给了一个ftp帐密，这里是一个ssrf，利用一下 user:heightofsecurity123!</code></p>
+<p><code>翻译: 一个我nternal FTP服务器已经创建了凭据用户：heightofsecuirty123！ /upload 端点现在支持用于上传表单 url 的 ftp、ftps、http 和 https 协议 /upload 端点已经被配置为简单的上传脚本，并且为了上传图像，可以简单地传递一个带有 ?u= 的 url。 以免尝试通过将 get param 中的 ftp url 传递给 admin vhost 来访问 ftp</code></p>
+<p><img src="https://s2.loli.net/2022/06/01/rhQpBzuqjCZ3Od2.png"></p>
+<p><code>利用 http://ADMIN.FORGE.HTB/upload?u=ftp://user:heightofsecurity123!@FORGE.HTB</code></p>
+<p><img src="https://s2.loli.net/2022/06/01/n4oGeMjD3AtEmiw.png"><br>读&#x2F;.ssh&#x2F;id_rsa</p>
+<p>成功读到，<br>chmod 600<br>user_id_rsa ssh -i user_id_rsa <a href="mailto:&#x75;&#x73;&#101;&#x72;&#64;&#49;&#x30;&#x2e;&#x31;&#48;&#46;&#49;&#49;&#46;&#x31;&#49;&#x31;">&#x75;&#x73;&#101;&#x72;&#64;&#49;&#x30;&#x2e;&#x31;&#48;&#46;&#49;&#49;&#46;&#x31;&#49;&#x31;</a><br>用户用的ftp的用户名 连接成功</p>
+<h4 id="提权"><a href="#提权" class="headerlink" title="提权"></a>提权</h4><p>sudo -l 发现一个python文件<br><img src="https://s2.loli.net/2022/06/01/AhJbR83p2wniOcv.png"><br><img src="/" alt="Uploading file...slq5l"></p>
+<p>代码是硬伤，wp是这么写的</p>
+<p>我们可以清楚地看到，如果我们设法创建了一些错误，那么我们转到 Python 调试器中的 except 处理程序， 因为我们以 root 身份运行它，所以我们可以轻松地使用系统中的 os 模块执行命令。 为此，我们需要两个 ssh 连接一个用于启动服务器，第二个用于连接到服务器。</p>
+<p><img src="/" alt="Uploading file...b36mg"><br><img src="/" alt="Uploading file...ghwsg"></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Hack-The-Box/" rel="tag"># Hack The Box</a>
+              <a href="/tags/%E9%9D%B6%E5%9C%BA%E7%BB%83%E4%B9%A0/" rel="tag"># 靶场练习</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/06/02/Bolt/" rel="prev" title="Bolt">
+      <i class="fa fa-chevron-left"></i> Bolt
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/06/02/Horizontall/" rel="next" title="Horizontall">
+      Horizontall <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%94%B6%E9%9B%86"><span class="nav-number">1.</span> <span class="nav-text">收集</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8F%90%E6%9D%83"><span class="nav-number">2.</span> <span class="nav-text">提权</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Lu1i丶"
+      src="/images/1.PNG">
+  <p class="site-author-name" itemprop="name">Lu1i丶</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">18</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Lu1i丶</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : '2IjWrTCGWIUFwAsamIh2ezIu-gzGzoHsz',
+      appKey     : 'EOJr4RJE5lM0E3ryx1vGuAPV',
+      placeholder: "Just go go",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : 'zh-cn' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : true,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>
