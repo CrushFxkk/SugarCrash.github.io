@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"sugarcrashx.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="漏洞中的第一个影响了称为“&#x3D;&#x3D;Spring Cloud Functions&#x3D;&#x3D;”的框架组件。第二个，可以说是更严重的漏洞，影响了“&#x3D;&#x3D;Spring Core&#x3D;&#x3D;”中的一个组件——框架的核心——从而显着增加了漏洞的潜在影响，并为它赢得了“Spring4Shell”的名字">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spring4Shell复现">
+<meta property="og:url" content="https://sugarcrashx.github.io/2022/06/02/Spring4Shell%E5%A4%8D%E7%8E%B0/index.html">
+<meta property="og:site_name" content="SugarCrash!">
+<meta property="og:description" content="漏洞中的第一个影响了称为“&#x3D;&#x3D;Spring Cloud Functions&#x3D;&#x3D;”的框架组件。第二个，可以说是更严重的漏洞，影响了“&#x3D;&#x3D;Spring Core&#x3D;&#x3D;”中的一个组件——框架的核心——从而显着增加了漏洞的潜在影响，并为它赢得了“Spring4Shell”的名字">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s2.loli.net/2022/05/20/ko1szS9uvxtUXDc.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/20/r3ntsvdoeA2SGkg.png">
+<meta property="article:published_time" content="2022-06-02T04:29:25.000Z">
+<meta property="article:modified_time" content="2022-06-02T04:30:18.844Z">
+<meta property="article:author" content="Lu1i丶">
+<meta property="article:tag" content="Tryhackme">
+<meta property="article:tag" content="漏洞复现">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s2.loli.net/2022/05/20/ko1szS9uvxtUXDc.png">
+
+<link rel="canonical" href="https://sugarcrashx.github.io/2022/06/02/Spring4Shell%E5%A4%8D%E7%8E%B0/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Spring4Shell复现 | SugarCrash!</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">SugarCrash!</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">记录学习，想找个师傅带带我</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://sugarcrashx.github.io/2022/06/02/Spring4Shell%E5%A4%8D%E7%8E%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/1.PNG">
+      <meta itemprop="name" content="Lu1i丶">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="SugarCrash!">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Spring4Shell复现
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-06-02 12:29:25 / 修改时间：12:30:18" itemprop="dateCreated datePublished" datetime="2022-06-02T12:29:25+08:00">2022-06-02</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Tryhackme/" itemprop="url" rel="index"><span itemprop="name">Tryhackme</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2022/06/02/Spring4Shell%E5%A4%8D%E7%8E%B0/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2022/06/02/Spring4Shell%E5%A4%8D%E7%8E%B0/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>漏洞中的第一个影响了称为“&#x3D;&#x3D;Spring Cloud Functions&#x3D;&#x3D;”的框架组件。第二个，可以说是更严重的漏洞，影响了“&#x3D;&#x3D;Spring Core&#x3D;&#x3D;”中的一个组件——框架的核心——从而显着增加了漏洞的潜在影响，并为它赢得了“Spring4Shell”的名字</p>
+<span id="more"></span>
+<h4 id="漏洞背景"><a href="#漏洞背景" class="headerlink" title="漏洞背景"></a>漏洞背景</h4><p>Spring4Shell 最初是作为 0-day 在现已删除的推文线程中发布的。它很快被确定为绕过<a target="_blank" rel="noopener" href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2010-1622">CVE-2010-1622补丁——Spring</a> Framework 早期版本中的一个漏洞，它允许攻击者通过滥用 Spring 处理HTTP请求中发送的数据的方式来获取远程命令执行。简而言之，该漏洞允许攻击者将“webshel​​l”（一段代码，它接受来自攻击者的命令，然后网络服务器被诱骗执行）上传到易受攻击的服务器，实现远程命令执行。</p>
+<h5 id="它是如何工作的？"><a href="#它是如何工作的？" class="headerlink" title="它是如何工作的？"></a>它是如何工作的？</h5><p>要了解 Spring4Shell，我们必须了解 CVE-2010-1622。<strong>Spring</strong> MVC（<strong>模型</strong>-视图-控制器）是 Spring 框架的一部分，它可以很容易地按照 MVC 设计模式开发 Web 应用程序<strong>。</strong>Spring MVC 的特点之一是，当根据发送到端点的参数发出请求时，它会自动实例化并填充指定类的对象。简单来说，这可能被滥用来覆盖父类的重要属性，从而导致远程代码执行。</p>
+<h5 id="限制"><a href="#限制" class="headerlink" title="限制"></a>限制</h5><p>Spring4Shell 漏洞影响 Spring Core 5.2 之前的版本，以及在版本 5.3.0-17 和 5.2.0-19 中，运行在<strong>大于****或</strong>等于 9 的 Java 开发 K it (JDK)版本上<strong>。</strong>当前可用的公开漏洞利用仅适用于作为 WAR 部署到 Apache Tomcat 的应用程序；然而，Spring Framework 的维护者表示他们认为可能还有其他方法可以利用该漏洞。</p>
+<p>漏洞的现状（如<a target="_blank" rel="noopener" href="https://spring.io/blog/2022/03/31/spring-framework-rce-early-announcement">Spring 的漏洞公告中所述</a>）可以总结如下：</p>
+<ul>
+<li>JDK 9+</li>
+<li>Spring 框架的易受攻击版本 (&lt;5.2 | 5.2.0-19 | 5.3.0-17)  </li>
+<li>Apache Tomcat 作为 Spring 应用程序的服务器，打包为 WAR</li>
+<li>对 Spring 框架的<code>spring-webmvc</code>和&#x2F;或组件的依赖<code>spring-webflux</code></li>
+</ul>
+<p>然而，值得注意的是，这些可能会随着时间的推移而改变，因为发现了利用该漏洞的其他方法。</p>
+<h5 id="补救措施"><a href="#补救措施" class="headerlink" title="补救措施"></a>补救措施</h5><p>幸运的是，Spring 框架的补丁版本已经发布。要修复 Spring4Shell，请确保您使用的是在次要版本 5.3 的补丁 18 之后（即 5.3.18 之后）发布的 Spring 版本，或者如果使用的是次要版本 5.2（即 5.2.20 之后），则在补丁 20 之后发布的版本。升级框架的版本足以从您的应用程序中删除漏洞。</p>
+<h4 id="利用"><a href="#利用" class="headerlink" title="利用"></a>利用</h4><blockquote>
+<p><a target="_blank" rel="noopener" href="https://github.com/BobTheShoplifter/Spring4Shell-POC/">https://github.com/BobTheShoplifter/Spring4Shell-POC/</a>  exp</p>
+</blockquote>
+<p>该脚本需要一个参数：<code>url</code>— 这指定了 POST 请求的目标。在当前上下文中可以忽略其他三个可选参数。</p>
+<p>让我们首先在浏览器中查看网站 ( <code>http://10.10.228.199/</code>)  </p>
+<p>我们可以通过查看网站主页的源代码（<code>view-source:http://10.10.228.199/</code>）轻松找到我们的目标 URL。</p>
+<p>具体来说，我们正在寻找联系表单的“操作”（我们唯一可用的 POST 请求）。这可以在第 20 行找到：</p>
+<p><code>&lt;form id=&quot;contactForm&quot; action=&quot;/&quot; method=&quot;post&quot;&gt;</code>  </p>
+<p>动作是“ <code>/</code>”，这意味着我们的目标 URL 将只是：<code>http://10.10.228.199/</code>。</p>
+<p><em><strong>注意：</strong>斜线在这里非常重要！</em><br><img src="https://s2.loli.net/2022/05/20/ko1szS9uvxtUXDc.png"></p>
+<h4 id="攻击"><a href="#攻击" class="headerlink" title="攻击"></a>攻击</h4><p><img src="https://s2.loli.net/2022/05/20/r3ntsvdoeA2SGkg.png"><br>访问路径，在后面执行命令或者webshell工具连接应该都行</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Tryhackme/" rel="tag"># Tryhackme</a>
+              <a href="/tags/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/" rel="tag"># 漏洞复现</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/06/02/Weaponization/" rel="prev" title="Weaponization">
+      <i class="fa fa-chevron-left"></i> Weaponization
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/06/02/Log4j%E5%A4%8D%E7%8E%B0/" rel="next" title="Log4j复现">
+      Log4j复现 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%BC%8F%E6%B4%9E%E8%83%8C%E6%99%AF"><span class="nav-number">1.</span> <span class="nav-text">漏洞背景</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%AE%83%E6%98%AF%E5%A6%82%E4%BD%95%E5%B7%A5%E4%BD%9C%E7%9A%84%EF%BC%9F"><span class="nav-number">1.1.</span> <span class="nav-text">它是如何工作的？</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E9%99%90%E5%88%B6"><span class="nav-number">1.2.</span> <span class="nav-text">限制</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%A1%A5%E6%95%91%E6%8E%AA%E6%96%BD"><span class="nav-number">1.3.</span> <span class="nav-text">补救措施</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%A9%E7%94%A8"><span class="nav-number">2.</span> <span class="nav-text">利用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%94%BB%E5%87%BB"><span class="nav-number">3.</span> <span class="nav-text">攻击</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Lu1i丶"
+      src="/images/1.PNG">
+  <p class="site-author-name" itemprop="name">Lu1i丶</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">32</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Lu1i丶</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : '2IjWrTCGWIUFwAsamIh2ezIu-gzGzoHsz',
+      appKey     : 'EOJr4RJE5lM0E3ryx1vGuAPV',
+      placeholder: "Just go go",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : 'zh-cn' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : true,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>

