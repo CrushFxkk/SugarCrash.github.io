@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"sugarcrashx.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="介绍Active Directory 是 Windows 域网络的目录服务。当今许多顶级公司都在使用它，并且是在攻击 Windows 时理解的一项重要技能。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Active-Directory">
+<meta property="og:url" content="https://sugarcrashx.github.io/2022/06/06/Active-Directory/index.html">
+<meta property="og:site_name" content="SugarCrash!">
+<meta property="og:description" content="介绍Active Directory 是 Windows 域网络的目录服务。当今许多顶级公司都在使用它，并且是在攻击 Windows 时理解的一项重要技能。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s2.loli.net/2022/06/06/NMHOItjkCGrYfEp.png">
+<meta property="og:image" content="https://s2.loli.net/2022/06/06/kPITq96VxmgaGNy.png">
+<meta property="og:image" content="https://s2.loli.net/2022/06/06/9LVqHO5Tj4Ikxy1.png">
+<meta property="og:image" content="https://sugarcrashx.github.io/">
+<meta property="og:image" content="https://s2.loli.net/2022/06/06/lvbLyXDCWMouEwO.png">
+<meta property="og:image" content="https://s2.loli.net/2022/06/06/sdWfKE5jwB96aUV.png">
+<meta property="article:published_time" content="2022-06-06T07:45:27.000Z">
+<meta property="article:modified_time" content="2022-06-06T07:46:29.179Z">
+<meta property="article:author" content="Lu1i丶">
+<meta property="article:tag" content="Tryhackme">
+<meta property="article:tag" content="内网">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s2.loli.net/2022/06/06/NMHOItjkCGrYfEp.png">
+
+<link rel="canonical" href="https://sugarcrashx.github.io/2022/06/06/Active-Directory/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Active-Directory | SugarCrash!</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">SugarCrash!</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">记录学习，想找个师傅带带我</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://sugarcrashx.github.io/2022/06/06/Active-Directory/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/1.PNG">
+      <meta itemprop="name" content="Lu1i丶">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="SugarCrash!">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Active-Directory
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-06-06 15:45:27 / 修改时间：15:46:29" itemprop="dateCreated datePublished" datetime="2022-06-06T15:45:27+08:00">2022-06-06</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Tryhackme/" itemprop="url" rel="index"><span itemprop="name">Tryhackme</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2022/06/06/Active-Directory/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2022/06/06/Active-Directory/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h4 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h4><p>Active Directory 是 Windows 域网络的目录服务。当今许多顶级公司都在使用它，并且是在攻击 Windows 时理解的一项重要技能。</p>
+<span id="more"></span>
+<h5 id="什么是Active-Directory"><a href="#什么是Active-Directory" class="headerlink" title="什么是Active Directory"></a>什么是Active Directory</h5><p>Active Directory 是连接在域内的机器和服务器的集合，它们是构成 Active Directory 网络的更大域林的集合部分。Active Directory 包含许多功能性的点点滴滴。<br>Active Directory 组件列表</p>
+<ul>
+<li>域控制器</li>
+<li>森林、树木、领域</li>
+<li>用户 + 组 </li>
+<li>信托</li>
+<li>政策 </li>
+<li>域服务</li>
+</ul>
+<h5 id="为什么使用Active-Directory"><a href="#为什么使用Active-Directory" class="headerlink" title="为什么使用Active Directory"></a>为什么使用Active Directory</h5><p>大多数大公司使用 Active Directory，因为它允许通过单个域控制器控制和监视其用户的计算机。它允许单个用户登录到活动目录网络上的任何计算机，并可以访问他或她在服务器中存储的文件和文件夹，以及该计算机上的本地存储。这允许公司中的任何用户使用公司拥有的任何机器，而无需在一台机器上设置多个用户。Active Directory 为您完成这一切。</p>
+<h4 id="物理Active-Directory"><a href="#物理Active-Directory" class="headerlink" title="物理Active Directory"></a>物理Active Directory</h4><p>物理 Active Directory 是本地的服务器和机器，它们可以是从域控制器和存储服务器到域用户机器的任何东西；除了软件之外，Active Directory 环境所需的一切。</p>
+<h5 id="域控制器"><a href="#域控制器" class="headerlink" title="域控制器"></a>域控制器</h5><p>域控制器是安装了 Active Directory 域服务 (AD DS) 并已提升为林中的域控制器的 Windows 服务器。域控制器是 Active Directory 的中心——它们控制域的其余部分。<br>域控制器的任务：</p>
+<ul>
+<li>保存 AD DS 数据存储 </li>
+<li>处理身份验证和授权服务 </li>
+<li>从林中的其他域控制器复制更新</li>
+<li>允许管理员访问管理域资源</li>
+</ul>
+<h5 id="AD-DS-数据存储"><a href="#AD-DS-数据存储" class="headerlink" title="AD DS 数据存储"></a>AD DS 数据存储</h5><p>Active Directory 数据存储包含存储和管理目录信息（例如用户、组和服务）所需的数据库和进程。<br>AD DS 数据存储的一些内容和特征：</p>
+<ul>
+<li>包含 NTDS.dit - 一个数据库，其中包含 Active Directory 域控制器的所有信息以及域用户的密码哈希</li>
+<li>默认存储在 %SystemRoot%\NTDS</li>
+<li>只能由域控制器访问</li>
+</ul>
+<h4 id="域森林"><a href="#域森林" class="headerlink" title="域森林"></a>域森林</h4><p>林是 Active Directory 网络中一个或多个域树的集合。它将网络的各个部分分类为一个整体。<br>由以下部分组成：</p>
+<ul>
+<li>树 - Active Directory 域服务中的域层次结构</li>
+<li>域 - 用于对对象进行分组和管理 </li>
+<li>组织单位 (OU) - 组、计算机、用户、打印机和其他 OU 的容器</li>
+<li>信任 - 允许用户访问其他域中的资源</li>
+<li>对象 - 用户、组、打印机、计算机、共享</li>
+<li>域服务 - DNS服务器、LLMNR、IPv6</li>
+<li>域模式 - 对象创建规则</li>
+</ul>
+<h4 id="用户-组"><a href="#用户-组" class="headerlink" title="用户+组"></a>用户+组</h4><p>Active Directory 中的用户和组由您决定；当您创建域控制器时，它带有默认组和两个默认用户：管理员和来宾。您可以创建新用户并创建新组以添加用户。</p>
+<h5 id="用户概览"><a href="#用户概览" class="headerlink" title="用户概览"></a>用户概览</h5><p>用户是 Active Directory 的核心；没有用户，为什么首先要有 Active Directory？您可以在 Active Directory 网络中找到四种主要类型的用户；但是，取决于公司如何管理其用户的权限，可能还有更多。四种类型的用户是：</p>
+<ul>
+<li>域管理员 - 这是大老板：他们控制域并且是唯一有权访问域控制器的人。</li>
+<li>服务帐户（可以是域管理员）——这些帐户大部分情况下从不使用，除了服务维护之外，Windows 需要它们用于 SQL 等服务以将服务与服务帐户配对</li>
+<li>本地管理员 - 这些用户可以以管理员身份对本地计算机进行更改，甚至可以控制其他普通用户，但他们无法访问域控制器</li>
+<li>域用户 - 这些是您的日常用户。他们可以登录他们有权访问的机器，并且可能对机器拥有本地管理员权限，具体取决于组织。</li>
+</ul>
+<h5 id="组概述"><a href="#组概述" class="headerlink" title="组概述"></a>组概述</h5><p>组通过将用户和对象组织成具有指定权限的组，可以更轻松地授予用户和对象权限。Active Directory 组有两种总体类型：</p>
+<ul>
+<li>安全组 - 这些组用于为大量用户指定权限</li>
+<li>通讯组 - 这些组用于指定电子邮件通讯组列表。作为攻击者，这些组对我们的好处不大，但在枚举中仍然是有益的</li>
+</ul>
+<h5 id="默认安全组"><a href="#默认安全组" class="headerlink" title="默认安全组"></a>默认安全组</h5><p>有很多默认安全组，因此我不会对每个安全组进行太多详细介绍，只是简要说明它们为分配的组提供的权限。以下是安全组的简要概述：</p>
+<ul>
+<li>域控制器 - 域中的所有域控制器</li>
+<li>域访客 - 所有域访客</li>
+<li>域用户 - 所有域用户</li>
+<li>域计算机 - 加入域的所有工作站和服务器</li>
+<li>域管理员 - 域的指定管理员</li>
+<li>企业管理员 - 企业的指定管理员</li>
+<li>架构管理员 - 架构的指定管理员</li>
+<li>DNS管理员 - DNS 管理员组</li>
+<li>DNS更新代理 - 允许代表其他一些客户端（例如 DHCP 服务器）执行动态更新的 DNS 客户端。</li>
+<li>允许的 RODC 密码复制组 - 此组中的成员可以将其密码复制到域中的所有只读域控制器</li>
+<li>Group Policy Creator Owners - 此组中的成员可以修改域的组策略</li>
+<li>拒绝 RODC 密码复制组 - 此组中的成员无法将其密码复制到域中的任何只读域控制器</li>
+<li>受保护的用户 - 该组的成员获得针对身份验证安全威胁的额外保护。有关详细信息，请参阅 <a target="_blank" rel="noopener" href="http://go.microsoft.com/fwlink/?LinkId=298939%E3%80%82">http://go.microsoft.com/fwlink/?LinkId=298939。</a></li>
+<li>Cert Publishers - 该组的成员被允许将证书发布到目录</li>
+<li>只读域控制器 - 该组的成员是域中的只读域控制器</li>
+<li>企业只读域控制器 - 该组的成员是企业中的只读域控制器</li>
+<li>关键管理员 - 该组的成员可以对域内的关键对象执行管理操作。</li>
+<li>Enterprise Key Admins - 该组的成员可以对林中的关键对象执行管理操作。</li>
+<li>可克隆域控制器 - 可以克隆作为域控制器的该组的成员。</li>
+<li>RAS 和 IAS 服务器 - 此组中的服务器可以访问用户的远程访问属性</li>
+</ul>
+<h4 id="信任-政策"><a href="#信任-政策" class="headerlink" title="信任+政策"></a>信任+政策</h4><p>信任和策略齐头并进，以帮助域和树相互通信并维护网络内部的“安全性”。他们使用规则代替森林内部的域如何相互交互、外部森林如何与森林交互以及域必须遵循的整体域规则或策略。</p>
+<h5 id="域信任"><a href="#域信任" class="headerlink" title="域信任"></a>域信任</h5><p>信任是一种机制，供网络中的用户访问域中的其他资源。在大多数情况下，信任概述了森林内的域相互通信的方式，在某些环境中，信任可以扩展到外部域，在某些情况下甚至可以扩展到森林。<br>有两种类型的信任决定了域的通信方式。我将在下面概述两种类型的信托：</p>
+<ul>
+<li>Directional - 信任的方向从信任域流向信任域</li>
+<li>可传递的 - 信任关系不仅限于两个域，还包括其他受信任的域<br>建立的信任类型决定了森林中的域和树在攻击 Active Directory 环境时如何能够相互通信和相互发送数据，有时您可以滥用这些信任以在整个网络中横向移动。</li>
+</ul>
+<h5 id="域策略概述"><a href="#域策略概述" class="headerlink" title="域策略概述"></a>域策略概述</h5><p>策略是 Active Directory 的重要组成部分，它们规定了服务器的运行方式以及它将遵循和不遵循的规则。您可以将域策略视为域组，但它们包含规则而不是权限，并且策略不仅适用于一组用户，还适用于整个域。它们只是充当 Active Directory 的规则手册，域管理员可以根据需要对其进行修改和更改，以保持网络平稳、安全地运行。除了很长的默认域策略列表外，域管理员还可以选择添加他们自己的策略，这些策略尚未在域控制器上，例如：如果您想在域上的所有计算机上禁用 Windows Defender，您可以创建一个新组禁用 Windows Defender 的策略对象。域策略的选项几乎是无穷无尽的，并且是攻击者在枚举 Active Directory 网络时的一个重要因素。我将概述许多默认策略中的一些策略，或者您可以在 Active Directory 环境中创建： </p>
+<ul>
+<li>禁用 Windows Defender - 在域上的所有计算机上禁用 Windows Defender</li>
+<li>数字签名通信（始终）- 可以在域控制器上禁用或启用 SMB 签名</li>
+</ul>
+<h4 id="Active-Directory-域服务-身份验证"><a href="#Active-Directory-域服务-身份验证" class="headerlink" title="Active Directory 域服务 + 身份验证"></a>Active Directory 域服务 + 身份验证</h4><p>Active Directory 域服务是 Active Directory 网络的核心功能；它们允许管理域、安全证书、LDAP 等等。这就是域控制器决定它想要做什么以及它想要为域提供什么服务的方式。</p>
+<h5 id="域服务概述"><a href="#域服务概述" class="headerlink" title="域服务概述"></a>域服务概述</h5><p>域服务正是它们听起来的样子。它们是域控制器为域或树的其余部分提供的服务。可以将多种服务添加到域控制器中；但是，在本会议室中，我们将仅讨论将 Windows 服务器设置为域控制器时提供的默认服务。下面概述了默认域服务： </p>
+<ul>
+<li>LDAP - 轻量级目录访问协议；提供应用程序和目录服务之间的通信</li>
+<li>证书服务 - 允许域控制器创建、验证和撤销公钥证书</li>
+<li>DNS , LLMNR, NBT-NS - 用于识别 IP 主机名的域名服务</li>
+</ul>
+<h5 id="域认证概述"><a href="#域认证概述" class="headerlink" title="域认证概述"></a>域认证概述</h5><p>域服务正是它们听起来的样子。它们是域控制器为域或树的其余部分提供的服务。可以将多种服务添加到域控制器中；但是，在本会议室中，我们将仅讨论将 Windows 服务器设置为域控制器时提供的默认服务。下面概述了默认域服务： </p>
+<ul>
+<li>LDAP - 轻量级目录访问协议；提供应用程序和目录服务之间的通信</li>
+<li>证书服务 - 允许域控制器创建、验证和撤销公钥证书</li>
+<li>DNS , LLMNR, NBT-NS - 用于识别 IP 主机名的域名服务</li>
+</ul>
+<h5 id="域认证概述-1"><a href="#域认证概述-1" class="headerlink" title="域认证概述"></a>域认证概述</h5><p>Active Directory 最重要的部分——也是 Active Directory 中最脆弱的部分——是设置的身份验证协议。Active Directory 有两种主要的身份验证类型：<strong>NTLM</strong> 和 <strong>Kerberos</strong>。</p>
+<ul>
+<li>Kerberos - Active Directory 的默认身份验证服务使用票证授予票证和服务票证对用户进行身份验证并授予用户对域中其他资源的访问权限。</li>
+<li>NTLM - 默认 Windows 身份验证协议使用加密的质询&#x2F;响应协议</li>
+</ul>
+<p>Active Directory 域服务是攻击者的主要访问点，并且包含一些最易受攻击的 Active Directory 协议，这不会是您最后一次看到它们在 Active Directory 安全性方面被提及。</p>
+<h4 id="云AD"><a href="#云AD" class="headerlink" title="云AD"></a>云AD</h4><p>最近，Active Directory 发生了转变，推动公司为其公司提供云网络。最著名的 AD 云提供商是 Azure AD。它的默认设置比本地物理 Active Directory 网络安全得多；但是，云 AD 可能仍然存在漏洞。</p>
+<h5 id="Azure-AD-概述"><a href="#Azure-AD-概述" class="headerlink" title="Azure AD 概述"></a>Azure AD 概述</h5><p>Azure 充当物理 Active Directory 和用户登录之间的中间人。这允许在域之间进行更安全的事务，从而使许多 Active Directory 攻击无效。<br><img src="https://s2.loli.net/2022/06/06/NMHOItjkCGrYfEp.png"></p>
+<h5 id="云安全概述"><a href="#云安全概述" class="headerlink" title="云安全概述"></a>云安全概述</h5><p>向您展示云如何采取超越物理网络已经提供的安全预防措施的最佳方式是向您展示与云 Active Directory 环境的比较：<br><img src="https://s2.loli.net/2022/06/06/kPITq96VxmgaGNy.png"></p>
+<h4 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h4><p><img src="https://s2.loli.net/2022/06/06/9LVqHO5Tj4Ikxy1.png"></p>
+<p>powerview脚本可以用来获取当前域管理员在线登录的服务器</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://gist.github.com/HarmJ0y/184f9822b195c52dd50c379ed3117993">https://gist.github.com/HarmJ0y/184f9822b195c52dd50c379ed3117993</a> 语法</p>
+</blockquote>
+<ul>
+<li><p><code>Get-NetComputer -fulldata | select operatingsystem</code> - 获取域上所有操作系统的列表<br> <img src="/" alt="Uploading file...sfkx7"></p>
+</li>
+<li><p><code>Get-NetUser | select cn</code> - 获取域上所有用户的列表<br><img src="https://s2.loli.net/2022/06/06/lvbLyXDCWMouEwO.png"></p>
+</li>
+<li><p><code>net local group</code> -获取本地组</p>
+</li>
+</ul>
+<p><code>Get-ADUser -identity SQLService -properties *</code> 查看sqlserver相关配置<br><img src="https://s2.loli.net/2022/06/06/sdWfKE5jwB96aUV.png"></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Tryhackme/" rel="tag"># Tryhackme</a>
+              <a href="/tags/%E5%86%85%E7%BD%91/" rel="tag"># 内网</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/06/02/Internal/" rel="prev" title="Internal">
+      <i class="fa fa-chevron-left"></i> Internal
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/06/06/Kerberos/" rel="next" title="Kerberos">
+      Kerberos <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.</span> <span class="nav-text">介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFActive-Directory"><span class="nav-number">1.1.</span> <span class="nav-text">什么是Active Directory</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BD%BF%E7%94%A8Active-Directory"><span class="nav-number">1.2.</span> <span class="nav-text">为什么使用Active Directory</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%89%A9%E7%90%86Active-Directory"><span class="nav-number">2.</span> <span class="nav-text">物理Active Directory</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%9F%9F%E6%8E%A7%E5%88%B6%E5%99%A8"><span class="nav-number">2.1.</span> <span class="nav-text">域控制器</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#AD-DS-%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8"><span class="nav-number">2.2.</span> <span class="nav-text">AD DS 数据存储</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9F%9F%E6%A3%AE%E6%9E%97"><span class="nav-number">3.</span> <span class="nav-text">域森林</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%94%A8%E6%88%B7-%E7%BB%84"><span class="nav-number">4.</span> <span class="nav-text">用户+组</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%94%A8%E6%88%B7%E6%A6%82%E8%A7%88"><span class="nav-number">4.1.</span> <span class="nav-text">用户概览</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%BB%84%E6%A6%82%E8%BF%B0"><span class="nav-number">4.2.</span> <span class="nav-text">组概述</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E9%BB%98%E8%AE%A4%E5%AE%89%E5%85%A8%E7%BB%84"><span class="nav-number">4.3.</span> <span class="nav-text">默认安全组</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BF%A1%E4%BB%BB-%E6%94%BF%E7%AD%96"><span class="nav-number">5.</span> <span class="nav-text">信任+政策</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%9F%9F%E4%BF%A1%E4%BB%BB"><span class="nav-number">5.1.</span> <span class="nav-text">域信任</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%9F%9F%E7%AD%96%E7%95%A5%E6%A6%82%E8%BF%B0"><span class="nav-number">5.2.</span> <span class="nav-text">域策略概述</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Active-Directory-%E5%9F%9F%E6%9C%8D%E5%8A%A1-%E8%BA%AB%E4%BB%BD%E9%AA%8C%E8%AF%81"><span class="nav-number">6.</span> <span class="nav-text">Active Directory 域服务 + 身份验证</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%9F%9F%E6%9C%8D%E5%8A%A1%E6%A6%82%E8%BF%B0"><span class="nav-number">6.1.</span> <span class="nav-text">域服务概述</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%9F%9F%E8%AE%A4%E8%AF%81%E6%A6%82%E8%BF%B0"><span class="nav-number">6.2.</span> <span class="nav-text">域认证概述</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%9F%9F%E8%AE%A4%E8%AF%81%E6%A6%82%E8%BF%B0-1"><span class="nav-number">6.3.</span> <span class="nav-text">域认证概述</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BA%91AD"><span class="nav-number">7.</span> <span class="nav-text">云AD</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Azure-AD-%E6%A6%82%E8%BF%B0"><span class="nav-number">7.1.</span> <span class="nav-text">Azure AD 概述</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%BA%91%E5%AE%89%E5%85%A8%E6%A6%82%E8%BF%B0"><span class="nav-number">7.2.</span> <span class="nav-text">云安全概述</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%9E%E4%BE%8B"><span class="nav-number">8.</span> <span class="nav-text">实例</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Lu1i丶"
+      src="/images/1.PNG">
+  <p class="site-author-name" itemprop="name">Lu1i丶</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">34</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Lu1i丶</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : '2IjWrTCGWIUFwAsamIh2ezIu-gzGzoHsz',
+      appKey     : 'EOJr4RJE5lM0E3ryx1vGuAPV',
+      placeholder: "Just go go",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : 'zh-cn' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : true,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>
