@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"sugarcrashx.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="开发环境配置安装steamboatSteamboat 由以下3个 Docker 镜像组成 123docker pullregistry.cn-hangzhou.aliyuncs.com&#x2F;steamboat&#x2F;steamboat:1docker pullregistry.cn-hangzhou.aliyuncs.com&#x2F;steamboat&#x2F;steamboat:2docker pullregistry">
+<meta property="og:type" content="article">
+<meta property="og:title" content="爬虫&amp;反爬虫学习初探">
+<meta property="og:url" content="https://sugarcrashx.github.io/2022/10/14/%E7%88%AC%E8%99%AB&%E5%8F%8D%E7%88%AC%E8%99%AB%E5%AD%A6%E4%B9%A0%E5%88%9D%E6%8E%A2/index.html">
+<meta property="og:site_name" content="SugarCrash!">
+<meta property="og:description" content="开发环境配置安装steamboatSteamboat 由以下3个 Docker 镜像组成 123docker pullregistry.cn-hangzhou.aliyuncs.com&#x2F;steamboat&#x2F;steamboat:1docker pullregistry.cn-hangzhou.aliyuncs.com&#x2F;steamboat&#x2F;steamboat:2docker pullregistry">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://lw-picgo.oss-cn-chengdu.aliyuncs.com/img/2022/20221014155129.png">
+<meta property="og:image" content="http://lw-picgo.oss-cn-chengdu.aliyuncs.com/img/2022/20221014155129.png">
+<meta property="og:image" content="http://lw-picgo.oss-cn-chengdu.aliyuncs.com/img/2022/20221014155129.png">
+<meta property="og:image" content="http://lw-picgo.oss-cn-chengdu.aliyuncs.com/img/2022/20221014155138.png">
+<meta property="og:image" content="http://lw-picgo.oss-cn-chengdu.aliyuncs.com/img/2022/20221014155146.png">
+<meta property="og:image" content="http://lw-picgo.oss-cn-chengdu.aliyuncs.com/img/2022/20221014155146.png">
+<meta property="og:image" content="http://lw-picgo.oss-cn-chengdu.aliyuncs.com/img/2022/20221014155146.png">
+<meta property="og:image" content="http://lw-picgo.oss-cn-chengdu.aliyuncs.com/img/2022/20221014155206.png">
+<meta property="og:image" content="http://lw-picgo.oss-cn-chengdu.aliyuncs.com/img/2022/20221014155206.png">
+<meta property="og:image" content="http://lw-picgo.oss-cn-chengdu.aliyuncs.com/img/2022/20221014155206.png">
+<meta property="og:image" content="http://lw-picgo.oss-cn-chengdu.aliyuncs.com/img/2022/20221014155217.png">
+<meta property="og:image" content="http://lw-picgo.oss-cn-chengdu.aliyuncs.com/img/2022/20221014155217.png">
+<meta property="og:image" content="http://lw-picgo.oss-cn-chengdu.aliyuncs.com/img/2022/20221014155217.png">
+<meta property="og:image" content="http://lw-picgo.oss-cn-chengdu.aliyuncs.com/img/2022/20221014155217.png">
+<meta property="og:image" content="http://lw-picgo.oss-cn-chengdu.aliyuncs.com/img/2022/20221014155217.png">
+<meta property="article:published_time" content="2022-10-14T08:01:50.000Z">
+<meta property="article:modified_time" content="2022-10-14T08:01:21.389Z">
+<meta property="article:author" content="Lu1i丶">
+<meta property="article:tag" content="python">
+<meta property="article:tag" content="爬虫">
+<meta property="article:tag" content="反爬虫">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://lw-picgo.oss-cn-chengdu.aliyuncs.com/img/2022/20221014155129.png">
+
+<link rel="canonical" href="https://sugarcrashx.github.io/2022/10/14/%E7%88%AC%E8%99%AB&%E5%8F%8D%E7%88%AC%E8%99%AB%E5%AD%A6%E4%B9%A0%E5%88%9D%E6%8E%A2/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>爬虫&反爬虫学习初探 | SugarCrash!</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">SugarCrash!</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">记录学习，想找个师傅带带我</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://sugarcrashx.github.io/2022/10/14/%E7%88%AC%E8%99%AB&%E5%8F%8D%E7%88%AC%E8%99%AB%E5%AD%A6%E4%B9%A0%E5%88%9D%E6%8E%A2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/1.PNG">
+      <meta itemprop="name" content="Lu1i丶">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="SugarCrash!">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          爬虫&反爬虫学习初探
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-10-14 16:01:50 / 修改时间：16:01:21" itemprop="dateCreated datePublished" datetime="2022-10-14T16:01:50+08:00">2022-10-14</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2022/10/14/%E7%88%AC%E8%99%AB&%E5%8F%8D%E7%88%AC%E8%99%AB%E5%AD%A6%E4%B9%A0%E5%88%9D%E6%8E%A2/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2022/10/14/%E7%88%AC%E8%99%AB&%E5%8F%8D%E7%88%AC%E8%99%AB%E5%AD%A6%E4%B9%A0%E5%88%9D%E6%8E%A2/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <span id="more"></span>
+<h3 id="开发环境配置"><a href="#开发环境配置" class="headerlink" title="开发环境配置"></a>开发环境配置</h3><h4 id="安装steamboat"><a href="#安装steamboat" class="headerlink" title="安装steamboat"></a>安装steamboat</h4><p>Steamboat 由以下3个 Docker 镜像组成</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker pullregistry.cn-hangzhou.aliyuncs.com/steamboat/steamboat:1</span><br><span class="line">docker pullregistry.cn-hangzhou.aliyuncs.com/steamboat/steamboat:2</span><br><span class="line">docker pullregistry.cn-hangzhou.aliyuncs.com/steamboat/steamboat:3</span><br></pre></td></tr></table></figure>
+
+<p>启动多个镜像写shell文件</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">创建runsp.sh</span><br><span class="line"></span><br><span class="line">写入</span><br><span class="line">docker run -d -p 80:80 -p8090:8090 -p 8205:8205 -p 8207:8207 9b5cc6bd42d0</span><br><span class="line">docker run -d -p 8202:8202 0487eb7998d9</span><br><span class="line">docker run -d -p 8206:8206 5c75ec9ef2b6</span><br><span class="line"></span><br><span class="line">启动</span><br><span class="line">sh runsp.sh</span><br></pre></td></tr></table></figure>
+
+<h4 id="Splash"><a href="#Splash" class="headerlink" title="Splash"></a>Splash</h4><p>Splash 是一个异步的 JavaScript 渲染服务。它是带有 HTTP API 的轻量级 Web 浏览器，能够并行处理多个页面请求，可以在页面上下文中执行自定义的 JavaScript 以及模拟浏览器中的点击、下滑等操作。<br>Splash的安装方式有两种，一种是下载已经封装好的 Docker 镜像，另一种是从 GitHub 下载源码后安装，这里我推荐第一种安装方式。在安装好 Docker 后，只需要从 DockerHub 中拉取 Splash 镜像并运行即可，相关命令如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -it -p 8050:8050 scrapinghub/splash</span><br></pre></td></tr></table></figure>
+
+<p><img src="http://lw-picgo.oss-cn-chengdu.aliyuncs.com/img/2022/20221014155129.png" alt="image-20221012125718154"></p>
+<h4 id="Puppeteer"><a href="#Puppeteer" class="headerlink" title="Puppeteer"></a>Puppeteer</h4><p>Puppeteer 是谷歌官方出品的一个 Node.js库，提供了一个高级 API来控制DevTools协议上的Chrome 或 Chromium。Puppeteer默认无界面运行，但可以配置为运行有界面的 Chrome 或 Chromium。</p>
+<p>在用户浏览器中，使用Puppeteer可以完成大多数手动执行的操作。有开发者开源了支持 Python 的 Puppeteer 库，叫作 Pyppeteer，其文档网址为<a target="_blank" rel="noopener" href="https://miyakogi.github.io/pyppeteer/">https://miyakogi.github.io/pyppeteer/</a> 。要注意的是，它仅支持在 Python 3.6 + 的环境下运行。同样，我们可以使用Python 包管理工具 pip来安装 Pyppeteer，命令如下</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install pyppeteer</span><br></pre></td></tr></table></figure>
+
+<h5 id="验证"><a href="#验证" class="headerlink" title="验证"></a>验证</h5><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> asyncio</span><br><span class="line"><span class="keyword">from</span> pyppeteer <span class="keyword">import</span> launch</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">main</span>():</span><br><span class="line">    <span class="comment"># 初始化浏览器对象</span></span><br><span class="line">    browser = <span class="keyword">await</span> launch()</span><br><span class="line">    page = <span class="keyword">await</span> browser.newPage()</span><br><span class="line">    <span class="comment"># 访问指定url</span></span><br><span class="line">    <span class="keyword">await</span> page.goto(<span class="string">&#x27;http://example.com&#x27;</span>)</span><br><span class="line">    <span class="comment"># 打开网址后进行截图并保存在当前路径</span></span><br><span class="line">    <span class="keyword">await</span> page.screenshot(&#123;<span class="string">&#x27;path&#x27;</span>: <span class="string">&#x27;example.png&#x27;</span>&#125;)</span><br><span class="line">    <span class="comment"># 关闭浏览器对象</span></span><br><span class="line">    <span class="keyword">await</span> browser.close()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">asyncio.get_event_loop().run_until_complete(main())</span><br></pre></td></tr></table></figure>
+
+<p>第一次运行 Pyppeteer 时，它会下载最新版本的<strong>Chromium</strong>（大小约 100 MB），所以第一次运行的等待时间较长。命令运行完毕后，在 pyteer.py 的同级目录下就会多出名为 example.png的图片，说明 Pyppeteer 安装成功，且可以正常运行。</p>
+<h4 id="PyTesseract"><a href="#PyTesseract" class="headerlink" title="PyTesseract"></a>PyTesseract</h4><p>安装： <a target="_blank" rel="noopener" href="https://blog.csdn.net/spatial_coder/article/details/123938274">https://blog.csdn.net/spatial_coder/article/details/123938274</a></p>
+<p>pytesseract.py的cmd路径<br>将cmd路径改为本机Tesseract-OCR.exe所在的路径</p>
+<p><img src="http://lw-picgo.oss-cn-chengdu.aliyuncs.com/img/2022/20221014155129.png" alt="image-20221012132234386"></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    <span class="keyword">from</span> PIL <span class="keyword">import</span> Image</span><br><span class="line"><span class="keyword">except</span> ImportError:</span><br><span class="line">    <span class="keyword">import</span> Image</span><br><span class="line"><span class="keyword">import</span> pytesseract</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(pytesseract.image_to_string(Image.<span class="built_in">open</span>(<span class="string">&#x27;example.png&#x27;</span>)))</span><br></pre></td></tr></table></figure>
+
+<p>首先导入 Image 库和 PyTesseract 库，接着使用 PyTesseract 库中的image_to_string() 方法识别<br>example.png 图片中的文字，并打印识别结果。</p>
+<p><img src="http://lw-picgo.oss-cn-chengdu.aliyuncs.com/img/2022/20221014155129.png" alt="image-20221012132319191"></p>
+<h4 id="Parsel"><a href="#Parsel" class="headerlink" title="Parsel"></a>Parsel</h4><p>Parsel 库是 Scrapy 开发团队开源的一个支持 XPath和 CSS 选择器语法的网页解析<br>库</p>
+<h3 id="反爬虫的概念与定义"><a href="#反爬虫的概念与定义" class="headerlink" title="反爬虫的概念与定义"></a>反爬虫的概念与定义</h3><ul>
+<li><p>主动型反爬虫 ：开发者有意识地使用技术手段区分正常用户和爬虫，并限制爬虫对网站的访问行为，如验证请求头信息、限制访问频率、使用验证码等。</p>
+</li>
+<li><p>被动型反爬虫 ：为了提升用户体验或节省资源，用一些技术间接提高爬虫访问难度的行为，比如数据分段加载、点击切换标签页、鼠标悬停预览数据等。</p>
+</li>
+</ul>
+<h4 id="User-Agent反爬虫"><a href="#User-Agent反爬虫" class="headerlink" title="User-Agent反爬虫"></a>User-Agent反爬虫</h4><p>User-Agent 反爬虫指的是服务器端通过校验请求头中的User-Agent值来区分正常用户和爬虫程序的手段，这是一种较为初级的反爬虫手段。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">from</span> lxml <span class="keyword">import</span> etree</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">url = <span class="string">&quot;http://www.porters.vip/verify/uas/index.html&quot;</span></span><br><span class="line">headers = &#123;</span><br><span class="line">    <span class="string">&quot;User-Agent&quot;</span>: <span class="string">&quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36&quot;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">resp = requests.get(url, headers=headers)</span><br><span class="line"><span class="built_in">print</span>(resp.status_code)</span><br><span class="line">html = etree.HTML(resp.text)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> resp.status_code == <span class="number">200</span>:</span><br><span class="line">    divs = html.xpath(<span class="string">&#x27;/html/body/div[2]/div[2]/div&#x27;</span>)</span><br><span class="line">    <span class="keyword">for</span> a <span class="keyword">in</span> divs:</span><br><span class="line">        biaoti = a.xpath(<span class="string">&#x27;./div/h4[1]/a[1]/text()&#x27;</span>)</span><br><span class="line">        <span class="built_in">print</span>(biaoti)</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;This request is fial.&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<h4 id="User-Agent校验流程"><a href="#User-Agent校验流程" class="headerlink" title="User-Agent校验流程"></a>User-Agent校验流程</h4><p>利用 nginx 的条件判断语句实现反爬虫。比如将 Python、Java和 PHP 等关键词加入黑名单，那么只要服务器检测到User-Agent头域值中包含黑名单中的关键词时，就会将此次请求的发起者视为爬虫，可以不予处理或者返回相应的错误提示。</p>
+<p><img src="http://lw-picgo.oss-cn-chengdu.aliyuncs.com/img/2022/20221014155138.png" alt="image-20221012150930620"></p>
+<p>示例</p>
+<p>在nginx 的辅助配置文件目录下新建一个名为 porters.conf 的辅助配置，将以下配置写入文件：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line"> listen 80;</span><br><span class="line"> server_name www.porters.vip; # 请填写真实域名</span><br><span class="line"> charset utf-8;</span><br><span class="line"> location /verify/uas/ &#123;</span><br><span class="line"> if ($http_user_agent ~* (python))&#123;</span><br><span class="line"> return 403;</span><br><span class="line"> &#125;</span><br><span class="line"> root /root/www/html;</span><br><span class="line"> index index.html;</span><br><span class="line"> &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这段配置的作用是判断请求头信息中User-Agent头域值里是否包含关键字python ，如果包含，则直接返回 403 错误。注意，配置中的server_name 必须是域名或 IP 地址，否则无法访问。然后，在<br>root 指令设定的目录下建立层级目录 &#x2F;verify&#x2F;uas。</p>
+<h4 id="Cookie反爬虫"><a href="#Cookie反爬虫" class="headerlink" title="Cookie反爬虫"></a>Cookie反爬虫</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 网址 ：http://www.porters.vip/verify/cookie/content.html 。</span></span><br><span class="line"><span class="comment"># 任务 ：爬取旅游网公告详情页中的公告标题</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">from</span> lxml <span class="keyword">import</span> etree</span><br><span class="line"></span><br><span class="line">url = <span class="string">&#x27;http://www.porters.vip/verify/cookie/content.html&#x27;</span></span><br><span class="line"><span class="comment"># 向目标网址发起网络请求</span></span><br><span class="line">header = &#123;<span class="string">&quot;Cookie&quot;</span>: <span class="string">&quot;isfirst=789kq7uc1pp4c&quot;</span>&#125;</span><br><span class="line">resp = requests.get(url, headers=header)</span><br><span class="line"><span class="comment"># 打印输出状态码</span></span><br><span class="line"><span class="built_in">print</span>(resp.status_code)</span><br><span class="line"><span class="comment"># 如果本次请求的状态码为200，则继续，否则提示失败</span></span><br><span class="line"><span class="keyword">if</span> resp.status_code == <span class="number">200</span>:</span><br><span class="line">    <span class="comment"># 将响应正文赋值给html变量</span></span><br><span class="line">    html = etree.HTML(resp.text)</span><br><span class="line">    <span class="comment"># 根据HTML标签名称和类名从文档中取出标题</span></span><br><span class="line">    res = html.cssselect(<span class="string">&#x27;.page-header h1&#x27;</span>)[<span class="number">0</span>].text</span><br><span class="line">    <span class="built_in">print</span>(res)</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;This request is fial.&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<h4 id="签名验证反爬虫"><a href="#签名验证反爬虫" class="headerlink" title="签名验证反爬虫"></a>签名验证反爬虫</h4><p><a target="_blank" rel="noopener" href="http://www.porters.vip/verify/sign/">http://www.porters.vip/verify/sign/</a></p>
+<p>页面加载了两个js文件一个md5加密的js文件，一个sign.js文件，sign.js</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">fetch</span>(<span class="params"></span>)&#123;</span><br><span class="line">    text=$.<span class="title function_">ajax</span>(&#123;</span><br><span class="line">        <span class="attr">type</span>:<span class="string">&quot;GET&quot;</span>, <span class="attr">async</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="attr">url</span>:<span class="string">&quot;http://www.porters.vip/verify/sign/fet&quot;</span> + <span class="title function_">uri</span>()</span><br><span class="line">    &#125;);</span><br><span class="line">    $(<span class="string">&quot;#content&quot;</span>).<span class="title function_">html</span>(text.<span class="property">responseText</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">randints</span>(<span class="params">r, n, tof</span>)&#123;</span><br><span class="line"><span class="comment">/* 生成随机数字，tof决定返回number类型或者字符串类型</span></span><br><span class="line"><span class="comment">r 代表数字范围 n 代表数量</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">var</span> result = [];</span><br><span class="line"><span class="keyword">if</span>(tof)&#123;</span><br><span class="line"><span class="keyword">return</span> <span class="title class_">Math</span>.<span class="title function_">floor</span>(<span class="title class_">Math</span>.<span class="title function_">random</span>()*r);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">0</span>;i&lt;n;i++)&#123;</span><br><span class="line">s = <span class="title class_">Math</span>.<span class="title function_">floor</span>(<span class="title class_">Math</span>.<span class="title function_">random</span>()*r);</span><br><span class="line">result.<span class="title function_">push</span>(s);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">return</span> result.<span class="title function_">join</span>(<span class="string">&#x27;&#x27;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">function</span> <span class="title function_">randstrs</span>(<span class="params">n</span>)&#123;</span><br><span class="line"><span class="comment">// 生成随机字母，n为随机字母的数量</span></span><br><span class="line"><span class="keyword">var</span> result = [];</span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">0</span>; i&lt;n; i++)&#123;</span><br><span class="line">s = <span class="title class_">String</span>.<span class="title function_">fromCharCode</span>(<span class="number">65</span>+<span class="title function_">randints</span>(<span class="number">25</span>, <span class="number">1</span>, <span class="number">1</span>));</span><br><span class="line">result.<span class="title function_">push</span>(s);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">return</span> result.<span class="title function_">join</span>(<span class="string">&#x27;&#x27;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">function</span> <span class="title function_">uri</span>(<span class="params"></span>)&#123;</span><br><span class="line"><span class="keyword">var</span> action = <span class="title function_">randints</span>(<span class="number">9</span>, <span class="number">5</span>, <span class="number">0</span>);</span><br><span class="line"><span class="keyword">var</span> tim = <span class="title class_">Math</span>.<span class="title function_">round</span>(<span class="keyword">new</span> <span class="title class_">Date</span>().<span class="title function_">getTime</span>()/<span class="number">1000</span>).<span class="title function_">toString</span>();</span><br><span class="line"><span class="keyword">var</span> randstr = <span class="title function_">randstrs</span>(<span class="number">5</span>);</span><br><span class="line"><span class="keyword">var</span> hexs = <span class="title function_">hex_md5</span>(action+tim+randstr);</span><br><span class="line">args = <span class="string">&#x27;?actions=&#x27;</span> + action + <span class="string">&#x27;&amp;tim=&#x27;</span> + tim + <span class="string">&#x27;&amp;randstr=&#x27;</span> + randstr + <span class="string">&#x27;&amp;sign=&#x27;</span> + hexs;</span><br><span class="line"><span class="keyword">return</span> args;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>直接看最后可以得知，action,tim,randstr,hexs这几个值</p>
+<p>action是生成1-9的几个随机数</p>
+<p>tim时间戳</p>
+<p>randstr是生成5个随机字母代码得知是大写字母</p>
+<p>hexs将前面所有的值加起来md5加密</p>
+<p>python实现相同代码</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> time <span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">from</span> random <span class="keyword">import</span> randint, sample</span><br><span class="line"><span class="keyword">import</span> hashlib</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">hex5</span>(<span class="params">value</span>):</span><br><span class="line">    manipulator = hashlib.md5()</span><br><span class="line">    manipulator.update(value.encode(<span class="string">&#x27;utf-8&#x27;</span>))</span><br><span class="line">    <span class="keyword">return</span> manipulator.hexdigest()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 生成1-9之间的五个随机数</span></span><br><span class="line">action = <span class="string">&quot;&quot;</span>.join([<span class="built_in">str</span>(randint(<span class="number">1</span>, <span class="number">9</span>)) <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">5</span>)])</span><br><span class="line"><span class="built_in">print</span>(action)</span><br><span class="line"><span class="comment"># 生成当前时间戳</span></span><br><span class="line">tim = <span class="built_in">round</span>(time())</span><br><span class="line"><span class="comment"># 生成5个随机大写字母</span></span><br><span class="line">randstr = <span class="string">&quot;&quot;</span>.join(sample([<span class="built_in">chr</span>(_) <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">65</span>, <span class="number">91</span>)], <span class="number">5</span>))</span><br><span class="line"><span class="comment"># 3个参数拼接之后进行MD5加密</span></span><br><span class="line">value = action + <span class="built_in">str</span>(tim) + randstr</span><br><span class="line">hexs = hex5(value)</span><br><span class="line"><span class="built_in">print</span>(action, tim, randstr, hexs)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> time <span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">from</span> random <span class="keyword">import</span> randint, sample</span><br><span class="line"><span class="keyword">import</span> hashlib</span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">hex5</span>(<span class="params">value</span>):</span><br><span class="line">    manipulator = hashlib.md5()</span><br><span class="line">    manipulator.update(value.encode(<span class="string">&#x27;utf-8&#x27;</span>))</span><br><span class="line">    <span class="keyword">return</span> manipulator.hexdigest()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 生成1-9之间的五个随机数</span></span><br><span class="line">action = <span class="string">&quot;&quot;</span>.join([<span class="built_in">str</span>(randint(<span class="number">1</span>, <span class="number">9</span>)) <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">5</span>)])</span><br><span class="line"><span class="built_in">print</span>(action)</span><br><span class="line"><span class="comment"># 生成当前时间戳</span></span><br><span class="line">tim = <span class="built_in">round</span>(time())</span><br><span class="line"><span class="comment"># 生成5个随机大写字母</span></span><br><span class="line">randstr = <span class="string">&quot;&quot;</span>.join(sample([<span class="built_in">chr</span>(_) <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">65</span>, <span class="number">91</span>)], <span class="number">5</span>))</span><br><span class="line"><span class="comment"># 3个参数拼接之后进行MD5加密</span></span><br><span class="line">value = action + <span class="built_in">str</span>(tim) + randstr</span><br><span class="line">hexs = hex5(value)</span><br><span class="line"><span class="built_in">print</span>(action, tim, randstr, hexs)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">uri</span>():</span><br><span class="line">    args = <span class="string">&#x27;?actions=&#123;&#125;&amp;tim=&#123;&#125;&amp;randstr=&#123;&#125;&amp;sign=&#123;&#125;&#x27;</span>.<span class="built_in">format</span>(action, tim, randstr, hexs)</span><br><span class="line">    <span class="keyword">return</span> args</span><br><span class="line"></span><br><span class="line">url = <span class="string">&#x27;http://www.porters.vip/verify/sign/fet&#x27;</span> + uri()</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(url)</span><br><span class="line">resp = requests.get(url)</span><br><span class="line"><span class="built_in">print</span>(resp.status_code, resp.text)</span><br></pre></td></tr></table></figure>
+
+<p>本次的反爬虫利用 JavaScript 生成随机值，与之前的随机值不同，这次的随机值中包含时间戳和 MD5 加密值。签名验证有很多种实现方式，但原理都是相同的：由客户端生成一些随机值和不可逆的 MD5 加密字符串，并在发起请求时将这些值发送给服务器端。服务器端使用相同的方式对随机值进行计算以及 MD5 加密，如果服务器端得到的MD5 值与前端提交的 MD5 值相等，就代表是正常请求，否则返回403。</p>
+<h3 id="动态渲染反爬虫"><a href="#动态渲染反爬虫" class="headerlink" title="动态渲染反爬虫"></a>动态渲染反爬虫</h3><p>动态网页比静态网页更具交互性，能给用户提供更好的体验。动态网页中常见的表现形式有下拉刷新、点击切换和悬停显示等。由JavaScript 改变 HTML DOM 导致页面内容发生变化的现象称为动态渲染。很多时候开发者只是想完成某个交互功能，而不是特意区分正常用户和爬虫程序，但这在不经意间限制了爬虫对数据的获取。由于编程语言没有像浏览器一样内置 JavaScript 解释器和渲染引擎，所以动态渲染是天然的反爬虫手段。</p>
+<h4 id="Selenium套件"><a href="#Selenium套件" class="headerlink" title="Selenium套件"></a>Selenium套件</h4><p>Selenium 是一个用于测试Web应用程序的工具。我们可以通过Selenium 和浏览器驱动调用浏览器执行特定的操作，如发起网络请求、点击操作、鼠标下滑等。由于调用的是浏览器，所以这种组合还具备了资源自动加载和渲染的能力。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> selenium.webdriver <span class="keyword">import</span> Chrome</span><br><span class="line"><span class="keyword">from</span> selenium.webdriver.common.by <span class="keyword">import</span> By</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line">url = <span class="string">&#x27;http://www.porters.vip/verify/sign/&#x27;</span></span><br><span class="line"></span><br><span class="line">web = Chrome()</span><br><span class="line">web.get(url)</span><br><span class="line">web.find_element(By.XPATH, <span class="string">&#x27;//*[@id=&quot;fetch_button&quot;]&#x27;</span>).click()</span><br><span class="line">time.sleep(<span class="number">1</span>)</span><br><span class="line">resp = web.page_source</span><br><span class="line"><span class="built_in">print</span>(resp)</span><br></pre></td></tr></table></figure>
+
+<h4 id="异步渲染库Puppeteer"><a href="#异步渲染库Puppeteer" class="headerlink" title="异步渲染库Puppeteer"></a>异步渲染库Puppeteer</h4><p>在 Selenium 套件的支持下，我们很轻松地完成了爬取任务。但Selenium 套件也有一定的缺陷，当我们使用 Python 中的异步库编写爬虫时，Selenium 就不是那么适合了。异步是目前提升爬虫效率的常用手段之一，越来越多的人将同步的爬虫代码改为异步。由于浏览器是以进程的方式启动，所以它无法满足异步爬虫的渲染需求，为什么这么说呢？异步爬虫可以做到每秒向 300 个页面发起请求，但是要在计算机中开启 300 个浏览器进程或者 300 个标签页是很困难的，这会导致阻塞，影响异步爬虫程序的整体效率。我们可以用 Python 代<br>码验证一下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> selenium <span class="keyword">import</span> webdriver</span><br><span class="line"><span class="keyword">from</span> datetime <span class="keyword">import</span> datetime</span><br><span class="line"></span><br><span class="line"><span class="comment"># 记录开始时间</span></span><br><span class="line">starts = datetime.now()</span><br><span class="line">url = <span class="string">&#x27;http://www.porters.vip/verify/sign/&#x27;</span></span><br><span class="line"><span class="comment"># 初始化浏览器对象</span></span><br><span class="line">browser = webdriver.Chrome()</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">30</span>):</span><br><span class="line">    <span class="comment"># 循环30次访问目标url</span></span><br><span class="line">    browser.get(url)</span><br><span class="line">    resp = browser.page_source</span><br><span class="line">browser.quit()</span><br><span class="line"><span class="comment"># 计算并打印耗时秒数</span></span><br><span class="line">runtime = datetime.now() - starts</span><br><span class="line"><span class="built_in">print</span>(runtime.total_seconds())</span><br></pre></td></tr></table></figure>
+
+<p>selenium循环访问示例页面总共耗时7秒左右</p>
+<p>Puppeteer是 Google 开源的 Node 库，它提供了一个高级 API来控制 Chrome 浏览器，浏览器中大多数手动执行的操作都可以使用Puppeteer 完成，更重要的是 Puppeteer 支持异步。Puppeteer 是一个 Node 库，如果你的爬虫程序是用 Node.js编写的，那么可以直接使用这个库，如果爬虫程序是用 Python 编写的，那么就需要用支持Python 的库 Pyppeteer。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> asyncio</span><br><span class="line"><span class="keyword">from</span> pyppeteer <span class="keyword">import</span> launch</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">main</span>():</span><br><span class="line">    <span class="comment"># 初始化浏览器对象</span></span><br><span class="line">    browser = <span class="keyword">await</span> launch()</span><br><span class="line">    <span class="comment"># 在浏览器上下文中创建新页面</span></span><br><span class="line">    page = <span class="keyword">await</span> browser.newPage()</span><br><span class="line">    <span class="comment"># 打开目标网址</span></span><br><span class="line">    <span class="keyword">await</span> page.goto(<span class="string">&#x27;http://www.porters.vip/verify/sign&#x27;</span>)</span><br><span class="line">    <span class="comment"># 点击指定按钮</span></span><br><span class="line">    <span class="keyword">await</span> page.click(<span class="string">&#x27;#fetch_button&#x27;</span>)</span><br><span class="line">    <span class="comment"># 读取页面指定位置的文本</span></span><br><span class="line">    resp = <span class="keyword">await</span> page.xpath(<span class="string">&#x27;//*[@id=&quot;content&quot;]&#x27;</span>)</span><br><span class="line">    text = <span class="keyword">await</span>(<span class="keyword">await</span></span><br><span class="line">                 resp[<span class="number">0</span>].getProperty(<span class="string">&#x27;textContent&#x27;</span>)).jsonValue()</span><br><span class="line">    <span class="built_in">print</span>(text)</span><br><span class="line">    <span class="comment"># 关闭浏览器对象</span></span><br><span class="line">    <span class="keyword">await</span> browser.close()</span><br><span class="line">asyncio.get_event_loop().run_until_complete(main())</span><br></pre></td></tr></table></figure>
+
+<p>说明 Puppeteer 也可以完成点击操作和页面渲染任务。</p>
+<h4 id="异步渲染服务-Splash"><a href="#异步渲染服务-Splash" class="headerlink" title="异步渲染服务 Splash"></a>异步渲染服务 Splash</h4><p>Splash 是一个异步的 JavaScript 渲染服务，它是带有 HTTP API 的轻量级 Web 浏览器。 Splash能够并行地处理多个页面请求，在页面上下文中执行自定义的 JavaScript 以及模浏览器中的点击、下滑等操作。有了 Splash 之后情况就变得不一样了，我们可以将Splash 服务部署到云服务器上并配置负载均衡。</p>
+<p>Splash 服务提供了一个可视化的操作界面</p>
+<p><img src="http://lw-picgo.oss-cn-chengdu.aliyuncs.com/img/2022/20221014155146.png" alt="image-20221013151514999"></p>
+<p>界面左侧是一些介绍文字，右侧是命令框。我们可以在右侧地址栏输入网址，点击Render me按钮后 Splash 就会向该网址发出请求。在右侧命令框中是 Splash 预设的示例代码，这段代码的作用是向指定网址发出请求，并在等待 0.5 秒后将页面文本、页面截图和资源加载相关信息返回。我们可以在可视化界面中尝试访问<a target="_blank" rel="noopener" href="http://www.porters.vip/verify/sign%EF%BC%8C%E7%84%B6%E5%90%8E%E7%82%B9%E5%87%BB%E5%AF%B9%E5%BA%94%E7%9A%84%E6%8C%89%E9%92%AE%E5%B9%B6%E6%89%93%E5%8D%B0%E6%B8%B2%E6%9F%93%E5%90%8E%E7%9A%84%E6%96%87%E6%9C%AC%E5%86%85%E5%AE%B9%E3%80%82">http://www.porters.vip/verify/sign，然后点击对应的按钮并打印渲染后的文本内容。</a></p>
+<p><img src="http://lw-picgo.oss-cn-chengdu.aliyuncs.com/img/2022/20221014155146.png" alt="image-20221013151559253"></p>
+<p>更改命令行代码，点击按钮，提取网页文本</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">main</span><span class="params">(splash, args)</span></span></span><br><span class="line"> <span class="comment">-- 访问指定的url</span></span><br><span class="line">	<span class="built_in">assert</span>(splash:go(args.url))</span><br><span class="line"> <span class="comment">-- 按钮定位</span></span><br><span class="line">	<span class="keyword">local</span> butt = splash:<span class="built_in">select</span>(<span class="string">&#x27;#fetch_button&#x27;</span>)</span><br><span class="line"> <span class="comment">-- 点击按钮</span></span><br><span class="line">	butt:mouse_click()</span><br><span class="line">	content = splash:<span class="built_in">select</span>(<span class="string">&#x27;#content&#x27;</span>):text()</span><br><span class="line">	<span class="keyword">return</span> &#123;</span><br><span class="line">		results = content</span><br><span class="line"> &#125;</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="http://lw-picgo.oss-cn-chengdu.aliyuncs.com/img/2022/20221014155146.png" alt="image-20221013151912483"></p>
+<p>Splash 允许我们编写自定义的 Lua 脚本，如果要获取脚本运行结果，那么我们可以使用execute 接口，execute 的详细介绍可参考Splash 文档中的 Splash Script 教程</p>
+<p>详见：<a target="_blank" rel="noopener" href="https://splash.readthedocs.io/en/stable/scriptingtutorial.html#scripting-tutorial">https://splash.readthedocs.io/en/stable/scriptingtutorial.html#scripting-tutorial</a> </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"></span><br><span class="line"><span class="comment"># Splash接口</span></span><br><span class="line">render = <span class="string">&#x27;http://192.168.136.133:8050/execute&#x27;</span></span><br><span class="line"><span class="comment"># 需要执行的命令</span></span><br><span class="line">script = <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    function main(splash)</span></span><br><span class="line"><span class="string">        splash:go(&#x27;http://www.porters.vip/verify/sign/&#x27;)</span></span><br><span class="line"><span class="string">        local butt = splash:select(&#x27;#fetch_button&#x27;)</span></span><br><span class="line"><span class="string">        butt:mouse_click()</span></span><br><span class="line"><span class="string">        content = splash:select(&#x27;#content&#x27;):text()</span></span><br><span class="line"><span class="string">        return &#123;</span></span><br><span class="line"><span class="string">            result = content</span></span><br><span class="line"><span class="string">        &#125;</span></span><br><span class="line"><span class="string">    end</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 设置请求头</span></span><br><span class="line">header = &#123;<span class="string">&#x27;content-type&#x27;</span>: <span class="string">&#x27;application/json&#x27;</span>&#125;</span><br><span class="line"><span class="comment"># 按照Splash规定提交命令</span></span><br><span class="line">data = json.dumps(&#123;<span class="string">&quot;lua_source&quot;</span>: script&#125;)</span><br><span class="line">resp = requests.post(render, data=data, headers=header)</span><br><span class="line"><span class="comment"># 打印返回的json</span></span><br><span class="line"><span class="built_in">print</span>(resp.json())</span><br></pre></td></tr></table></figure>
+
+<p> Splash 渲染服务同样可以完成点击事件和目标内容的提取。</p>
+<h4 id="图灵社区"><a href="#图灵社区" class="headerlink" title="图灵社区"></a>图灵社区</h4><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;search&quot;</span> <span class="attr">name</span>=<span class="string">&quot;q&quot;</span> <span class="attr">placeholder</span>=<span class="string">&quot;技术改变世界 阅读塑造人生&quot;</span><span class="attr">class</span>=<span class="string">&quot;key&quot;</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="Selenium"><a href="#Selenium" class="headerlink" title="Selenium"></a>Selenium</h5><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> selenium <span class="keyword">import</span> webdriver</span><br><span class="line">url = <span class="string">&#x27;http://www.ituring.com.cn/&#x27;</span></span><br><span class="line"><span class="comment"># 初始化浏览器对象</span></span><br><span class="line">browser = webdriver.Chrome()</span><br><span class="line"><span class="comment"># 向指定网址发起GET请求</span></span><br><span class="line">browser.get(url)</span><br><span class="line"><span class="comment"># 使用CSS选择器定位搜索框，并输入文字</span></span><br><span class="line">browser.find_element_by_css_selector(<span class="string">&#x27;.key&#x27;</span>).send_keys(<span class="string">&#x27;Python&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<h5 id="Puppeteer-1"><a href="#Puppeteer-1" class="headerlink" title="Puppeteer"></a>Puppeteer</h5><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> asyncio</span><br><span class="line"><span class="keyword">from</span> pyppeteer <span class="keyword">import</span> launch</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">main</span>():</span><br><span class="line">    <span class="comment"># 初始化浏览器对象</span></span><br><span class="line">    browser = <span class="keyword">await</span> launch()</span><br><span class="line">    <span class="comment"># 在浏览器上下文中创建新页面</span></span><br><span class="line">    page = <span class="keyword">await</span> browser.newPage()</span><br><span class="line">    <span class="comment"># 打开目标网站</span></span><br><span class="line">    <span class="keyword">await</span> page.goto(<span class="string">&#x27;http://www.ituring.com.cn&#x27;</span>)</span><br><span class="line">    <span class="comment"># 在指定位置输入文本</span></span><br><span class="line">    <span class="keyword">await</span> page.<span class="built_in">type</span>(<span class="string">&#x27;.key&#x27;</span>, <span class="string">&#x27;python&#x27;</span>)</span><br><span class="line">    <span class="comment"># 截图并报错为ituring.png</span></span><br><span class="line">    <span class="keyword">await</span> page.screenshot(&#123;<span class="string">&#x27;path&#x27;</span>: <span class="string">&#x27;ituring.png&#x27;</span>&#125;)</span><br><span class="line">    <span class="comment"># 关闭浏览器对象</span></span><br><span class="line">    <span class="keyword">await</span> browser.close()</span><br><span class="line"></span><br><span class="line">asyncio.get_event_loop().run_until_complete(main())</span><br></pre></td></tr></table></figure>
+
+<h5 id="Splash-1"><a href="#Splash-1" class="headerlink" title="Splash"></a>Splash</h5><figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">main</span><span class="params">(splash, args)</span></span></span><br><span class="line">	<span class="built_in">assert</span>(splash:go(args.url))</span><br><span class="line">	<span class="built_in">assert</span>(splash:wait(<span class="number">0.2</span>))</span><br><span class="line">    <span class="comment">--聚焦搜索框</span></span><br><span class="line">	splash:<span class="built_in">select</span>(<span class="string">&#x27;input[name=q]&#x27;</span>):focus()</span><br><span class="line">	<span class="comment">--在搜索框中输入Python</span></span><br><span class="line">	splash:send_text(<span class="string">&#x27;Python&#x27;</span>)</span><br><span class="line">	<span class="built_in">assert</span>(splash:wait(<span class="number">0.2</span>))</span><br><span class="line">	<span class="keyword">return</span> &#123;</span><br><span class="line">        png = splash:png()</span><br><span class="line">    &#125;</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>Splash 页面左侧输出了图灵社区页面截图，并且截图中的搜索框文本内容也变成了Python。运行结果说明这3种工具都能够模拟人类对浏览器的操作。</p>
+<p>设置禁止渲染工具加载图片或其他类型文件</p>
+<p>书228页</p>
+<h4 id="图片伪装反爬虫"><a href="#图片伪装反爬虫" class="headerlink" title="图片伪装反爬虫"></a>图片伪装反爬虫</h4><p><a target="_blank" rel="noopener" href="http://www.porters.vip/confusion/recruit.html">http://www.porters.vip/confusion/recruit.html</a></p>
+<p><img src="http://lw-picgo.oss-cn-chengdu.aliyuncs.com/img/2022/20221014155206.png" alt="image-20221013160449463"></p>
+<p>电话这里是一张图片</p>
+<p>任务：爬取企业名称及联系电话</p>
+<p>企业名称</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">from</span> parsel <span class="keyword">import</span> Selector</span><br><span class="line"></span><br><span class="line">url = <span class="string">&#x27;http://www.porters.vip/confusion/recruit.html&#x27;</span></span><br><span class="line"></span><br><span class="line">resp = requests.get(url)</span><br><span class="line">sel = Selector(resp.text)</span><br><span class="line">company = sel.css(<span class="string">&#x27;h1.interval::text&#x27;</span>).get()</span><br><span class="line"><span class="built_in">print</span>(company)</span><br></pre></td></tr></table></figure>
+
+<p>电话号码用ocr识别</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> io</span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">from</span> urllib.parse <span class="keyword">import</span> urljoin</span><br><span class="line"><span class="keyword">from</span> parsel <span class="keyword">import</span> Selector</span><br><span class="line"><span class="keyword">from</span> PIL <span class="keyword">import</span> Image</span><br><span class="line"><span class="keyword">import</span> pytesseract</span><br><span class="line"></span><br><span class="line">url = <span class="string">&#x27;http://www.porters.vip/confusion/recruit.html&#x27;</span></span><br><span class="line">resp = requests.get(url)</span><br><span class="line">sel = Selector(resp.text)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 提取图片名称</span></span><br><span class="line">image_name = sel.css(<span class="string">&#x27;.pn::attr(&quot;src&quot;)&#x27;</span>).extract_first()</span><br><span class="line"><span class="comment"># 拼接图片名和URL</span></span><br><span class="line">image_url = urljoin(url, image_name)</span><br><span class="line"><span class="comment"># 请求图片，拿到图片字节流内容</span></span><br><span class="line">image_body = requests.get(image_url).content</span><br><span class="line"><span class="comment"># 使用Image.open打开图片字节流，得到图片对象</span></span><br><span class="line">image_stream = Image.<span class="built_in">open</span>(io.BytesIO(image_body))</span><br><span class="line"><span class="built_in">print</span>(pytesseract.image_to_string(image_stream))</span><br></pre></td></tr></table></figure>
+
+<h4 id="css偏移反爬虫"><a href="#css偏移反爬虫" class="headerlink" title="css偏移反爬虫"></a>css偏移反爬虫</h4><p><a target="_blank" rel="noopener" href="http://www.porters.vip/confusion/flight.html">http://www.porters.vip/confusion/flight.html</a></p>
+<p><img src="http://lw-picgo.oss-cn-chengdu.aliyuncs.com/img/2022/20221014155206.png" alt="image-20221013164736265"></p>
+<p><img src="http://lw-picgo.oss-cn-chengdu.aliyuncs.com/img/2022/20221014155206.png" alt="image-20221013164754902"></p>
+<p>大概就是把上面的数排列好，然后用上面的多少px去对应他，第几位就是几，然后把所有数写出来，为764，倒序一下就位467</p>
+<p>大概是这样，</p>
+<h4 id="WebDriver-识别"><a href="#WebDriver-识别" class="headerlink" title="WebDriver 识别"></a>WebDriver 识别</h4><p><a target="_blank" rel="noopener" href="http://www.porters.vip/features/webdriver.html">http://www.porters.vip/features/webdriver.html</a></p>
+<p>借助”其实是通过对应的浏览器驱动（即WebDriver）向浏览器发出指令的行为。也就是说，开发者可以根据客户端是否包含浏览器驱动这一特征来区分正常用户和爬虫程序。</p>
+<p>任务：爬取新闻专题页中的文章内容</p>
+<p>selenium和pyppeteer无法获取目标数据</p>
+<p>navigator.webdriver判断了是否使用webdriver驱动</p>
+<p>绕过方法</p>
+<p>Splash</p>
+<p>对于 Splash 这种使用 WebKit 内核开发的渲染工具来说是无效的。我们可以用 Splash 获取示例 8 中的目标数据，Splash 脚本如下：</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">main</span><span class="params">(splash, args)</span></span></span><br><span class="line">	<span class="built_in">assert</span>(splash:go(args.url))</span><br><span class="line">	<span class="built_in">assert</span>(splash:wait(<span class="number">0.5</span>))</span><br><span class="line">	<span class="comment">-- 定位按钮</span></span><br><span class="line">	<span class="keyword">local</span> bton = splash:<span class="built_in">select</span>(<span class="string">&#x27;.btn.btn-primary.btn-lg&#x27;</span>)</span><br><span class="line">	<span class="built_in">assert</span>(splash:wait(<span class="number">1</span>))</span><br><span class="line">	<span class="comment">-- 鼠标悬停</span></span><br><span class="line">	bton:mouse_hover()</span><br><span class="line">	<span class="comment">-- 点击按钮</span></span><br><span class="line">	bton:mouse_click()</span><br><span class="line">	<span class="built_in">assert</span>(splash:wait(<span class="number">1</span>))</span><br><span class="line">	<span class="keyword">return</span> &#123;</span><br><span class="line">	<span class="comment">-- 返回页面截图</span></span><br><span class="line">	png = splash:png(),</span><br><span class="line">	&#125;</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+
+<p>识别navigator.webdriver值，可以在触发之前将值改为false 或者undefined 即可。</p>
+<p>Selenium 套件和 Puppeteer 都提供了运行 JavaScript 代码的方法</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> selenium.webdriver <span class="keyword">import</span> Chrome</span><br><span class="line"><span class="keyword">from</span> selenium.webdriver.common.by <span class="keyword">import</span> By</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line">browser = Chrome()</span><br><span class="line">browser.get(<span class="string">&#x27;http://www.porters.vip/features/webdriver.html&#x27;</span>)</span><br><span class="line"></span><br><span class="line">script = <span class="string">&#x27;Object.defineProperty(navigator, &quot;webdriver&quot;, &#123;get: () =&gt; false,&#125;);&#x27;</span></span><br><span class="line"><span class="comment"># 运行javascript代码</span></span><br><span class="line">browser.execute_script(script)</span><br><span class="line">time.sleep(<span class="number">1</span>)</span><br><span class="line"><span class="comment"># 定位按钮并点击</span></span><br><span class="line">browser.find_element(By.CSS_SELECTOR, <span class="string">&#x27;.btn.btn-primary.btn-lg&#x27;</span>).click()</span><br><span class="line"><span class="comment"># 定位到文章内容</span></span><br><span class="line">element = browser.find_element(By.CSS_SELECTOR, <span class="string">&#x27;#content&#x27;</span>)</span><br><span class="line">time.sleep(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(element.text)</span><br><span class="line">browser.close()</span><br></pre></td></tr></table></figure>
+
+<p>修改之后的javascript只对当前的页面有效</p>
+<h4 id="浏览器特征"><a href="#浏览器特征" class="headerlink" title="浏览器特征"></a>浏览器特征</h4><p>比如将浏览器请求头中的User-Agent 值与navigator.userAgent 属性值进行对比，结合navigator.platform 就可以判断客户端是否使用随机切换的UserAgent。</p>
+<p><img src="http://lw-picgo.oss-cn-chengdu.aliyuncs.com/img/2022/20221014155217.png" alt="image-20221013173453628"></p>
+<p><img src="http://lw-picgo.oss-cn-chengdu.aliyuncs.com/img/2022/20221014155217.png" alt="image-20221013173458374"></p>
+<h4 id="爬虫特征"><a href="#爬虫特征" class="headerlink" title="爬虫特征"></a>爬虫特征</h4><p>访问频率限制</p>
+<p><a target="_blank" rel="noopener" href="http://www.porters.vip/features/rate.html">http://www.porters.vip/features/rate.html</a></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">10</span>):</span><br><span class="line">	resp = requests.get(<span class="string">&#x27;http://www.porters.vip/features/rate.html&#x27;</span>)</span><br><span class="line">	<span class="built_in">print</span>(resp.status_code)</span><br></pre></td></tr></table></figure>
+
+<p>直接访问4个503</p>
+<p>方法1：加time.sleep(1)</p>
+<p>方法2：分布式爬虫</p>
+<p>方法3：代理池</p>
+<h4 id="浏览器指纹"><a href="#浏览器指纹" class="headerlink" title="浏览器指纹"></a>浏览器指纹</h4><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"> <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;userAgent:&quot;</span> + navigator.<span class="property">userAgent</span>);</span></span><br><span class="line"><span class="language-javascript"> <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;platform:&quot;</span> + navigator.<span class="property">platform</span>);</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>获取ua和设备信息，判断客户端是否使用随机切换的User-Agent</p>
+<h5 id="Splash-2"><a href="#Splash-2" class="headerlink" title="Splash"></a>Splash</h5><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> asyncio</span><br><span class="line"><span class="keyword">from</span> pyppeteer <span class="keyword">import</span> launch</span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">main</span>():</span><br><span class="line">	browser = <span class="keyword">await</span> launch()</span><br><span class="line">	page = <span class="keyword">await</span> browser.newPage()</span><br><span class="line">	<span class="keyword">await</span> page.goto(<span class="string">&#x27;http://www.porters.vip/features/browser.html&#x27;</span>)</span><br><span class="line">	<span class="keyword">await</span> page.setViewport(&#123;<span class="string">&#x27;width&#x27;</span>: <span class="number">1000</span>, <span class="string">&#x27;height&#x27;</span>: <span class="number">1000</span>&#125;)</span><br><span class="line">	<span class="keyword">await</span> page.screenshot(&#123;<span class="string">&#x27;path&#x27;</span>: <span class="string">&#x27;browser.png&#x27;</span>&#125;)</span><br><span class="line">	<span class="keyword">await</span> browser.close()</span><br><span class="line">    </span><br><span class="line">asyncio.get_event_loop().run_until_complete(main())</span><br></pre></td></tr></table></figure>
+
+<p>Splash用linux搭建的，就会显示为linux</p>
+<p><img src="http://lw-picgo.oss-cn-chengdu.aliyuncs.com/img/2022/20221014155217.png" alt="image-20221014110503956"></p>
+<h5 id="Puppeteer截图"><a href="#Puppeteer截图" class="headerlink" title="Puppeteer截图"></a>Puppeteer截图</h5><p><img src="http://lw-picgo.oss-cn-chengdu.aliyuncs.com/img/2022/20221014155217.png" alt="image-20221014110526892"></p>
+<p><img src="http://lw-picgo.oss-cn-chengdu.aliyuncs.com/img/2022/20221014155217.png" alt="image-20221014110531666"></p>
+<p>如果判断比较明显的客户端特征，比较离谱的就是爬虫的客户端，可以做为特征。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/python/" rel="tag"># python</a>
+              <a href="/tags/%E7%88%AC%E8%99%AB/" rel="tag"># 爬虫</a>
+              <a href="/tags/%E5%8F%8D%E7%88%AC%E8%99%AB/" rel="tag"># 反爬虫</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/06/06/Kerberos/" rel="prev" title="Kerberos">
+      <i class="fa fa-chevron-left"></i> Kerberos
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE"><span class="nav-number">1.</span> <span class="nav-text">开发环境配置</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%89%E8%A3%85steamboat"><span class="nav-number">1.1.</span> <span class="nav-text">安装steamboat</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Splash"><span class="nav-number">1.2.</span> <span class="nav-text">Splash</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Puppeteer"><span class="nav-number">1.3.</span> <span class="nav-text">Puppeteer</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E9%AA%8C%E8%AF%81"><span class="nav-number">1.3.1.</span> <span class="nav-text">验证</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#PyTesseract"><span class="nav-number">1.4.</span> <span class="nav-text">PyTesseract</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Parsel"><span class="nav-number">1.5.</span> <span class="nav-text">Parsel</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%8D%E7%88%AC%E8%99%AB%E7%9A%84%E6%A6%82%E5%BF%B5%E4%B8%8E%E5%AE%9A%E4%B9%89"><span class="nav-number">2.</span> <span class="nav-text">反爬虫的概念与定义</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#User-Agent%E5%8F%8D%E7%88%AC%E8%99%AB"><span class="nav-number">2.1.</span> <span class="nav-text">User-Agent反爬虫</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#User-Agent%E6%A0%A1%E9%AA%8C%E6%B5%81%E7%A8%8B"><span class="nav-number">2.2.</span> <span class="nav-text">User-Agent校验流程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Cookie%E5%8F%8D%E7%88%AC%E8%99%AB"><span class="nav-number">2.3.</span> <span class="nav-text">Cookie反爬虫</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%AD%BE%E5%90%8D%E9%AA%8C%E8%AF%81%E5%8F%8D%E7%88%AC%E8%99%AB"><span class="nav-number">2.4.</span> <span class="nav-text">签名验证反爬虫</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8A%A8%E6%80%81%E6%B8%B2%E6%9F%93%E5%8F%8D%E7%88%AC%E8%99%AB"><span class="nav-number">3.</span> <span class="nav-text">动态渲染反爬虫</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Selenium%E5%A5%97%E4%BB%B6"><span class="nav-number">3.1.</span> <span class="nav-text">Selenium套件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BC%82%E6%AD%A5%E6%B8%B2%E6%9F%93%E5%BA%93Puppeteer"><span class="nav-number">3.2.</span> <span class="nav-text">异步渲染库Puppeteer</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BC%82%E6%AD%A5%E6%B8%B2%E6%9F%93%E6%9C%8D%E5%8A%A1-Splash"><span class="nav-number">3.3.</span> <span class="nav-text">异步渲染服务 Splash</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9B%BE%E7%81%B5%E7%A4%BE%E5%8C%BA"><span class="nav-number">3.4.</span> <span class="nav-text">图灵社区</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Selenium"><span class="nav-number">3.4.1.</span> <span class="nav-text">Selenium</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Puppeteer-1"><span class="nav-number">3.4.2.</span> <span class="nav-text">Puppeteer</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Splash-1"><span class="nav-number">3.4.3.</span> <span class="nav-text">Splash</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9B%BE%E7%89%87%E4%BC%AA%E8%A3%85%E5%8F%8D%E7%88%AC%E8%99%AB"><span class="nav-number">3.5.</span> <span class="nav-text">图片伪装反爬虫</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#css%E5%81%8F%E7%A7%BB%E5%8F%8D%E7%88%AC%E8%99%AB"><span class="nav-number">3.6.</span> <span class="nav-text">css偏移反爬虫</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#WebDriver-%E8%AF%86%E5%88%AB"><span class="nav-number">3.7.</span> <span class="nav-text">WebDriver 识别</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B5%8F%E8%A7%88%E5%99%A8%E7%89%B9%E5%BE%81"><span class="nav-number">3.8.</span> <span class="nav-text">浏览器特征</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%88%AC%E8%99%AB%E7%89%B9%E5%BE%81"><span class="nav-number">3.9.</span> <span class="nav-text">爬虫特征</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B5%8F%E8%A7%88%E5%99%A8%E6%8C%87%E7%BA%B9"><span class="nav-number">3.10.</span> <span class="nav-text">浏览器指纹</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Splash-2"><span class="nav-number">3.10.1.</span> <span class="nav-text">Splash</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Puppeteer%E6%88%AA%E5%9B%BE"><span class="nav-number">3.10.2.</span> <span class="nav-text">Puppeteer截图</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Lu1i丶"
+      src="/images/1.PNG">
+  <p class="site-author-name" itemprop="name">Lu1i丶</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">35</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">17</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://txluck.github.io/" title="https:&#x2F;&#x2F;txluck.github.io&#x2F;" rel="noopener" target="_blank">永安寺</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Lu1i丶</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : '2IjWrTCGWIUFwAsamIh2ezIu-gzGzoHsz',
+      appKey     : 'EOJr4RJE5lM0E3ryx1vGuAPV',
+      placeholder: "Just go go",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : 'zh-cn' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : true,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>
